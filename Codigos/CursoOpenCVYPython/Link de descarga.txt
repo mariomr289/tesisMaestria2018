@@ -1,0 +1,4 @@
+Curso Texto:
+http://nbviewer.jupyter.org/github/CAChemE/opencv-python/blob/master/opencv-and-python.ipynb#1.-Introducci%C3%B3n
+
+
