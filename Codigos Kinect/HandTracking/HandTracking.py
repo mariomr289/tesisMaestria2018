@@ -116,7 +116,7 @@ def hand_tracker():
         for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
             pygame.draw.lines(screen,YELLOW,True,cont,3) #Colorea los limites binarios del fondo amarillo
         for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
-            pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Dibuja un círculo azul en cada centroide
+            pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Dibuja un circulo azul en cada centroide
             centroidList.append(blobData.centroid[i]) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
             pygame.draw.lines(screen,RED,True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
             pygame.draw.lines(screen,GREEN,True,blobData.contours[i],3) #Dibuja el contorno de cada blob
