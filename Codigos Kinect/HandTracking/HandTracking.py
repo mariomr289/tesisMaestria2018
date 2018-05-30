@@ -1,51 +1,51 @@
-from freenect import sync_get_depth as get_depth #Uses freenect to get depth information from the Kinect
-import numpy as np #Imports NumPy
-import cv,cv2 #Uses both of cv and cv2
-import pygame #Uses pygame
+from freenect import sync_get_depth as get_depth #Utiliza freenect para obtener informacion detallada del Kinect
+import numpy as np #Importar NumPy
+import cv,cv2 #Utiliza tanto cv como cv2
+import pygame #Utiliza pygame
 
-#The libaries below are used for mouse manipulation
+#Las siguientes bibliotecas se usan para la manipulacion del mouse
 from Xlib import X, display
 import Xlib.XK
 import Xlib.error
 import Xlib.ext.xtest
 
-constList = lambda length, val: [val for _ in range(length)] #Gives a list of size length filled with the variable val. length is a list and val is dynamic
+constList = lambda length, val: [val for _ in range(length)] #Da una lista de longitud del tamanio lleno con la variable val. la longitud es una lista y val es dinamica
 
 """
-This class is a less extensive form of regionprops() developed by MATLAB. It finds properties of contours and sets them to fields
+Esta clase es una forma menos extensa de regionprops () desarrollada por MATLAB. Encuentra propiedades de contornos y los establece en campos
 """
 class BlobAnalysis:
-    def __init__(self,BW): #Constructor. BW is a binary image in the form of a numpy array
+    def __init__(self,BW): #Constructor. BW es una imagen binaria en forma de una matriz numpy
         self.BW = BW
-        cs = cv.FindContours(cv.fromarray(self.BW.astype(np.uint8)),cv.CreateMemStorage(),mode = cv.CV_RETR_EXTERNAL) #Finds the contours
+        cs = cv.FindContours(cv.fromarray(self.BW.astype(np.uint8)),cv.CreateMemStorage(),mode = cv.CV_RETR_EXTERNAL) #Encuentra los contornos
         counter = 0
         """
-        These are dynamic lists used to store variables
+        Estas son listas dinamicas usadas para almacenar variables
         """
         centroid = list()
         cHull = list()
         contours = list()
         cHullArea = list()
         contourArea = list()
-        while cs: #Iterate through the CvSeq, cs.
-            if abs(cv.ContourArea(cs)) > 2000: #Filters out contours smaller than 2000 pixels in area
-                contourArea.append(cv.ContourArea(cs)) #Appends contourArea with newest contour area
-                m = cv.Moments(cs) #Finds all of the moments of the filtered contour
+        while cs: #Iterar a traves de CvSeq, cs.
+            if abs(cv.ContourArea(cs)) > 2000: #Filtra contornos de menos de 2000 pixeles en el area
+                contourArea.append(cv.ContourArea(cs)) #Se agrega contourArea con el area de contorno mas reciente
+                m = cv.Moments(cs) #Encuentra todos los momentos del contorno filtrado
                 try:
-                    m10 = int(cv.GetSpatialMoment(m,1,0)) #Spatial moment m10
-                    m00 = int(cv.GetSpatialMoment(m,0,0)) #Spatial moment m00
-                    m01 = int(cv.GetSpatialMoment(m,0,1)) #Spatial moment m01
-                    centroid.append((int(m10/m00), int(m01/m00))) #Appends centroid list with newest coordinates of centroid of contour
-                    convexHull = cv.ConvexHull2(cs,cv.CreateMemStorage(),return_points=True) #Finds the convex hull of cs in type CvSeq
-                    cHullArea.append(cv.ContourArea(convexHull)) #Adds the area of the convex hull to cHullArea list
-                    cHull.append(list(convexHull)) #Adds the list form of the convex hull to cHull list
-                    contours.append(list(cs)) #Adds the list form of the contour to contours list
-                    counter += 1 #Adds to the counter to see how many blobs are there
+                    m10 = int(cv.GetSpatialMoment(m,1,0)) #Momento espacial m10
+                    m00 = int(cv.GetSpatialMoment(m,0,0)) #Momento espacial m00
+                    m01 = int(cv.GetSpatialMoment(m,0,1)) #Momento espacial m01
+                    centroid.append((int(m10/m00), int(m01/m00))) #Aniade la lista de centroides con las coordenadas mas nuevas del centro de gravedad del contorno
+                    convexHull = cv.ConvexHull2(cs,cv.CreateMemStorage(),return_points=True) #Encuentra el casco convexo de cs en el tipo CvSeq
+                    cHullArea.append(cv.ContourArea(convexHull)) #Agrega el area del casco convexo a la lista cHullArea
+                    cHull.append(list(convexHull)) #Agrega la lista del casco convexo a la lista de cHull
+                    contours.append(list(cs)) #Agrega la forma de lista del contorno a la lista de contornos
+                    counter += 1 #Agrega al mostrador para ver cuantos blobs hay
                 except:
                     pass
-            cs = cs.h_next() #Goes to next contour in cs CvSeq
+            cs = cs.h_next() #Pasa al siguiente contorno en cs CvSeq
         """
-        Below the variables are made into fields for referencing later
+        A continuacion, las variables se convierten en campos para hacer referencias posteriores
         """
         self.centroid = centroid
         self.counter = counter
@@ -54,26 +54,26 @@ class BlobAnalysis:
         self.cHullArea = cHullArea
         self.contourArea = contourArea
 
-d = display.Display() #Display reference for Xlib manipulation
-def move_mouse(x,y):#Moves the mouse to (x,y). x and y are ints
+d = display.Display() #Muestra la referencia para la manipulacion Xlib
+def move_mouse(x,y):#Mueve el mouse a (x, y). x y y son enteros
     s = d.screen()
     root = s.root
     root.warp_pointer(x,y)
     d.sync()
-    
-def click_down(button):#Simulates a down click. Button is an int
+
+def click_down(button):#Simula un clic hacia abajo. El boton es un int
     Xlib.ext.xtest.fake_input(d,X.ButtonPress, button)
     d.sync()
-    
-def click_up(button): #Simulates a up click. Button is an int
+
+def click_up(button): #Simula un clic arriba. El boton es un int
     Xlib.ext.xtest.fake_input(d,X.ButtonRelease, button)
     d.sync()
 
 """
-The function below is a basic mean filter. It appends a cache list and takes the mean of it.
-It is useful for filtering noisy data
-cache is a list of floats or ints and val is either a float or an int
-it returns the filtered mean
+La funcion siguiente es un filtro de base basico. Aniade una lista de cache y toma el valor de eso.
+Es util para filtrar datos ruidosos
+cache es una lista de flotantes o ints y val es un float o un int
+devuelve la media filtrada
 """
 def cacheAppendMean(cache, val):
     cache.append(val)
@@ -81,15 +81,15 @@ def cacheAppendMean(cache, val):
     return np.mean(cache)
 
 """
-This is the GUI that displays the thresholded image with the convex hull and centroids. It uses pygame.
-Mouse control is also dictated in this function because the mouse commands are updated as the frame is updated
+Esta es la GUI que muestra la imagen con umbral con el casco convexo y los centroides. Utiliza pygame.
+El control del mouse tambien se dicta en esta funcion porque los comandos del mouse se actualizan a medida que se actualiza el marco.
 """
 def hand_tracker():
     (depth,_) = get_depth()
-    cHullAreaCache = constList(5,12000) #Blank cache list for convex hull area
-    areaRatioCache = constList(5,1) #Blank cache list for the area ratio of contour area to convex hull area
-    centroidList = list() #Initiate centroid list
-    #RGB Color tuples
+    cHullAreaCache = constList(5,12000) #Lista de cache en blanco para el area convexa del casco
+    areaRatioCache = constList(5,1) #Lista de cache en blanco para la relacion de area del area de contorno al area de casco convexo
+    centroidList = list() #Iniciar lista de centroides
+    #Tuplas de colores RGB
     BLACK = (0,0,0)
     RED = (255,0,0)
     GREEN = (0,255,0)
@@ -97,79 +97,79 @@ def hand_tracker():
     BLUE = (0,0,255)
     WHITE = (255,255,255)
     YELLOW = (255,255,0)
-    pygame.init() #Initiates pygame
-    xSize,ySize = 640,480 #Sets size of window
-    screen = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #creates main surface
-    screenFlipped = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #creates surface that will be flipped (mirror display)
-    screen.fill(BLACK) #Make the window black
-    done = False #Iterator boolean --> Tells programw when to terminate
-    dummy = False #Very important bool for mouse manipulation
+    pygame.init() #Inicia pygame
+    xSize,ySize = 640,480 #Establece el tamanio de la ventana
+    screen = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #crea la superficie principal
+    screenFlipped = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #crea una superficie que se volteara (pantalla de espejo)
+    screen.fill(BLACK) #Haz que la ventana sea negra
+    done = False #Iterador booleano --> Le dice al Programa cuando terminar
+    dummy = False #Muy importante bool para la manipulacion del raton
     while not done:
-        screen.fill(BLACK) #Make the window black
-        (depth,_) = get_depth() #Get the depth from the kinect 
-        depth = depth.astype(np.float32) #Convert the depth to a 32 bit float
-        _,depthThresh = cv2.threshold(depth, 600, 255, cv2.THRESH_BINARY_INV) #Threshold the depth for a binary image. Thresholded at 600 arbitary units
-        _,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV) #Threshold the background in order to have an outlined background and segmented foreground
-        blobData = BlobAnalysis(depthThresh) #Creates blobData object using BlobAnalysis class
-        blobDataBack = BlobAnalysis(back) #Creates blobDataBack object using BlobAnalysis class
-        
-        for cont in blobDataBack.contours: #Iterates through contours in the background
-            pygame.draw.lines(screen,YELLOW,True,cont,3) #Colors the binary boundaries of the background yellow
-        for i in range(blobData.counter): #Iterate from 0 to the number of blobs minus 1
-            pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Draws a blue circle at each centroid
-            centroidList.append(blobData.centroid[i]) #Adds the centroid tuple to the centroidList --> used for drawing
-            pygame.draw.lines(screen,RED,True,blobData.cHull[i],3) #Draws the convex hull for each blob
-            pygame.draw.lines(screen,GREEN,True,blobData.contours[i],3) #Draws the contour of each blob
-            for tips in blobData.cHull[i]: #Iterates through the verticies of the convex hull for each blob
-                pygame.draw.circle(screen,PURPLE,tips,5) #Draws the vertices purple
-        
+        screen.fill(BLACK) #Haz que la ventana sea negra
+        (depth,_) = get_depth() #Obtenga la profundidad del kinect
+        depth = depth.astype(np.float32) #Convierta la profundidad en un float de 32 bits
+        _,depthThresh = cv2.threshold(depth, 600, 255, cv2.THRESH_BINARY_INV) #Umbral de la profundidad de una imagen binaria. Umbral en 600 unidades arbitrarias
+        _,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV) #Umbral del fondo para tener un fondo delineado y un primer plano segmentado
+        blobData = BlobAnalysis(depthThresh) #Crea el objeto blobData usando la clase BlobAnalysis
+        blobDataBack = BlobAnalysis(back) #Crea el objeto blobDataBack usando la clase BlobAnalysis
+
+        for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
+            pygame.draw.lines(screen,YELLOW,True,cont,3) #Colorea los limites binarios del fondo amarillo
+        for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
+            pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Dibuja un círculo azul en cada centroide
+            centroidList.append(blobData.centroid[i]) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
+            pygame.draw.lines(screen,RED,True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
+            pygame.draw.lines(screen,GREEN,True,blobData.contours[i],3) #Dibuja el contorno de cada blob
+            for tips in blobData.cHull[i]: #Itera a traves de los vertices del casco convexo para cada blob
+                pygame.draw.circle(screen,PURPLE,tips,5) #Dibuja los vertices purpura
+
         """
         #Drawing Loop
-        #This draws on the screen lines from the centroids
-        #Possible exploration into gesture recognition :D
+        #Esto se basa en las lineas de pantalla de los centroides
+        #Posible exploracion en reconocimiento de gestos :D
         for cent in centroidList:
             pygame.draw.circle(screen,BLUE,cent,10)
         """
-        
-        pygame.display.set_caption('Kinect Tracking') #Makes the caption of the pygame screen 'Kinect Tracking'
-        del depth #Deletes depth --> opencv memory issue
-        screenFlipped = pygame.transform.flip(screen,1,0) #Flips the screen so that it is a mirror display
-        screen.blit(screenFlipped,(0,0)) #Updates the main screen --> screen
-        pygame.display.flip() #Updates everything on the window
-        
-        #Mouse Try statement
+
+        pygame.display.set_caption('Kinect Tracking') #Hace que el pie de la pantalla de pygame 'Kinect Tracking'
+        del depth #Elimina la profundidad -> problema de memoria opencv
+        screenFlipped = pygame.transform.flip(screen,1,0) #Da vuelta la pantalla para que sea una pantalla de espejo
+        screen.blit(screenFlipped,(0,0)) #Actualiza la pantalla principal -> pantalla
+        pygame.display.flip() #Actualiza todo en la ventana
+
+        #Declaracion de prueba de mouse
         try:
             centroidX = blobData.centroid[0][0]
             centroidY = blobData.centroid[0][1]
             if dummy:
-                mousePtr = display.Display().screen().root.query_pointer()._data #Gets current mouse attributes
-                dX = centroidX - strX #Finds the change in X
-                dY = strY - centroidY #Finds the change in Y
-                if abs(dX) > 1: #If there was a change in X greater than 1...
-                    mouseX = mousePtr["root_x"] - 2*dX #New X coordinate of mouse
-                if abs(dY) > 1: #If there was a change in Y greater than 1...
-                    mouseY = mousePtr["root_y"] - 2*dY #New Y coordinate of mouse
-                move_mouse(mouseX,mouseY) #Moves mouse to new location
-                strX = centroidX #Makes the new starting X of mouse to current X of newest centroid
-                strY = centroidY #Makes the new starting Y of mouse to current Y of newest centroid
-                cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0]) #Normalizes (gets rid of noise) in the convex hull area
-                areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea) #Normalizes the ratio between the contour area and convex hull area
-                if cArea < 10000 and areaRatio > 0.82: #Defines what a click down is. Area must be small and the hand must look like a binary circle (nearly)
+                mousePtr = display.Display().screen().root.query_pointer()._data #Obtiene los atributos actuales del mouse
+                dX = centroidX - strX #Encuentra el cambio en X
+                dY = strY - centroidY #Encuentra el cambio en Y
+                if abs(dX) > 1: #Si hubo un cambio en X mayor que 1 ...
+                    mouseX = mousePtr["root_x"] - 2*dX #Nueva coordenada X del mouse
+                if abs(dY) > 1: #Si hubo un cambio en Y mayor que 1 ...
+                    mouseY = mousePtr["root_y"] - 2*dY #Nueva coordenada Y del mouse
+                move_mouse(mouseX,mouseY) #Mueve el mouse a una nueva ubicacion
+                strX = centroidX #Hace que la nueva X inicial del raton sea la X actual del centroide más nuevo
+                strY = centroidY #Hace que la nueva Y inicial del raton sea la Y actual del centroide más nuevo
+                cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0]) #Normaliza (elimina el ruido) en el area convexa del casco
+                areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea) #Normaliza la relacion entre el area del contorno y el area convexa del casco
+                if cArea < 10000 and areaRatio > 0.82: #Define lo que es un clic abajo. El area debe ser pequenia y la mano debe verse como un circulo binario (casi)
                     click_down(1)
                 else:
                     click_up(1)
             else:
-                strX = centroidX #Initializes the starting X
-                strY = centroidY #Initializes the starting Y
-                dummy = True #Lets the function continue to the first part of the if statement
-        except: #There may be no centroids and therefore blobData.centroid[0] will be out of range
-            dummy = False #Waits for a new starting point
-            
-        for e in pygame.event.get(): #Itertates through current events
-            if e.type is pygame.QUIT: #If the close button is pressed, the while loop ends
+                strX = centroidX #Inicializa la X inicial
+                strY = centroidY #Inicializa la Y inicial
+                dummy = True #Permite que la funcion continue en la primera parte de la sentencia if
+        except: #No puede haber centroides y, por lo tanto, blobData.centroid [0] estara fuera de rango
+            dummy = False #Espera un nuevo punto de partida
+
+        for e in pygame.event.get(): #Itera a traves de los eventos actuales
+            if e.type is pygame.QUIT: #Si se presiona el boton de cerrar, el bucle while termina
                 done = True
 
-try: #Kinect may not be plugged in --> weird erros
+try: #Kinect puede no estar enchufado -> errores extranios
     hand_tracker()
-except: #Lets the libfreenect errors be shown instead of python ones
+except: #Deja que se muestren los errores libfreenect en lugar de los de python
     pass
