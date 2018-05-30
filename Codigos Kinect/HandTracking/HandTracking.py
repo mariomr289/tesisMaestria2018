@@ -150,8 +150,8 @@ def hand_tracker():
                 if abs(dY) > 1: #Si hubo un cambio en Y mayor que 1 ...
                     mouseY = mousePtr["root_y"] - 2*dY #Nueva coordenada Y del mouse
                 move_mouse(mouseX,mouseY) #Mueve el mouse a una nueva ubicacion
-                strX = centroidX #Hace que la nueva X inicial del raton sea la X actual del centroide más nuevo
-                strY = centroidY #Hace que la nueva Y inicial del raton sea la Y actual del centroide más nuevo
+                strX = centroidX #Hace que la nueva X inicial del raton sea la X actual del centroide mas nuevo
+                strY = centroidY #Hace que la nueva Y inicial del raton sea la Y actual del centroide mas nuevo
                 cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0]) #Normaliza (elimina el ruido) en el area convexa del casco
                 areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea) #Normaliza la relacion entre el area del contorno y el area convexa del casco
                 if cArea < 10000 and areaRatio > 0.82: #Define lo que es un clic abajo. El area debe ser pequenia y la mano debe verse como un circulo binario (casi)
