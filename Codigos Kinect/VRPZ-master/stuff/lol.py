@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from freenect import sync_get_depth as get_depth #Uses freenect to get depth information from the Kinect
-import numpy as np #Imports NumPy
-import cv,cv2 #Uses both of cv and cv2
-import pygame #Uses pygame
+from freenect import sync_get_depth as get_depth #Utiliza freenect para obtener informacion detallada del Kinect
+import numpy as np #Importar NumPy
+import cv,cv2 #Utiliza tanto cv como cv2
+import pygame #Utiliza pygame
 import sys
 import socket
 import random
@@ -11,56 +11,56 @@ import random
 smoothing = 5
 smoothingAngle = 10
 smoothingCriminal = 10
-constList = lambda length, val: [val for _ in range(length)] #Gives a list of size length filled with the variable val. length is a list and val is dynamic
+constList = lambda length, val: [val for _ in range(length)] #Da una lista de longitud del tamanio lleno con la variable val. la longitud es una lista y val es dinamica
 
 score = 0
 
 bangTime = 5
-#chance in %
-#speed of  food
+#oportunidad en %
+#velocidad de la comida
 movechance = 1
-#speed of  junk food
+#velocidad de comida chatarra
 movechanceBad = 0.5
-#chance of food
+#posibilidad de comida
 movespeed = 6
-#chance of junk food
+#oportunidad de comida chatarra
 movespeedBad = 12
 
 """
-This class is a less extensive form of regionprops() developed by MATLAB. It finds properties of contours and sets them to fields
+Esta clase es una forma menos extensa de regionprops () desarrollada por MATLAB. Encuentra propiedades de contornos y los establece en campos
 """
 class BlobAnalysis:
-    def __init__(self,BW): #Constructor. BW is a binary image in the form of a numpy array
+    def __init__(self,BW): #Constructor. BW es una imagen binaria en forma de una matriz numpy
         self.BW = BW
         cs = cv.FindContours(cv.fromarray(self.BW.astype(np.uint8)),cv.CreateMemStorage(),mode = cv.CV_RETR_EXTERNAL) #Finds the contours
         counter = 0
         """
-        These are dynamic lists used to store variables
+        Estas son listas dinamicas usadas para almacenar variables
         """
         centroid = list()
         cHull = list()
         contours = list()
         cHullArea = list()
         contourArea = list()
-        while cs: #Iterate through the CvSeq, cs.
-            if abs(cv.ContourArea(cs)) > 2000: #Filters out contours smaller than 2000 pixels in area
-                contourArea.append(cv.ContourArea(cs)) #Appends contourArea with newest contour area
-                m = cv.Moments(cs) #Finds all of the moments of the filtered contour
+        while cs: #Iterar a traves de CvSeq, cs.
+            if abs(cv.ContourArea(cs)) > 2000: #Filtra contornos de menos de 2000 pixeles en el area
+                contourArea.append(cv.ContourArea(cs)) #Se agrega contourArea con el area de contorno mas reciente
+                m = cv.Moments(cs) #Encuentra todos los momentos del contorno filtrado
                 try:
-                    m10 = int(cv.GetSpatialMoment(m,1,0)) #Spatial moment m10
-                    m00 = int(cv.GetSpatialMoment(m,0,0)) #Spatial moment m00
-                    m01 = int(cv.GetSpatialMoment(m,0,1)) #Spatial moment m01
-                    centroid.append((int(m10/m00), int(m01/m00))) #Appends centroid list with newest coordinates of centroid of contour
-                    convexHull = cv.ConvexHull2(cs,cv.CreateMemStorage(),return_points=True) #Finds the convex hull of cs in type CvSeq
-                    cHullArea.append(cv.ContourArea(convexHull)) #Adds the area of the convex hull to cHullArea list
-                    cHull.append(list(convexHull)) #Adds the list form of the convex hull to cHull list
-                    contours.append(list(cs)) #Adds the list form of the contour to contours list
-                    counter += 1 #Adds to the counter to see how many blobs are there
+                    m10 = int(cv.GetSpatialMoment(m,1,0)) #Momento espacial m10
+                    m00 = int(cv.GetSpatialMoment(m,0,0)) #Momento espacial m00
+                    m01 = int(cv.GetSpatialMoment(m,0,1)) #Momento espacial m01
+                    centroid.append((int(m10/m00), int(m01/m00))) #Aniade la lista de centroides con las coordenadas mas nuevas del centro de gravedad del contorno
+                    convexHull = cv.ConvexHull2(cs,cv.CreateMemStorage(),return_points=True) #Encuentra el casco convexo de cs en el tipo CvSeq
+                    cHullArea.append(cv.ContourArea(convexHull)) #Agrega el area del casco convexo a la lista cHullArea
+                    cHull.append(list(convexHull)) #Agrega la lista del casco convexo a la lista de cHull
+                    contours.append(list(cs)) #Agrega la forma de lista del contorno a la lista de contornos
+                    counter += 1 #Agrega al contador para ver cuantos blobs hay
                 except:
                     pass
-            cs = cs.h_next() #Goes to next contour in cs CvSeq
+            cs = cs.h_next() #Pasa al siguiente contorno en cs CvSeq
         """
-        Below the variables are made into fields for referencing later
+        A continuacion, las variables se convierten en campos para hacer referencias posteriores
         """
         self.centroid = centroid
         self.counter = counter
@@ -71,19 +71,19 @@ class BlobAnalysis:
 
 def distance(x1,y1,x2,y2):
      """
-     Calculates distance of two points
+     Calcula la distancia de dos puntos
      """
      dist = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
      return dist
 
 def in_hull(p, hull):
     """
-    Test if points in `p` are in `hull`
+    Prueba si los puntos en `p` están en` casco`
 
-    `p` should be a `NxK` coordinates of `N` points in `K` dimension
-    `hull` is either a scipy.spatial.Delaunay object or the `MxK` array of the
-    coordinates of `M` points in `K`dimension for which a Delaunay triangulation
-    will be computed
+    `p` debe ser una` NxK` coordenadas de `N` puntos en` K` dimensión
+     `hull` es un objeto scipy.spatial.Delaunay o la matriz` MxK` del
+     coordenadas de `M` puntos en` K`dimension para la cual una triangulacion de Delaunay
+     sera computado
     """
     from scipy.spatial import Delaunay
     if not isinstance(hull,Delaunay):
@@ -92,7 +92,7 @@ def in_hull(p, hull):
     return hull.find_simplex(p)>=0
 
 def rot_center(image, angle):
-    """rotate an image while keeping its center and size"""
+    """rotar una imagen manteniendo su centro y tamanio"""
     orig_rect = image.get_rect()
     rot_image = pygame.transform.rotate(image, angle)
     rot_rect = orig_rect.copy()
@@ -116,8 +116,8 @@ def hand_tracker():
     movespeedBad = 12
     hasic =0
     (depth,_) = get_depth()
-    centroidList = list() #Initiate centroid list
-    #RGB Color tuples
+    centroidList = list() #Iniciar lista de centroides
+    #Tuplas de colores RGB
     BLACK = (0,0,0)
     RED = (255,0,0)
     GREEN = (0,255,0)
@@ -126,11 +126,11 @@ def hand_tracker():
     WHITE = (255,255,255)
     YELLOW = (255,255,0)
     score = 0
-    pygame.init() #Initiates pygame
-    xSize,ySize = 1024,768 #Sets size of window
+    pygame.init() #Inicia pygame
+    xSize,ySize = 1024,768 #Establece el tamanio de la ventana
     WIDTH,HEIGHT = xSize,ySize
-    screen = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #creates main surface
-    screenFlipped = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #creates surface that will be flipped (mirror display)
+    screen = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #crea la superficie principal
+    screenFlipped = pygame.display.set_mode((xSize,ySize),pygame.RESIZABLE) #crea una superficie que se volteara (pantalla de espejo)
 
     trex1Img = pygame.image.load('../graphics/trex1.png')
     trex2Img = pygame.image.load('../graphics/trex2.png')
@@ -141,11 +141,11 @@ def hand_tracker():
     trex = False
 
 
-    screen.fill(BLACK) #Make the window black
-    done = False #Iterator boolean --> Tells programw when to terminate
+    screen.fill(BLACK) #Haz que la ventana sea negra
+    done = False #Iterator boolean -> Indica a programa cuando finalizar
 
 
-    # HOLY COW!!
+    # VACA SANTA!!
     zbran = sys.argv[1]+'_weapon.png'
     headPic = sys.argv[1]
     scale = 1.0
@@ -240,17 +240,17 @@ def hand_tracker():
 
         if hasic % 200 == 0 and level < 5:
 
-            #speed of  food
+            #velocidad de la comida
             movechance *= 1.7
-            #speed of  junk food
+            #velocidad de comida chatarra
             movechanceBad *= 1.7
-            #chance of food
+            #posibilidad de comida
             movespeed +=0.3
-            #chance of junk food
+            #oportunidad de comida chatarra
             movespeedBad +=0.3
             level += 1
 
-        #moving object
+        #objeto en movimiento
         if random.randint(0,10000) < movechance*100 and not trex:
             down, up = 1, 5
             if headPic == 'lion' or headPic == 'vader':
@@ -271,7 +271,7 @@ def hand_tracker():
             else:
                 movingObjectBad.append([1024, moveCordY, candy, -1])
 
-        screen.fill(BLACK) #Make the window black
+        screen.fill(BLACK) #Haz que la ventana sea negra
         screen.blit(wall, (0, 0))
 
         myfont = pygame.font.SysFont("Comic Sans MS", 90)
@@ -297,7 +297,7 @@ def hand_tracker():
 
                 screen.blit(trexOut, trexCoord)
 
-        #kiss kissbang bang
+        #beso beso Bang Bang
         for bang in banged:
             screen.blit(bangImg, (bang[0], bang[1]))
             bang[2] = bang[2] + 1
@@ -320,16 +320,16 @@ def hand_tracker():
                 movingObjectBad.remove(movingObjectBad[i])
                 break
 
-        (depth,_) = get_depth() #Get the depth from the kinect
+        (depth,_) = get_depth() #Obtenga la profundidad del kinect
         old_depth = depth
         depth = cv2.resize(old_depth, (1024, 768))
-        depth = depth.astype(np.float32) #Convert the depth to a 32 bit float
-        _,depthThresh = cv2.threshold(depth, 800, 255, cv2.THRESH_BINARY_INV) #Threshold the depth for a binary image. Thresholded at 600 arbitary units
-        _,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV) #Threshold the background in order to have an outlined background and segmented foreground
-        blobData = BlobAnalysis(depthThresh) #Creates blobData object using BlobAnalysis class
-        blobDataBack = BlobAnalysis(back) #Creates blobDataBack object using BlobAnalysis class
+        depth = depth.astype(np.float32) #Convierta la profundidad en un flotador de 32 bits
+        _,depthThresh = cv2.threshold(depth, 800, 255, cv2.THRESH_BINARY_INV) #Umbral de la profundidad de una imagen binaria. Umbral en 600 unidades arbitrarias
+        _,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV) #Umbral del fondo para tener un fondo delineado y un primer plano segmentado
+        blobData = BlobAnalysis(depthThresh) #Crea el objeto blobData usando la clase BlobAnalysis
+        blobDataBack = BlobAnalysis(back) #Crea el objeto blobDataBack usando la clase BlobAnalysis
 
-        # Boundaries
+        # Limites
         hullBound = []
         for i in range(blobData.counter):
             hullLeft = 1000
@@ -343,14 +343,14 @@ def hand_tracker():
 
 
         tempCont = []
-        for cont in blobDataBack.contours: #Iterates through contours in the background
-            pygame.draw.lines(screen,BLACK,True,cont,5) #Colors the binary boundaries of the background yellow
+        for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
+            pygame.draw.lines(screen,BLACK,True,cont,5) #Colorea los limites binarios del fondo amarillo
 
             for xcont,ycont in cont:
                 valid = True
                 for bound in hullBound:
                     if xcont <= bound[0] and xcont >= bound[1]:
-                        # in Hull boundaries
+                        # en los limites de Hull
                         valid = False
                 if valid:
                     tempCont.append([xcont, ycont])
@@ -399,9 +399,9 @@ def hand_tracker():
                 score -=50
                 break
 
-        for i in range(blobData.counter): #Iterate from 0 to the number of blobs minus 1
+        for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
 
-            #pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Draws a blue circle at each centroid
+            #pygame.draw.circle(screen,BLUE,blobData.centroid[i],10) #Dibuja un circulo azul en cada centroide
             smoothCriminal.append(blobData.centroid[i])
 
             if len(smoothCriminal) > smoothingCriminal:
@@ -415,15 +415,15 @@ def hand_tracker():
             mean[0]=int(mean[0]/len(smoothCriminal))
             mean[1]=int(mean[1]/len(smoothCriminal))
 
-            centroidList.append((mean[0], mean[1])) #Adds the centroid tuple to the centroidList --> used for drawing
-            #pygame.draw.lines(screen,RED,True,blobData.cHull[i],3) #Draws the convex hull for each blob
-            #pygame.draw.lines(screen,GREEN,True,blobData.contours[i],3) #Draws the contour of each blob
+            centroidList.append((mean[0], mean[1])) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
+            #pygame.draw.lines(screen,RED,True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
+            #pygame.draw.lines(screen,GREEN,True,blobData.contours[i],3) #Dibuja el contorno de cada blob
             mostLeft = (xSize, 0)
             mostRight = (0, 0)
 
-            # Body ruky
-            for tips in blobData.cHull[i]: #Iterates through the verticies of the convex hull for each blob
-                #pygame.draw.circle(screen,PURPLE,tips,5) #Draws the vertices purple
+            # Cuerpo ruky
+            for tips in blobData.cHull[i]: #Itera a traves de los vertices del casco convexo para cada blob
+                #pygame.draw.circle(screen,PURPLE,tips,5) #Dibuja los vertices purpura
 
                 if tips[0] < mostLeft[0]:
                     mostLeft = tips
@@ -432,7 +432,7 @@ def hand_tracker():
 
 
             if blobData.centroid[i][0] > headCords[0]:
-                #continue
+                #continua
                 pass
 
             # Centrum ruky
@@ -488,21 +488,21 @@ def hand_tracker():
                         movingObjectBad.remove(movingObjectBad[brick])
                         break
 
-        pygame.display.set_caption('ZOO') #Makes the caption of the pygame screen 'Kinect Tracking'
-        del depth #Deletes depth --> opencv memory issue
-        screenFlipped = pygame.transform.flip(screen,1,0) #Flips the screen so that it is a mirror display
-        screen.blit(screenFlipped,(0,0)) #Updates the main screen --> screen
-        pygame.display.flip() #Updates everything on the window
+        pygame.display.set_caption('ZOO') #Hace que el pie de la pantalla de pygame 'Kinect Tracking'
+        del depth #Elimina la profundidad -> problema de memoria opencv
+        screenFlipped = pygame.transform.flip(screen,1,0) #Da vuelta la pantalla para que sea una pantalla de espejo
+        screen.blit(screenFlipped,(0,0)) #Actualiza la pantalla principal -> pantalla
+        pygame.display.flip() #Actualiza todo en la ventana
 
 
-        for e in pygame.event.get(): #Itertates through current events
-            if e.type is pygame.QUIT: #If the close button is pressed, the while loop ends
+        for e in pygame.event.get(): #Itera a traves de los eventos actuales
+            if e.type is pygame.QUIT: #Si se presiona el boton de cerrar, el bucle while termina
                 done = True
 
-try: #Kinect may not be plugged in --> weird erros
+try: #Kinect puede no estar enchufado -> errores extraños
     #hand_tracker()
     pass
-except: #Lets the libfreenect errors be shown instead of python ones
+except: #LDeja que se muestren los errores libfreenect en lugar de los de python
     pass
 
 hand_tracker()
