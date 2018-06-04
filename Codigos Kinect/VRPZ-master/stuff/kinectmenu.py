@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from freenect import sync_get_depth as get_depth
 import numpy as np

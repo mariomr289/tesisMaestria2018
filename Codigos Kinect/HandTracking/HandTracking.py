@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from freenect import sync_get_depth as get_depth #Utiliza freenect para obtener informacion detallada del Kinect
 import numpy as np #Importar NumPy
 import cv,cv2 #Utiliza tanto cv como cv2
