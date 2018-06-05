@@ -73,4 +73,7 @@ def main_mouse(screen_x = 1280, screen_y = 800):
         else:
             mouse_click_up(1)
         timer +=1
-        
+
+if __name__ == '__main__':
+    main_mouse()
+       
