@@ -38,7 +38,7 @@ class MenuItem(pygame.font.Font):
 		self.font = font
 		self.fontColor = fontColor
 		self.label = self.font.render(name, 1, self.fontColor)
-		self.itemImage = pygame.image.load("../graphics/menuico.png").convert()
+		self.itemImage = pygame.image.load("graphics/menuico.png").convert()
 		self.itemImage.set_colorkey((255, 255, 255))
 
 	def getName(self):
@@ -58,7 +58,7 @@ class MenuItem(pygame.font.Font):
 		if(xpos >= self.xpos and xpos <= self.xpos + self.width) and \
 			(ypos >= self.ypos and ypos <= self.ypos + self.height):
 				return True
-		
+
 		return False
 
 	def applyFocus(self, screen):
@@ -74,7 +74,7 @@ class IdleScreen():
 		self.scrWidth = self.screen.get_rect().width
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
-		self.bgImage = pygame.image.load("../graphics/mainbg.jpg").convert()
+		self.bgImage = pygame.image.load("graphics/mainbg.jpg").convert()
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("Comic Sans MS", 50)
 		self.fontColor = (255, 255, 255)
@@ -108,7 +108,7 @@ class IdleScreen():
 		screenloop = True
 		while screenloop:
 			self.clock.tick(30)
-			mpos = pygame.mouse.get_pos() 
+			mpos = pygame.mouse.get_pos()
 
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT:
@@ -138,7 +138,7 @@ class IdleScreen():
 		if self.animalImgs == []:
 			for i in range(0, 3):
 				self.animalAct = self.animalPictures.pop(random.randrange(len(self.animalPictures)))
-				self.animalImgs.append(BouncingSprite("../graphics/" + self.animalAct, self.scrWidth, self.scrHeight, [3, 3]))
+				self.animalImgs.append(BouncingSprite("graphics/" + self.animalAct, self.scrWidth, self.scrHeight, [3, 3]))
 		else:
 			for img in self.animalImgs:
 				img.update()

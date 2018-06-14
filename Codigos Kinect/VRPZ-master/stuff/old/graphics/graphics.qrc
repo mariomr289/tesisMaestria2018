@@ -1,0 +1,43 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>bison_bg.jpg</file>
+    <file>bison.png</file>
+    <file>bison_weapon.png</file>
+    <file>candy0.png</file>
+    <file>candy1.png</file>
+    <file>candy2.png</file>
+    <file>candy3.png</file>
+    <file>elephant_bg.jpg</file>
+    <file>elephant.png</file>
+    <file>elephant_weapon.png</file>
+    <file>food0.png</file>
+    <file>food1.png</file>
+    <file>food2.png</file>
+    <file>food3.png</file>
+    <file>food4.png</file>
+    <file>food5.png</file>
+    <file>giraffe_bg.jpg</file>
+    <file>giraffe.png</file>
+    <file>giraffe_weapon.png</file>
+    <file>goat_bg.jpg</file>
+    <file>goat.png</file>
+    <file>goat_weapon.png</file>
+    <file>lion_bg.jpg</file>
+    <file>lion.png</file>
+    <file>lion_weapon.png</file>
+    <file>mainbg.jpg</file>
+    <file>menuico.png</file>
+    <file>monkey_bg.jpg</file>
+    <file>monkey.png</file>
+    <file>monkey_weapon.png</file>
+    <file>sheep_bg.jpg</file>
+    <file>sheep.png</file>
+    <file>sheep_weapon.png</file>
+    <file>vader_bg</file>
+    <file>vader_bg.jpg</file>
+    <file>vader.png</file>
+    <file>vader_weapon.png</file>
+    <file>wall.jpg</file>
+
+</qresource>
+</RCC>
