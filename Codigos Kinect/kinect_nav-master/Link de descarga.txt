@@ -1,0 +1,6 @@
+Video:
+https://www.youtube.com/watch?v=kNfKIVMBxEE
+
+Codigo:
+https://github.com/SaranshKejriwal/kinect_nav
+
