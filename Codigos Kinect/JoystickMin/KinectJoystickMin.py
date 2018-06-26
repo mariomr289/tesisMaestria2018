@@ -89,9 +89,9 @@ def doloop():
             yPos = yTempPos
             COLOR = cv.RGB(100,0,100)
 
-        cv.Circle(rgb, (xPos, yPos), 2, COLOR, 40) #draws a circle of a certain color at minimum position
+        #cv.Circle(rgb, (xPos, yPos), 2, COLOR, 40) #draws a circle of a certain color at minimum position
 
-        cv.ShowImage('Image',rgb) #Shows the image
+        #cv.ShowImage('Image',rgb) #Shows the image
         cv.WaitKey(5) #Keyboard interupt
 
         """
