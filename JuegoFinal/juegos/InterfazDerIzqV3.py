@@ -24,16 +24,14 @@ done = False
 # Variables para generar las imagenes
 nave = False
 movimiento = False
-ancho = 800
-alto = 480
 # Clase Para las Naves
 class naveEspacial(pygame.sprite.Sprite):
-	def __init__(self):
+	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
 		self.ImagenNave = pygame.image.load('../Imagenes/nave.jpg')
 		self.rect = self.ImagenNave.get_rect()
-		self.rect.centerx = ancho/2
-		self.rect.centery = alto-30
+		self.rect.centerx = scrWidth/2
+		self.rect.centery = scrHeight-80
 
 		self.listaDisparo = []
 		self.Vida = True
@@ -173,6 +171,9 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
+		# Instancia del Objeto Nave Espacial
+		jugador = naveEspacial(self.scrWidth,self.scrHeight)
+
 		if not done:
 			self.buildMenu() #Construye el Menu Principal si done = False
 
@@ -208,6 +209,8 @@ class IdleScreen():
 				# Cuando se asigna a movimiento = True se empiezan a mover las imagenes
 				self.floatingPicture(movimiento)
 
+			# llamada a que se dibuje la nave espacial
+			jugador.dibujar(screen)
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
 			self.menuItems[self.lastActiveFocus].removeFocus()
 
