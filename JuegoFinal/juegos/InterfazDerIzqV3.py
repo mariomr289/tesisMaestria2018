@@ -7,9 +7,13 @@ import cv
 import cv2
 import pygame
 import sys
+from pygame.locals import *
 import time
 import random
 import os
+
+# Importar libreria de números aleatorios
+from random import randint
 
 # Las siguientes bibliotecas se usan para la manipulacion del mouse
 from Xlib import X, display
@@ -22,13 +26,17 @@ constList = lambda length, val: [val for _ in range(length)]
 # Variable Auxiliar para crear el menu
 done = False
 # Variables para generar las imagenes
-nave = False
+animales = False
 movimiento = False
+# Variable para seleccionar que boton Seleciono (izquierda o derecha)
+identidad = None
+# Lista de Enemigos
+listaEnemigo = []
 # Clase Para las Naves
 class naveEspacial(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
-		self.ImagenNave = pygame.image.load('../Imagenes/nave.jpg')
+		self.ImagenNave = pygame.image.load('../Imagenes/nina.png')
 		self.rect = self.ImagenNave.get_rect()
 		self.rect.centerx = scrWidth/2
 		self.rect.centery = scrHeight-80
@@ -36,11 +44,138 @@ class naveEspacial(pygame.sprite.Sprite):
 		self.listaDisparo = []
 		self.Vida = True
 
-	def disparar(self):
-		pass
+		self.velocidad = 20
+
+		self.sonidoDisparo = pygame.mixer.Sound("../Sonidos/laserSpace.wav")
+
+	"""Nuevos Cambios (Metodos)"""
+	def movimientoDerecha(self):
+		self.rect.right += self.velocidad
+		self.__movimiento()
+
+	def movimientoIzquierda(self):
+		self.rect.left -= self.velocidad
+		self.__movimiento()
+
+	# Identificar que la nave no se salga de la pantalla
+	def __movimiento(self):
+		if self.Vida == True:
+			if self.rect.left <= 22:
+				self.rect.left = 22
+			elif self.rect.right > 1002:
+				self.rect.right = 1002
+
+	def disparar(self,x,y):
+		miProyectil = Proyectil(x,y,"../Imagenes/bala.png", True)
+		self.listaDisparo.append(miProyectil)
+		self.sonidoDisparo.play()
 
 	def dibujar(self, screen):
 		screen.blit(self.ImagenNave, self.rect)
+
+# Clase para el Proyectil
+class Proyectil(pygame.sprite.Sprite):
+	def __init__(self, posx, posy, ruta, personaje):
+		pygame.sprite.Sprite.__init__(self)
+
+		self.imageProyectil = pygame.image.load(ruta)
+
+		self.rect = self.imageProyectil.get_rect()
+
+		self.velocidadDisparo = 5
+
+		self.rect.top = posy
+		self.rect.left = posx
+
+		self.disparoPersonaje = personaje
+
+	def trayectoria(self):
+		if self.disparoPersonaje == True:
+			self.rect.top = self.rect.top - self.velocidadDisparo
+		else:
+			self.rect.top = self.rect.top + self.velocidadDisparo
+
+	def dibujar(self, screen):
+		screen.blit(self.imageProyectil, self.rect)
+
+# Clase para el Invasor
+class Invasor(pygame.sprite.Sprite):
+	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
+		pygame.sprite.Sprite.__init__(self)
+
+		self.imagenA = pygame.image.load(imagenUno)
+		self.imagenB = pygame.image.load(imagenDos)
+
+		self.listaImagenes = [self.imagenA, self.imagenB]
+		self.posImagen = 0
+
+		self.imagenInvasor = self.listaImagenes[self.posImagen]
+		self.rect = self.imagenInvasor.get_rect()
+
+		self.listaDisparo = []
+		self.velocidad = 20
+		self.rect.top = posy
+		self.rect.left = posx
+
+		self.rangoDisparo = 5
+		self.tiempoCambio = 1
+
+		self.derecha = True
+		self.contador = 0
+		self.Maxdescenso = self.rect.top + 40
+
+		self.limiteDerecha = posx + distancia
+		self.limiteIzquierda = posx - distancia
+
+	def dibujar(self, screen):
+		self.imagenInvasor = self.listaImagenes[self.posImagen]
+		screen.blit(self.imagenInvasor, self.rect)
+
+	def comportamiento(self, tiempo):
+		# algoritmo de comportamiento
+		self.__movimientos()
+
+		self.__ataque()
+		if self.tiempoCambio == tiempo:
+			self.posImagen += 1
+			self.tiempoCambio += 1
+
+			if self.posImagen > len(self.listaImagenes)-1:
+				self.posImagen = 0
+
+	def __movimientos(self):
+		if self.contador < 3:
+			self.__movimientoLateral()
+		else:
+			self.__descenso()
+
+	def __descenso(self):
+		if self.Maxdescenso == self.rect.top:
+			self.contador = 0
+			self.Maxdescenso = self.rect.top + 40
+		else:
+			self.rect.top += 1
+
+	def __movimientoLateral(self):
+		if self.derecha == True:
+			self.rect.left = self.rect.left + self.velocidad
+			if self.rect.left > self.limiteDerecha:
+				self.derecha = False
+
+				self.contador += 1
+		else:
+			self.rect.left = self.rect.left - self.velocidad
+			if self.rect.left < self.limiteIzquierda:
+				self.derecha = True
+
+	def __ataque(self):
+		if (randint(0,100) < self.rangoDisparo):
+			self.__disparo()
+
+	def __disparo(self):
+		x,y = self.rect.center
+		miProyectil = Proyectil(x,y,"../Imagenes/disparob.jpg", False)
+		self.listaDisparo.append(miProyectil)
 
 # Clase de imagen de animal que rebota
 class BouncingSprite(pygame.sprite.Sprite):
@@ -106,7 +241,7 @@ class IdleScreen():
 		self.scrWidth = self.screen.get_rect().width
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
-		self.bgImage = pygame.transform.flip(pygame.image.load("../graphics/mainbg.jpg").convert(), 1, 0)
+		self.bgImage = pygame.transform.flip(pygame.image.load("../graphics/FondoJuego.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("LDFComicSans", 40)
 		self.fontColor = (255, 255, 255)
@@ -138,27 +273,52 @@ class IdleScreen():
 	# Esto de alguna manera deberia comenzar un nuevo juego con el script lol.py - DEBERIA, pero no lo hace
 	def ClickDerecho(self):
 		global done
-		global nave
+		global animales
+		global identidad
 		print "DERECHA"
 		done = True
-		nave = True
-		self.run()
+		animales = True
+		identidad = "derecha"
+		# self.run()
 		# sys.exit(128)
 
 	def ClickIzquierdo(self):
 		global done
 		global movimiento
+		global identidad
 		print "IZQUIERDA"
 		done = True
 		movimiento = True
-		self.run()
+		identidad = "izquierda"
+		# self.run()
 		# sys.exit(128)
+
+	# Funcion para cargar los enemigos
+	def cargarEnemigos(self):
+	    posx = 100
+	    for x in range(1, 5):
+	        enemigo = Invasor(posx,100,40,'../Imagenes/MarcianoA.jpg', '../Imagenes/MarcianoB.jpg')
+	        listaEnemigo.append(enemigo)
+	        posx = posx + 200
+
+	    posx = 100
+	    for x in range(1, 5):
+	        enemigo = Invasor(posx,0,40,'../Imagenes/Marciano2A.jpg', '../Imagenes/Marciano2B.jpg')
+	        listaEnemigo.append(enemigo)
+	        posx = posx + 200
+
+	    posx = 100
+	    for x in range(1, 5):
+	        enemigo = Invasor(posx,-100,40,'../Imagenes/Marciano3A.jpg', '../Imagenes/Marciano3B.jpg')
+	        listaEnemigo.append(enemigo)
+	        posx = posx + 200
 
 	# Bucle principal de este script
 	def run(self):
 		global done
-		global nave
+		global animales
 		global movimiento
+		global identidad
 		screenloop = True
 		(depth,_) = get_depth()
 		# Lista de cache en blanco para el area convexa del casco
@@ -171,14 +331,33 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
+		# Cargar sonido principal
+		pygame.mixer.music.load('../Sonidos/Intro.mp3')
+		pygame.mixer.music.play(3)
 		# Instancia del Objeto Nave Espacial
 		jugador = naveEspacial(self.scrWidth,self.scrHeight)
-
+		# Instancia del objeto Invasor
+		#enemigo = Invasor(100,100)
+		self.cargarEnemigos()
+		# Instancia del Objeto Proyectil para el Jugador
+		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
+		# Instancia del Objeto Proyectil para el enemigo
+		# ProyectilInvasor = Proyectil(self.scrWidth/4,self.scrHeight-700,"../Imagenes/disparob.jpg", False)
+		# Verificar si un jugador gano o perdio
+		enJuego = True
+		# Construye el Menu Principal si done = False
 		if not done:
-			self.buildMenu() #Construye el Menu Principal si done = False
+			self.buildMenu()
 
 		while screenloop:
+			# Cuando se crea el Proyectil del Jugador se empieza a mover
+			# DemoProyectil.trayectoria()
+			# Cuando se crea el Proyectil del enemigo se empieza a mover
+			# ProyectilInvasor.trayectoria()
+			# Regulamos los frames por segundo
 			self.clock.tick(30)
+			# Obtenemos el tiempo del Juego
+			tiempo = pygame.time.get_ticks()/1000
 			# Obtenga la profundidad del kinect
 			(depth,_) = get_depth()
 			old_depth = depth
@@ -199,25 +378,99 @@ class IdleScreen():
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT:
 					screenloop = False
-				elif e.type == pygame.MOUSEBUTTONDOWN:
-					screenloop = self.menuFuncs[self.itemNames[self.activeFocus]]()
-					break;
+					pygame.quit()
+					sys.exit()
+				# Controlamos que cliqueo con el mouse
+				if enJuego == True:
+					if e.type == pygame.MOUSEBUTTONDOWN:
+						screenloop = True
+						opcion = self.menuFuncs[self.itemNames[self.activeFocus]]()
+						# break;
+						# Verificar cual de los botones se ha pulsado
+						if identidad == "izquierda":
+							# Movimiento del Jugador a la Izquierda
+							jugador.movimientoDerecha()
+							# Disparos del jugador
+							x,y = jugador.rect.center
+							jugador.disparar(x,y)
+						elif identidad == "derecha":
+							# Movimiento del Jugador a la Derecha
+							jugador.movimientoIzquierda()
+							# Disparos del jugador
+							x,y = jugador.rect.center
+							jugador.disparar(x,y)
 
+					#elif e.type == pygame.KEYDOWN:
+					#	screenloop = True
+					#	if e.key == K_s:
+					#		x,y = jugador.rect.center
+					#		jugador.disparar(x,y)
+
+			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImage, (0, 0))
-			# Se usa para que aparezca las imagenes con la variable nave = True
-			if nave:
+			# Se usa para que aparezca las imagenes con la variable animales = True
+			if animales:
 				# Cuando se asigna a movimiento = True se empiezan a mover las imagenes
 				self.floatingPicture(movimiento)
 
+			# Llamada a que se dibuje el Proyectil del jugador
+			# DemoProyectil.dibujar(screen)
+			# Llamada a que se dibuje el Proyectil del enemigo
+			# ProyectilInvasor.dibujar(screen)
+			# Llamada al comportamiento del enemigo
+			# enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
+			# Llamada a que se dibuje el enemigo
+			# enemigo.dibujar(screen)
+			# Verificar los disparos del jugador
+			if len(jugador.listaDisparo) > 0:
+				for x in jugador.listaDisparo:
+					x.dibujar(screen)
+					x.trayectoria()
+					if x.rect.top < -10:
+						jugador.listaDisparo.remove(x)
+					else:
+						#Verificar que las balas del jugador dieron a los enemigos
+						for enemigo in listaEnemigo:
+							if x.rect.colliderect(enemigo.rect):
+								listaEnemigo.remove(enemigo)
+								jugador.listaDisparo.remove(x)
+
+			# Cargar los enemigos
+			if len(listaEnemigo) > 0:
+				for enemigo in listaEnemigo:
+					enemigo.comportamiento(tiempo)
+					enemigo.dibujar(screen)
+					# Verificar que la bala del enemigo dio al jugador
+					if enemigo.rect.colliderect(jugador.rect):
+						pass
+					# Verificar los disparos del enemigo
+					if len(enemigo.listaDisparo) > 0:
+						for x in enemigo.listaDisparo:
+							x.dibujar(screen)
+							x.trayectoria()
+							# Verificar si el enemigo colisiono con el jugador
+							if x.rect.colliderect(jugador.rect):
+								pass
+
+							if x.rect.top > 900:
+								enemigo.listaDisparo.remove(x)
+							else:
+								# Verificar que cuando un Proyectil enemigo choque con el del jugador los dos se eliminen
+								for disparo in jugador.listaDisparo:
+									if x.rect.colliderect(disparo.rect):
+										jugador.listaDisparo.remove(disparo)
+										enemigo.listaDisparo.remove(x)
+
+			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
 			self.menuItems[self.lastActiveFocus].removeFocus()
 
 			for item in self.menuItems:
 				self.screen.blit(item.label, (item.xpos, item.ypos))
 
-			#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
+			#  Se ejecuta la acción de click del mouse (Parte principal)
 			if mpos[0] > self.scrHeight / 2:
 				self.activeFocus = 0
 				self.lastActiveFocus = 1
