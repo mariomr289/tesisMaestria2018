@@ -115,6 +115,8 @@ class IdleScreen():
 	# Esto de alguna manera deberia comenzar un nuevo juego con el script lol.py - DEBERIA, pero no lo hace
 	def startNewGame(self):
 		print "newgame"
+		os.system("/usr/bin/python TutorialCinco.py")
+		#os.system("/usr/bin/python lol.py bison")
 		sys.exit(128)
 
 	# Bucle principal de este script
