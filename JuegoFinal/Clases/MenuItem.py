@@ -10,7 +10,7 @@ class MenuItem(pygame.font.Font):
 		self.font = font
 		self.fontColor = fontColor
 		self.label = pygame.transform.flip(self.font.render(self.name, 1, self.fontColor), 1, 0)
-		self.itemImage = pygame.image.load("Imagenes/menuico.png").convert()
+		self.itemImage = pygame.image.load("Imagenes/Manito.png").convert()
 		self.itemImage.set_colorkey((255, 255, 255))
 
 	# Controles, si las coordenadas dadas estan en el marco del objeto
