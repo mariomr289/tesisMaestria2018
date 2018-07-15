@@ -23,7 +23,7 @@ class MenuItem(pygame.font.Font):
 
 	# Se aplica el foco en el elemento de menu real
 	def applyFocus(self, screen):
-		self.label = pygame.transform.flip(self.font.render(self.name, 1, (255, 0, 0)), 1, 0)
+		self.label = pygame.transform.flip(self.font.render(self.name, 1, (189, 83, 143)), 1, 0)
 		self.label = pygame.transform.smoothscale(self.label, (self.width + 25, self.height + 25))
 		screen.blit(self.itemImage, (self.xpos - 70, self.ypos + 25))
 

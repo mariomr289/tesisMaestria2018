@@ -48,23 +48,32 @@ class IdleScreen():
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
-		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
+		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
+		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
-		self.font = pygame.font.SysFont("LDFComicSans", 40)
-		self.fontColor = (255, 255, 255)
+		self.font = pygame.font.SysFont("gaban", 60)
+		self.fontColor = (100, 255, 100)
 		self.menuItems = list()
 		self.menuItemsIntro = list()
+		self.menuItemsMenuJuegos = list()
 		self.itemNames = ("Derecha", "Izquierda")
 		self.menuFuncs = { 	"Derecha" : self.ClickDerecho,
 							"Izquierda" : self.ClickIzquierdo}
 		self.itemNamesIntro = ("Entrar", "Salir")
 		self.menuFuncsIntro = {"Entrar" : self.ClickEntrar,
 							"Salir" : self.ClickSalir}
+		self.itemNamesMenuJuegos = ("Primero", "Segundo", "Tercero", "Cuarto")
+		self.menuFuncsMenuJuegos = {"Primero" : self.ClickPrimerJuego,
+							"Segundo" : self.ClickSegundoJuego,
+							"Tercero" : self.ClickTercerJuego,
+							"Cuarto" : self.ClickCuartoJuego}
 		self.animalImgs = []
 		self.animalPictures = ["bison.png", "elephant.png", "giraffe.png", "goat.png", "lion.png",
 								"monkey.png", "sheep.png"]
 		self.activeFocus = 0
 		self.lastActiveFocus = 1
+		self.secondActiveFocus = 2
+		self.thirdActiveFocus = 3
 
 	# Crea el menu de los Botones de la Interfaz Izquierda y Derecha
 	def buildMenu(self):
@@ -96,11 +105,26 @@ class IdleScreen():
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsIntro.append(mi)
 
+	# Crea el menu de los Botones de la Interfaz de Introduccion
+	def buildMenuJuegos(self):
+		self.items = []
+
+		for index, item in enumerate(self.itemNamesMenuJuegos):
+			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
+			width = label.get_rect().width
+			height = label.get_rect().height + 30
+			posx = (self.scrWidth / 2) - (width / 2)
+			totalHeight  = len(self.itemNamesMenuJuegos) * height
+			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+
+			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsMenuJuegos.append(mi)
+
 	# Boton de entrar de la Pantalla de Introduccion
 	def ClickEntrar(self):
 		global done
 		done = False
-		self.run()
+		self.MenuJuegos()
 
 	# Boton de Salir de la Pantalla de Introduccion
 	def ClickSalir(self):
@@ -109,23 +133,48 @@ class IdleScreen():
 		print "SALIR"
 		#sys.exit(128)
 
+	# Boton de Ingreso al Primer Juego
+	def ClickPrimerJuego(self):
+		global done
+		done = False
+		print "Primer Juego"
+		self.JuegoInvasores()
+
+	# Boton de Ingreso al Segundo Juego
+	def ClickSegundoJuego(self):
+		global done
+		done = False
+		print "Segundo Juego"
+
+	# Boton de Ingreso al Tercer Juego
+	def ClickTercerJuego(self):
+		global done
+		done = False
+		print "Tercer Juego"
+
+	# Boton de Ingreso al Cuarto Juego
+	def ClickCuartoJuego(self):
+		global done
+		done = False
+		print "Cuarto Juego"
+
 	# Esto de alguna manera deberia comenzar un nuevo juego con el script lol.py - DEBERIA, pero no lo hace
 	def ClickDerecho(self):
 		global done
-		global animales
+		#global animales
 		global identidad
 		print "DERECHA"
 		done = True
-		animales = True
+		#animales = True
 		identidad = "derecha"
 
 	def ClickIzquierdo(self):
 		global done
-		global movimiento
+		#global movimiento
 		global identidad
 		print "IZQUIERDA"
 		done = True
-		movimiento = True
+		#movimiento = True
 		identidad = "izquierda"
 
 	# Funcion para cargar los enemigos
@@ -149,10 +198,10 @@ class IdleScreen():
 	        posx = posx + 200
 
 	# Juego de los Invasores
-	def run(self):
+	def JuegoInvasores(self):
 		global done
-		global animales
-		global movimiento
+		#global animales
+		#global movimiento
 		global identidad
 		screenloop = True
 		(depth,_) = get_depth()
@@ -244,9 +293,9 @@ class IdleScreen():
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImage, (0, 0))
 			# Se usa para que aparezca las imagenes con la variable animales = True
-			if animales:
+			#if animales:
 				# Cuando se asigna a movimiento = True se empiezan a mover las imagenes
-				self.floatingPicture(movimiento)
+			#	self.floatingPicture(movimiento)
 
 			# Llamada a que se dibuje el Proyectil del jugador
 			# DemoProyectil.dibujar(screen)
@@ -438,6 +487,8 @@ class IdleScreen():
 
 			# Se Carga el fondo de la Imagen de Introduccion
 			self.screen.blit(self.bgImageIntro, (0, 0))
+			# Se usa para que aparezca las imagenes que dan la vuelta
+			self.floatingPicture()
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsIntro[self.activeFocus].applyFocus(self.screen)
 			self.menuItemsIntro[self.lastActiveFocus].removeFocus()
@@ -531,8 +582,166 @@ class IdleScreen():
 				# Espera un nuevo punto de partida
 				dummy = False
 
+	# Pantalla Del Menu de los Juegos
+	def MenuJuegos(self):
+		global done
+		screenloop = True
+		(depth,_) = get_depth()
+		# Lista de cache en blanco para el area convexa del casco
+		cHullAreaCache = constList(5,12000)
+		# Lista de cache en blanco para la relacion de area del area de contorno al area de casco convexo
+		areaRatioCache = constList(5,1)
+		# Iniciar lista de centroides
+		centroidList = list()
+		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.RESIZABLE)
+		# Iterator boolean -> Indica a programa cuando finalizar
+		# Muy importante bool para la manipulacion del raton
+		dummy = False
+		if not done:
+			self.buildMenuJuegos() #Construye el Menu Principal
+
+		while screenloop:
+			self.clock.tick(30)
+			# Obtenga la profundidad del kinect
+			(depth,_) = get_depth()
+			old_depth = depth
+			depth = cv2.resize(old_depth, (1024, 768))
+			# Convierta la profundidad en un flotador de 32 bits
+			depth = depth.astype(np.float32)
+			# Umbral de la profundidad de una imagen binaria. Umbral en 600 unidades arbitrarias
+			_,depthThresh = cv2.threshold(depth, 600, 255, cv2.THRESH_BINARY_INV)
+			# Umbral del fondo para tener un fondo delineado y un primer plano segmentado
+			_,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV)
+			# Crea el objeto blobData usando la clase BlobAnalysis
+			blobData = BlobAnalysis(depthThresh)
+			# Crea el objeto blobDataBack usando la clase BlobAnalysis
+			blobDataBack = BlobAnalysis(back)
+
+			mpos = pygame.mouse.get_pos()
+
+			for e in pygame.event.get():
+				if e.type == pygame.QUIT:
+					screenloop = False
+				elif e.type == pygame.MOUSEBUTTONDOWN:
+					screenloop = True
+					opcion = self.menuFuncsMenuJuegos[self.itemNamesMenuJuegos[self.activeFocus]]()
+					break;
+
+			# Se Carga el fondo de la Imagen de Introduccion
+			self.screen.blit(self.bgImageMenuJuegos, (0, 0))
+			# Se usa para que aparezca las imagenes que dan la vuelta
+			self.floatingPicture()
+			# Se establece en el menu que boton se hizo click
+			self.menuItemsMenuJuegos[self.activeFocus].applyFocus(self.screen)
+			self.menuItemsMenuJuegos[self.lastActiveFocus].removeFocus()
+			self.menuItemsMenuJuegos[self.secondActiveFocus].removeFocus()
+			self.menuItemsMenuJuegos[self.thirdActiveFocus].removeFocus()
+
+			# Se muestra el menú de la Interfaz del Menu de Juegos
+			for item in self.menuItemsMenuJuegos:
+				self.screen.blit(item.label, (item.xpos, item.ypos))
+
+			#  Se ejecuta la acción de click del mouse (Parte principal)
+			if mpos[1] < self.scrHeight / 4:
+				self.activeFocus = 0
+				self.lastActiveFocus = 1
+				self.secondActiveFocus = 2
+				self.thirdActiveFocus = 3
+			elif mpos[1] < self.scrHeight / 2:
+				self.activeFocus = 1
+				self.lastActiveFocus = 0
+				self.secondActiveFocus = 2
+				self.thirdActiveFocus = 3
+			elif mpos[1] < (self.scrHeight / 4 + self.scrHeight/2):
+				self.activeFocus = 2
+				self.lastActiveFocus = 0
+				self.secondActiveFocus = 1
+				self.thirdActiveFocus = 3
+			else:
+				self.activeFocus = 3
+				self.lastActiveFocus = 0
+				self.secondActiveFocus = 1
+				self.thirdActiveFocus = 2
+
+			for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
+				pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
+			for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
+				pygame.draw.circle(screen,(0,0,255),blobData.centroid[i],10) #Dibuja un circulo azul en cada centroide
+				centroidList.append(blobData.centroid[i]) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
+				pygame.draw.lines(screen,(255,0,0),True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
+				pygame.draw.lines(screen,(0,255,0),True,blobData.contours[i],3) #Dibuja el contorno de cada blob
+
+				for tips in blobData.cHull[i]: #Itera a traves de los vertices del casco convexo para cada blob
+					pygame.draw.circle(screen,(255,0,255),tips,5) #Dibuja los vertices purpura
+
+			# Elimina la profundidad --> opencv problema de memoria
+			del depth
+			# Da vuelta la pantalla para que sea una pantalla de espejo
+			screenFlipped = pygame.transform.flip(screen,1,0)
+			# Actualiza la pantalla principal -> pantalla
+			screen.blit(screenFlipped,(0,0))
+			# Actualiza todo en la ventana
+			pygame.display.flip()
+
+			# Declaracion de prueba de mouse
+			try:
+				centroidX = blobData.centroid[0][0]
+				centroidY = blobData.centroid[0][1]
+				if dummy:
+					# Obtiene los atributos actuales del mouse
+					mousePtr = display.Display().screen().root.query_pointer()._data
+					# Encuentra el cambio en X
+					dX = centroidX - strX
+					# Encuentra el cambio en Y
+					dY = strY - centroidY
+					minChange = 3
+					# Si hubo un cambio en X mayor que minChange ...
+					if abs(dX) > minChange:
+						# Nueva coordenada X del mouse
+						mouseX = mousePtr["root_x"] - 2*dX
+						if mouseX < 0:
+							mouseX = 0
+						elif mouseX > self.scrWidth:
+							mouseX = self.scrWidth
+					# Si hubo un cambio en Y mayor que minChange ...
+					if abs(dY) > minChange:
+						# Nueva coordenada Y del mouse
+						mouseY = mousePtr["root_y"] - 2*dY
+						if mouseY < 0:
+							mouseY = 0
+						elif mouseY > self.scrHeight:
+							mouseY = self.scrHeight
+					print mouseX, mouseY
+					# Mueve el mouse a una nueva ubicación
+					move_mouse(mouseX, mouseY)
+					# Hace que la nueva X inicial del mouse sea la X actual del centroide mas nuevo
+					strX = centroidX
+					# Hace que la nueva Y inicial del mouse sea la Y actual del centroide mas nuevo
+					strY = centroidY
+					# Normaliza (elimina el ruido) en el area convexa del casco
+					cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0])
+					# Normaliza la relacion entre el area del contorno y el area convexa del casco
+					areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea)
+					print cArea, areaRatio, "(Must be: < 1000, > 0.82)"
+					# Define lo que es un clic abajo. El area debe ser pequenia y la mano debe verse como un circulo binario (casi)
+					if cArea < 25000 and areaRatio > 0.82:
+						click_down(1)
+					else:
+						click_up(1)
+				else:
+					# Inicializa la X inicial
+					strX = centroidX
+					# Inicializa el inicio Y
+					strY = centroidY
+					# Permite que la función continue en la primera parte de la sentencia if
+					dummy = True
+			except:
+				# No puede haber centroides y, por lo tanto, blobData.centroid [0] estará fuera de rango
+				# Espera un nuevo punto de partida
+				dummy = False
+
 	# Maneja, crea y actualiza animales flotando / rebotando en la pantalla del menú
-	def floatingPicture(self, movimiento):
+	def floatingPicture(self):
 		self.animalAct = None
 		self.animalPos = [[0, 0], [1024, 0]]
 		if self.animalImgs == []:
@@ -540,9 +749,7 @@ class IdleScreen():
 				self.animalAct = self.animalPictures.pop(random.randrange(len(self.animalPictures)))
 				self.animalImgs.append(BouncingSprite("Imagenes/" + self.animalAct, self.scrWidth, self.scrHeight,
 					self.animalPos[i][0], self.animalPos[i][1], [3, 3]))
-
-		if movimiento:
-		#else:
+		else:
 			for img in self.animalImgs:
 				img.update()
 
