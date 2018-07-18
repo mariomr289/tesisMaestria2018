@@ -211,7 +211,7 @@ class IdleScreen():
 		areaRatioCache = constList(5,1)
 		# Iniciar lista de centroides
 		centroidList = list()
-		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.RESIZABLE)
+		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
@@ -264,6 +264,11 @@ class IdleScreen():
 					screenloop = False
 					pygame.quit()
 					sys.exit()
+				elif e.type == pygame.KEYDOWN:
+					if e.key == pygame.K_ESCAPE:
+						screenloop = False
+						pygame.quit()
+						sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -451,7 +456,7 @@ class IdleScreen():
 		areaRatioCache = constList(5,1)
 		# Iniciar lista de centroides
 		centroidList = list()
-		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.RESIZABLE)
+		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
@@ -480,6 +485,13 @@ class IdleScreen():
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT:
 					screenloop = False
+					pygame.quit()
+					sys.exit()
+				elif e.type == pygame.KEYDOWN:
+					if e.key == pygame.K_ESCAPE:
+						screenloop = False
+						pygame.quit()
+						sys.exit()
 				elif e.type == pygame.MOUSEBUTTONDOWN:
 					screenloop = True
 					opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
@@ -593,7 +605,7 @@ class IdleScreen():
 		areaRatioCache = constList(5,1)
 		# Iniciar lista de centroides
 		centroidList = list()
-		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.RESIZABLE)
+		screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
@@ -622,6 +634,13 @@ class IdleScreen():
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT:
 					screenloop = False
+					pygame.quit()
+					sys.exit()
+				elif e.type == pygame.KEYDOWN:
+					if e.key == pygame.K_ESCAPE:
+						screenloop = False
+						pygame.quit()
+						sys.exit()
 				elif e.type == pygame.MOUSEBUTTONDOWN:
 					screenloop = True
 					opcion = self.menuFuncsMenuJuegos[self.itemNamesMenuJuegos[self.activeFocus]]()
