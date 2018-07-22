@@ -16,11 +16,11 @@ class Invasor(pygame.sprite.Sprite):
 		self.rect = self.imagenInvasor.get_rect()
 
 		self.listaDisparo = []
-		self.velocidad = 20
+		self.velocidad = 10
 		self.rect.top = posy
 		self.rect.left = posx
 
-		self.rangoDisparo = 5
+		self.rangoDisparo = 1
 		self.tiempoCambio = 1
 
 		self.derecha = True
@@ -39,7 +39,8 @@ class Invasor(pygame.sprite.Sprite):
 		self.__movimientos()
 
 		self.__ataque()
-		if self.tiempoCambio == tiempo:
+		# Animacion de la Gallina
+		if self.tiempoCambio != tiempo:
 			self.posImagen += 1
 			self.tiempoCambio += 1
 
@@ -47,10 +48,10 @@ class Invasor(pygame.sprite.Sprite):
 				self.posImagen = 0
 
 	def __movimientos(self):
-		if self.contador < 3:
+		#if self.contador < 3:
 			self.__movimientoLateral()
-		else:
-			self.__descenso()
+		#else:
+		#	self.__descenso()
 
 	def __descenso(self):
 		if self.Maxdescenso == self.rect.top:
@@ -72,10 +73,11 @@ class Invasor(pygame.sprite.Sprite):
 				self.derecha = True
 
 	def __ataque(self):
-		if (randint(0,100) < self.rangoDisparo):
+		# Numero de Huevos que Pone la gallina
+		if (randint(0,150) < self.rangoDisparo):
 			self.__disparo()
 
 	def __disparo(self):
 		x,y = self.rect.center
-		miProyectil = Proyectil.Proyectil(x,y,"Imagenes/disparob.jpg", False)
+		miProyectil = Proyectil.Proyectil(x,y,"Imagenes/HuevoFinal.png", False)
 		self.listaDisparo.append(miProyectil)

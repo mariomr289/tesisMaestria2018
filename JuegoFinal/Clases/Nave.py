@@ -4,7 +4,7 @@ import Proyectil
 class naveEspacial(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
-		self.ImagenNave = pygame.image.load('Imagenes/nina.png')
+		self.ImagenNave = pygame.image.load('Imagenes/NenaCanasta.png')
 		self.rect = self.ImagenNave.get_rect()
 		self.rect.centerx = scrWidth/2
 		self.rect.centery = scrHeight-80
@@ -18,11 +18,11 @@ class naveEspacial(pygame.sprite.Sprite):
 
 	"""Nuevos Cambios (Metodos)"""
 	def movimientoDerecha(self):
-		self.rect.right += self.velocidad
+		self.rect.right -= self.velocidad
 		self.__movimiento()
 
 	def movimientoIzquierda(self):
-		self.rect.left -= self.velocidad
+		self.rect.left += self.velocidad
 		self.__movimiento()
 
 	# Identificar que la nave no se salga de la pantalla
