@@ -22,14 +22,16 @@ import Xlib.error
 import Xlib.ext.xtest
 
 # Importar las Clases del Juego Izquierda Derecha
-from Clases import Nave
-from Clases import Invasor
+from Clases import Jugador
+from Clases import Gallina
 # Importar la Clase de la Animacion Inicial de los Animales
 from Clases import BouncingSprite
 # Importar la Clase para crear el Menu
 from Clases import MenuItem
 # Importar las Clases del Juego Laberinto
 from Clases import Player
+# Importar la Clase para crear el Puntaje
+from Clases import Puntaje
 
 # Da una lista de longitud del tamanio lleno con la variable val la longitud es una lista y val es dinamica
 constList = lambda length, val: [val for _ in range(length)]
@@ -316,12 +318,11 @@ class IdleScreen():
 	    #    enemigo = Invasor(posx,100,40,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTrans.png')
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
-
-	    posx = 150
-	    for x in range(1, 2):
-	        enemigo = Invasor(posx,50,90,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
+	    posx = 120
+	    for x in range(1, 5):
+	        enemigo = Gallina(posx,50,100,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
 	        listaEnemigo.append(enemigo)
-	        posx = posx + 230
+	        posx = posx + 240
 
 	    #posx = 100
 	    #for x in range(1, 5):
@@ -351,10 +352,12 @@ class IdleScreen():
 		# pygame.mixer.music.load('Sonidos/Intro.mp3')
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Nave Espacial
-		jugador = Nave.naveEspacial(self.scrWidth,self.scrHeight)
+		jugador = Jugador.NenaCanasta(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
 		#enemigo = Invasor(100,100)
 		self.cargarEnemigos()
+		# Instancia del Objeto Puntaje
+		puntos = Puntaje.Score(self.font, (self.scrWidth/2, self.scrHeight/8))
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
@@ -426,9 +429,10 @@ class IdleScreen():
 					#	if e.key == K_s:
 					#		x,y = jugador.rect.center
 					#		jugador.disparar(x,y)
-
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImage, (0, 0))
+			# Cargar el dibujarPuntaje
+			puntos.update(screen)
 			# Se usa para que aparezca las imagenes con la variable animales = True
 			#if animales:
 				# Cuando se asigna a movimiento = True se empiezan a mover las imagenes
@@ -474,8 +478,8 @@ class IdleScreen():
 							# Verificar si el enemigo colisiono con el jugador
 							if x.rect.colliderect(jugador.rect):
 								pass
-
-							if x.rect.top > 900:
+							# Verificar que el huevo paso de la ventana se elimina
+							if x.rect.top > 750:
 								enemigo.listaDisparo.remove(x)
 							else:
 								# Verificar que cuando un Proyectil enemigo choque con el del jugador los dos se eliminen

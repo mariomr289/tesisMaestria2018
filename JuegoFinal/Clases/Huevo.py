@@ -1,12 +1,12 @@
 import pygame
-# Clase para el Proyectil
-class Proyectil(pygame.sprite.Sprite):
+# Clase para el Huevo de la Gallina
+class Huevo(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, ruta, personaje):
 		pygame.sprite.Sprite.__init__(self)
 
-		self.imageProyectil = pygame.image.load(ruta)
+		self.imageHuevo = pygame.image.load(ruta)
 
-		self.rect = self.imageProyectil.get_rect()
+		self.rect = self.imageHuevo.get_rect()
 
 		self.velocidadDisparo = 2
 
@@ -22,4 +22,4 @@ class Proyectil(pygame.sprite.Sprite):
 			self.rect.top = self.rect.top + self.velocidadDisparo
 
 	def dibujar(self, screen):
-		screen.blit(self.imageProyectil, self.rect)
+		screen.blit(self.imageHuevo, self.rect)

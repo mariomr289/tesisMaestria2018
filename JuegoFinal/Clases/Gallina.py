@@ -1,8 +1,8 @@
 import pygame
 from random import randint
-import Proyectil
-# Clase para el Invasor
-class Invasor(pygame.sprite.Sprite):
+import Huevo
+# Clase para la Gallina que es el Enemigo
+class Gallina(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)
 
@@ -12,15 +12,15 @@ class Invasor(pygame.sprite.Sprite):
 		self.listaImagenes = [self.imagenA, self.imagenB]
 		self.posImagen = 0
 
-		self.imagenInvasor = self.listaImagenes[self.posImagen]
-		self.rect = self.imagenInvasor.get_rect()
+		self.imagenGallina = self.listaImagenes[self.posImagen]
+		self.rect = self.imagenGallina.get_rect()
 
 		self.listaDisparo = []
 		self.velocidad = 10
 		self.rect.top = posy
 		self.rect.left = posx
 
-		self.rangoDisparo = 1
+		self.rangoDisparo = 2
 		self.tiempoCambio = 1
 
 		self.derecha = True
@@ -31,8 +31,8 @@ class Invasor(pygame.sprite.Sprite):
 		self.limiteIzquierda = posx - distancia
 
 	def dibujar(self, screen):
-		self.imagenInvasor = self.listaImagenes[self.posImagen]
-		screen.blit(self.imagenInvasor, self.rect)
+		self.imagenGallina = self.listaImagenes[self.posImagen]
+		screen.blit(self.imagenGallina, self.rect)
 
 	def comportamiento(self, tiempo):
 		# algoritmo de comportamiento
@@ -79,5 +79,5 @@ class Invasor(pygame.sprite.Sprite):
 
 	def __disparo(self):
 		x,y = self.rect.center
-		miProyectil = Proyectil.Proyectil(x,y,"Imagenes/HuevoFinal.png", False)
-		self.listaDisparo.append(miProyectil)
+		miHuevo = Huevo.Huevo(x,y,"Imagenes/HuevoFinal.png", False)
+		self.listaDisparo.append(miHuevo)
