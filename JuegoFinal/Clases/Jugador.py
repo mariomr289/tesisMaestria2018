@@ -5,6 +5,7 @@ class NenaCanasta(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
 		self.ImagenNena = pygame.image.load('Imagenes/NenaCanasta.png')
+		self.ImagenExplosion = pygame.image.load('Imagenes/NenaPierde.png')
 		self.rect = self.ImagenNena.get_rect()
 		self.rect.centerx = scrWidth/2
 		self.rect.centery = scrHeight-60
@@ -15,6 +16,7 @@ class NenaCanasta(pygame.sprite.Sprite):
 		self.velocidad = 20
 
 		#self.sonidoDisparo = pygame.mixer.Sound("Sonidos/laserSpace.wav")
+		self.sonidoExplosion = pygame.mixer.Sound("Sonidos/short-egg-cracking.mp3")
 
 	"""Nuevos Cambios (Metodos)"""
 	def movimientoDerecha(self):
@@ -37,6 +39,13 @@ class NenaCanasta(pygame.sprite.Sprite):
 	#	miProyectil = Proyectil.Proyectil(x,y,"Imagenes/bala.png", True)
 	#	self.listaDisparo.append(miProyectil)
 	#	self.sonidoDisparo.play()
+
+	# Funcion para cuando pierda el juego
+	def destruccion(self):
+		self.sonidoExplosion.play()
+		self.Vida = False
+		self.velocidad = 0
+		self.ImagenNena = self.ImagenExplosion
 
 	def dibujar(self, screen):
 		screen.blit(self.ImagenNena, self.rect)

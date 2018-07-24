@@ -20,8 +20,10 @@ class Gallina(pygame.sprite.Sprite):
 		self.rect.top = posy
 		self.rect.left = posx
 
-		self.rangoDisparo = 2
+		self.rangoDisparo = 1
 		self.tiempoCambio = 1
+
+		self.conquista = False
 
 		self.derecha = True
 		self.contador = 0
@@ -35,17 +37,18 @@ class Gallina(pygame.sprite.Sprite):
 		screen.blit(self.imagenGallina, self.rect)
 
 	def comportamiento(self, tiempo):
-		# algoritmo de comportamiento
-		self.__movimientos()
+		if self.conquista == False:
+			# algoritmo de comportamiento
+			self.__movimientos()
 
-		self.__ataque()
-		# Animacion de la Gallina
-		if self.tiempoCambio != tiempo:
-			self.posImagen += 1
-			self.tiempoCambio += 1
+			self.__ataque()
+			# Animacion de la Gallina
+			if self.tiempoCambio != tiempo:
+				self.posImagen += 1
+				self.tiempoCambio += 1
 
-			if self.posImagen > len(self.listaImagenes)-1:
-				self.posImagen = 0
+				if self.posImagen > len(self.listaImagenes)-1:
+					self.posImagen = 0
 
 	def __movimientos(self):
 		#if self.contador < 3:

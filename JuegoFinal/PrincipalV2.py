@@ -118,14 +118,15 @@ class IdleScreen():
 		self.scrWidth = self.screen.get_rect().width
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
-		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoDerIzq.jpg").convert(), 1, 0)
+		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
 		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
-		self.fontColor = (100, 255, 100)
+		self.fontPuntaje = pygame.font.SysFont("Answer", 45)
+		self.fontColor = (16, 4, 130)
 		self.menuItems = list()
 		self.menuItemsArriba = list()
 		self.menuItemsLaberinto = list()
@@ -276,11 +277,9 @@ class IdleScreen():
 	# Menu del Juego Derecha e Izquierda
 	def ClickDerecho(self):
 		global done
-		#global animales
 		global identidad
 		print "DERECHA"
 		done = True
-		#animales = True
 		identidad = "derecha"
 
 	def ClickIzquierdo(self):
@@ -289,27 +288,29 @@ class IdleScreen():
 		global identidad
 		print "IZQUIERDA"
 		done = True
-		#movimiento = True
 		identidad = "izquierda"
 
 	# Menus del Juego Arriba y Abajo
 	def ClickArriba(self):
 		global done
-		#global animales
 		global identidad
 		print "ARRIBA"
 		done = True
-		#animales = True
 		identidad = "arriba"
 
 	def ClickAbajo(self):
 		global done
-		#global movimiento
 		global identidad
 		print "ABAJO"
 		done = True
-		#movimiento = True
 		identidad = "abajo"
+
+	def detenerTodo(self):
+		for enemigo in listaEnemigo:
+			for disparo in enemigo.listaDisparo:
+				enemigo.listaDisparo.remove(disparo)
+
+			enemigo.conquista = True
 
 	# Funcion para cargar los enemigos
 	def cargarEnemigos(self):
@@ -318,11 +319,11 @@ class IdleScreen():
 	    #    enemigo = Invasor(posx,100,40,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTrans.png')
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
-	    posx = 120
-	    for x in range(1, 5):
-	        enemigo = Gallina(posx,50,100,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
+	    posx = 470
+	    for x in range(1, 2):
+	        enemigo = Gallina(posx,80,460,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
 	        listaEnemigo.append(enemigo)
-	        posx = posx + 240
+	        posx = posx + 380
 
 	    #posx = 100
 	    #for x in range(1, 5):
@@ -333,8 +334,6 @@ class IdleScreen():
 	# Juego de SpaceInvader (Derecha e Izquierda)
 	def JuegoDerIzq(self):
 		global done
-		#global animales
-		#global movimiento
 		global identidad
 		screenloop = True
 		(depth,_) = get_depth()
@@ -349,15 +348,17 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar sonido principal
-		# pygame.mixer.music.load('Sonidos/Intro.mp3')
-		# pygame.mixer.music.play(3)
+		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
+		pygame.mixer.music.play(3)
+		# Cargar la Palaba de Fin del Juego
+		Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
 		# Instancia del Objeto Nave Espacial
 		jugador = Jugador.NenaCanasta(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
 		#enemigo = Invasor(100,100)
 		self.cargarEnemigos()
 		# Instancia del Objeto Puntaje
-		puntos = Puntaje.Score(self.font, (self.scrWidth/2, self.scrHeight/8))
+		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
@@ -402,8 +403,11 @@ class IdleScreen():
 				if e.type == pygame.KEYDOWN:
 					if e.key == pygame.K_ESCAPE:
 						screenloop = False
-						pygame.quit()
-						sys.exit()
+						done = False
+						pygame.mixer.music.fadeout(2000)
+						self.MenuJuegos()
+						#pygame.quit()
+						#sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -431,7 +435,7 @@ class IdleScreen():
 					#		jugador.disparar(x,y)
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImage, (0, 0))
-			# Cargar el dibujarPuntaje
+			# Actualizar el Puntaje del Juego
 			puntos.update(screen)
 			# Se usa para que aparezca las imagenes con la variable animales = True
 			#if animales:
@@ -449,44 +453,59 @@ class IdleScreen():
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
-			if len(jugador.listaDisparo) > 0:
-				for x in jugador.listaDisparo:
-					x.dibujar(screen)
-					x.trayectoria()
-					if x.rect.top < -10:
-						jugador.listaDisparo.remove(x)
-					else:
+			#if len(jugador.listaDisparo) > 0:
+			#	for x in jugador.listaDisparo:
+			#		x.dibujar(screen)
+			#		x.trayectoria()
+			#		if x.rect.top < -10:
+			#			jugador.listaDisparo.remove(x)
+			#		else:
 						#Verificar que las balas del jugador dieron a los enemigos
-						for enemigo in listaEnemigo:
-							if x.rect.colliderect(enemigo.rect):
-								listaEnemigo.remove(enemigo)
-								jugador.listaDisparo.remove(x)
+			#			for enemigo in listaEnemigo:
+			#				if x.rect.colliderect(enemigo.rect):
+			#					listaEnemigo.remove(enemigo)
+			#					jugador.listaDisparo.remove(x)
 
 			# Cargar los enemigos
 			if len(listaEnemigo) > 0:
 				for enemigo in listaEnemigo:
 					enemigo.comportamiento(tiempo)
 					enemigo.dibujar(screen)
-					# Verificar que la bala del enemigo dio al jugador
-					if enemigo.rect.colliderect(jugador.rect):
-						pass
+					# Verificar que el enemigo choco con el jugador
+					#if enemigo.rect.colliderect(jugador.rect):
+					#	pass
+						#jugador.destruccion()
+						# enJuego = False
+						#self.detenerTodo()
 					# Verificar los disparos del enemigo
 					if len(enemigo.listaDisparo) > 0:
 						for x in enemigo.listaDisparo:
 							x.dibujar(screen)
 							x.trayectoria()
-							# Verificar si el enemigo colisiono con el jugador
+							# Verificar que la bala del enemigo colisiono con el jugador
 							if x.rect.colliderect(jugador.rect):
-								pass
-							# Verificar que el huevo paso de la ventana se elimina
-							if x.rect.top > 750:
+								# Suma al puntaje los huevos que alcanza el jugador
+								puntos.score_up()
+								#Remueve los huevos de la lista de Disparos
 								enemigo.listaDisparo.remove(x)
-							else:
+								enJuego = True
+							# Verificar que el huevo paso de la ventana se elimina
+							if x.rect.top > 780:
+								# Verifica que cuando el huevo pasa del limite el jugador pierde
+								enemigo.listaDisparo.remove(x)
+								jugador.destruccion()
+								enJuego = False
+								self.detenerTodo()
+							#else:
 								# Verificar que cuando un Proyectil enemigo choque con el del jugador los dos se eliminen
-								for disparo in jugador.listaDisparo:
-									if x.rect.colliderect(disparo.rect):
-										jugador.listaDisparo.remove(disparo)
-										enemigo.listaDisparo.remove(x)
+								#for disparo in jugador.listaDisparo:
+									#if x.rect.colliderect(disparo.rect):
+										#jugador.listaDisparo.remove(disparo)
+										#enemigo.listaDisparo.remove(x)
+
+			if enJuego == False:
+				pygame.mixer.music.fadeout(3000)
+				screen.blit(Texto,(320,200))
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
