@@ -42,17 +42,19 @@ animales = False
 movimiento = False
 # Variable para seleccionar que boton Seleciono (izquierda o derecha)
 identidad = None
-# Lista de Enemigos
+# Lista de Enemigos del Juego de IzqDerecha
 listaEnemigo = []
-# Clase Protagonista
-class Protagonista(pygame.sprite.Sprite):
+# lista de Enemigos del Juego Arriba Abajo
+listaPeces = []
+# Clase Sirena Juego Arriba Abajo
+class Sirena(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
-		self.ImagenProt = pygame.image.load('Imagenes/MarioVuela.png')
-		self.rect = self.ImagenProt.get_rect()
-		self.rect.centerx = scrWidth - 80
+		self.ImagenSirena = pygame.image.load('Imagenes/Pez.png')
+		self.rect = self.ImagenSirena.get_rect()
+		self.rect.centerx = scrWidth - 60
 		self.rect.centery = scrHeight/2
 
-		self.listaDisparo = []
+		#self.listaDisparo = []
 		self.Vida = True
 
 		self.velocidad = 20
@@ -69,46 +71,80 @@ class Protagonista(pygame.sprite.Sprite):
 	# Identificar que la nave no se salga de la pantalla
 	def __movimiento(self):
 		if self.Vida == True:
-			if self.rect.top <= 0:
-				self.rect.top = 0
-			elif self.rect.bottom > 760:
-				self.rect.bottom = 760
+			if self.rect.top <= 10:
+				self.rect.top = 10
+			elif self.rect.bottom > 758:
+				self.rect.bottom = 758
 
 	def dibujar(self, screen):
-		screen.blit(self.ImagenProt, self.rect)
+		screen.blit(self.ImagenSirena, self.rect)
 
-# Clase Enemigo
-class Enemigo(pygame.sprite.Sprite):
-	def __init__(self, posx, posy):
+# Clase Pez que son los enemigos del Juego Arriba Abajo
+class Pez(pygame.sprite.Sprite):
+	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)
 
-		self.imagenA = pygame.image.load('Imagenes/enemigoA.png')
-		self.imagenB = pygame.image.load('Imagenes/enemigoB.png')
+		self.imagenA = pygame.image.load(imagenUno)
+		self.imagenB = pygame.image.load(imagenDos)
 
 		self.listaImagenes = [self.imagenA, self.imagenB]
 		self.posImagen = 0
 
-		self.imagenEnemigo = self.listaImagenes[self.posImagen]
-		self.rect = self.imagenEnemigo.get_rect()
+		self.imagenPez = self.listaImagenes[self.posImagen]
+		self.rect = self.imagenPez.get_rect()
 
-		self.listaDisparo = []
-		self.velocidad = 20
+		#self.listaDisparo = []
+		self.velocidad = 10
 		self.rect.top = posy
 		self.rect.left = posx
 
 		self.tiempoCambio = 1
 
+		self.abajo = True
+		self.contador = 0
+		self.MaxDerecha = self.rect.left + 40
+
+		self.limiteDerecha = posx + distancia
+		self.limiteIzquierda = posx - distancia
+
 	def dibujar(self, screen):
-		self.imagenEnemigo = self.listaImagenes[self.posImagen]
-		screen.blit(self.imagenEnemigo, self.rect)
+		self.imagenPez = self.listaImagenes[self.posImagen]
+		screen.blit(self.imagenPez, self.rect)
 
 	def comportamiento(self, tiempo):
-		if self.tiempoCambio == tiempo:
+		self.__movimientos()
+		# Animacion del Enemigo
+		if self.tiempoCambio != tiempo:
 			self.posImagen += 1
 			self.tiempoCambio += 1
 
 			if self.posImagen > len(self.listaImagenes)-1:
 				self.posImagen = 0
+
+	def __movimientos(self):
+		if self.contador < 3:
+			self.__movimientoAbajo()
+		else:
+			self.__Moviderecha()
+
+	def __Moviderecha(self):
+		if self.MaxDerecha == self.rect.left:
+			self.contador = 0
+			self.MaxDerecha = self.rect.left + 40
+		else:
+			self.rect.left += 1
+
+	def __movimientoAbajo(self):
+		if self.abajo == True:
+			self.rect.top = self.rect.top + self.velocidad
+			if self.rect.top > self.limiteDerecha:
+				self.abajo = False
+
+				self.contador += 1
+		else:
+			self.rect.top = self.rect.top - self.velocidad
+			if self.rect.top < self.limiteIzquierda:
+				self.abajo = True
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -119,7 +155,7 @@ class IdleScreen():
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
-		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoMarino.jpg").convert(), 1, 0)
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
@@ -305,6 +341,7 @@ class IdleScreen():
 		done = True
 		identidad = "abajo"
 
+	#Funcion que detiene todo en el Juego Izquierda Derecha
 	def detenerTodo(self):
 		for enemigo in listaEnemigo:
 			for disparo in enemigo.listaDisparo:
@@ -330,6 +367,26 @@ class IdleScreen():
 	    #    enemigo = Invasor(posx,-100,40,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTrans.png')
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
+
+	# Funcion para cargar los Peces del Juego Arriba Abajo
+	def cargarPeces(self):
+		posy = 100
+		for x in range(1,5):
+			PezEnemigo = Pez(100,posy,40,'Imagenes/MarcianoA.jpg', 'Imagenes/MarcianoB.jpg')
+			listaPeces.append(PezEnemigo)
+			posy = posy + 200
+
+		posy = 100
+		for x in range(1,5):
+			PezEnemigo = Pez(0,posy,40,'Imagenes/Marciano2A.jpg', 'Imagenes/Marciano2B.jpg')
+			listaPeces.append(PezEnemigo)
+			posy = posy + 200
+
+		posy = 100
+		for x in range(1,5):
+			PezEnemigo = Pez(-100,posy,40,'Imagenes/Marciano3A.jpg', 'Imagenes/Marciano3B.jpg')
+			listaPeces.append(PezEnemigo)
+			posy = posy + 200
 
 	# Juego de SpaceInvader (Derecha e Izquierda)
 	def JuegoDerIzq(self):
@@ -620,9 +677,10 @@ class IdleScreen():
 		# pygame.mixer.music.load('Sonidos/Intro.mp3')
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Nave Espacial
-		jugador = Protagonista(self.scrWidth,self.scrHeight)
+		jugador = Sirena(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
-		enemigo = Enemigo(100,100)
+		#enemigo = Enemigo(100,100)
+		self.cargarPeces()
 		# self.cargarEnemigos()
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
@@ -708,11 +766,11 @@ class IdleScreen():
 			# Llamada a que se dibuje el Proyectil del enemigo
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
-			enemigo.comportamiento(tiempo)
+			#enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Llamada a que se dibuje el enemigo
-			enemigo.dibujar(screen)
+			#enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
 			#if len(jugador.listaDisparo) > 0:
 			#	for x in jugador.listaDisparo:
@@ -728,10 +786,10 @@ class IdleScreen():
 			#					jugador.listaDisparo.remove(x)
 
 			# Cargar los enemigos
-			#if len(listaEnemigo) > 0:
-			#	for enemigo in listaEnemigo:
-			#		enemigo.comportamiento(tiempo)
-			#		enemigo.dibujar(screen)
+			if len(listaPeces) > 0:
+				for PezEnemigo in listaPeces:
+					PezEnemigo.comportamiento(tiempo)
+					PezEnemigo.dibujar(screen)
 					# Verificar que la bala del enemigo dio al jugador
 			#		if enemigo.rect.colliderect(jugador.rect):
 			#			pass
