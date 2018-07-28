@@ -44,17 +44,16 @@ movimiento = False
 identidad = None
 # Lista de Enemigos del Juego de IzqDerecha
 listaEnemigo = []
-# lista de Enemigos del Juego Arriba Abajo
-listaPeces = []
-# Clase Sirena Juego Arriba Abajo
-class Sirena(pygame.sprite.Sprite):
+# lista de Obstaculos del Juego Arriba Abajo
+listaObstaculos = []
+# Clase Pez Juego Arriba Abajo
+class Pez(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
-		self.ImagenSirena = pygame.image.load('Imagenes/Pez.png')
-		self.rect = self.ImagenSirena.get_rect()
-		self.rect.centerx = scrWidth - 60
+		self.ImagenPez = pygame.image.load('Imagenes/Pez.png')
+		self.rect = self.ImagenPez.get_rect()
+		self.rect.centerx = scrWidth - 100
 		self.rect.centery = scrHeight/2
 
-		#self.listaDisparo = []
 		self.Vida = True
 
 		self.velocidad = 20
@@ -77,10 +76,10 @@ class Sirena(pygame.sprite.Sprite):
 				self.rect.bottom = 758
 
 	def dibujar(self, screen):
-		screen.blit(self.ImagenSirena, self.rect)
+		screen.blit(self.ImagenPez, self.rect)
 
-# Clase Pez que son los enemigos del Juego Arriba Abajo
-class Pez(pygame.sprite.Sprite):
+# Clase Obstaculo que son los enemigos del Juego Arriba Abajo
+class Obstaculo(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)
 
@@ -90,8 +89,8 @@ class Pez(pygame.sprite.Sprite):
 		self.listaImagenes = [self.imagenA, self.imagenB]
 		self.posImagen = 0
 
-		self.imagenPez = self.listaImagenes[self.posImagen]
-		self.rect = self.imagenPez.get_rect()
+		self.imagenObstaculo = self.listaImagenes[self.posImagen]
+		self.rect = self.imagenObstaculo.get_rect()
 
 		#self.listaDisparo = []
 		self.velocidad = 10
@@ -108,8 +107,8 @@ class Pez(pygame.sprite.Sprite):
 		self.limiteIzquierda = posx - distancia
 
 	def dibujar(self, screen):
-		self.imagenPez = self.listaImagenes[self.posImagen]
-		screen.blit(self.imagenPez, self.rect)
+		self.imagenObstaculo = self.listaImagenes[self.posImagen]
+		screen.blit(self.imagenObstaculo, self.rect)
 
 	def comportamiento(self, tiempo):
 		self.__movimientos()
@@ -122,9 +121,9 @@ class Pez(pygame.sprite.Sprite):
 				self.posImagen = 0
 
 	def __movimientos(self):
-		if self.contador < 3:
-			self.__movimientoAbajo()
-		else:
+		#if self.contador < 3:
+		#	self.__movimientoAbajo()
+		#else:
 			self.__Moviderecha()
 
 	def __Moviderecha(self):
@@ -368,27 +367,31 @@ class IdleScreen():
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
 
-	# Funcion para cargar los Peces del Juego Arriba Abajo
-	def cargarPeces(self):
-		posy = 100
-		for x in range(1,5):
-			PezEnemigo = Pez(100,posy,40,'Imagenes/MarcianoA.jpg', 'Imagenes/MarcianoB.jpg')
-			listaPeces.append(PezEnemigo)
-			posy = posy + 200
+	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
+	def cargarObstaculos(self):
+		posx = -1000
+		for x in range(1,7):
+			valor = np.random.randint(2, size=1)
+			if valor == 1:
+				# posicion Abajo de los Obstaculos
+				#posy = 0
+				posy = np.random.randint(0,100)
+				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				listaObstaculos.append(ObstaculoEne)
+				posy = posy + 700
+				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				listaObstaculos.append(ObstaculoEne)
+			else:
+				# posicion Arriba de los Obstaculos
+				posy = -300
+				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				listaObstaculos.append(ObstaculoEne)
+				posy = 400
+				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				listaObstaculos.append(ObstaculoEne)
+			posx = posx + 300
 
-		posy = 100
-		for x in range(1,5):
-			PezEnemigo = Pez(0,posy,40,'Imagenes/Marciano2A.jpg', 'Imagenes/Marciano2B.jpg')
-			listaPeces.append(PezEnemigo)
-			posy = posy + 200
-
-		posy = 100
-		for x in range(1,5):
-			PezEnemigo = Pez(-100,posy,40,'Imagenes/Marciano3A.jpg', 'Imagenes/Marciano3B.jpg')
-			listaPeces.append(PezEnemigo)
-			posy = posy + 200
-
-	# Juego de SpaceInvader (Derecha e Izquierda)
+	# Juego de La Galina y los Huevos (Derecha e Izquierda)
 	def JuegoDerIzq(self):
 		global done
 		global identidad
@@ -677,10 +680,10 @@ class IdleScreen():
 		# pygame.mixer.music.load('Sonidos/Intro.mp3')
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Nave Espacial
-		jugador = Sirena(self.scrWidth,self.scrHeight)
+		jugador = Pez(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
 		#enemigo = Enemigo(100,100)
-		self.cargarPeces()
+		self.cargarObstaculos()
 		# self.cargarEnemigos()
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
@@ -786,10 +789,10 @@ class IdleScreen():
 			#					jugador.listaDisparo.remove(x)
 
 			# Cargar los enemigos
-			if len(listaPeces) > 0:
-				for PezEnemigo in listaPeces:
-					PezEnemigo.comportamiento(tiempo)
-					PezEnemigo.dibujar(screen)
+			if len(listaObstaculos) > 0:
+				for ObstaculoEne in listaObstaculos:
+					ObstaculoEne.comportamiento(tiempo)
+					ObstaculoEne.dibujar(screen)
 					# Verificar que la bala del enemigo dio al jugador
 			#		if enemigo.rect.colliderect(jugador.rect):
 			#			pass
