@@ -24,6 +24,9 @@ import Xlib.ext.xtest
 # Importar las Clases del Juego Izquierda Derecha
 from Clases import Jugador
 from Clases import Gallina
+# Importar las Clases del Juego  Arriba y Abajo
+from Clases import Pez
+from Clases import Obstaculo
 # Importar la Clase de la Animacion Inicial de los Animales
 from Clases import BouncingSprite
 # Importar la Clase para crear el Menu
@@ -46,104 +49,6 @@ identidad = None
 listaEnemigo = []
 # lista de Obstaculos del Juego Arriba Abajo
 listaObstaculos = []
-# Clase Pez Juego Arriba Abajo
-class Pez(pygame.sprite.Sprite):
-	def __init__(self, scrWidth, scrHeight):
-		self.ImagenPez = pygame.image.load('Imagenes/Pez.png')
-		self.rect = self.ImagenPez.get_rect()
-		self.rect.centerx = scrWidth - 100
-		self.rect.centery = scrHeight/2
-
-		self.Vida = True
-
-		self.velocidad = 20
-
-	"""Nuevos Cambios (Metodos)"""
-	def movimientoArriba(self):
-		self.rect.top -= self.velocidad
-		self.__movimiento()
-
-	def movimientoAbajo(self):
-		self.rect.bottom += self.velocidad
-		self.__movimiento()
-
-	# Identificar que la nave no se salga de la pantalla
-	def __movimiento(self):
-		if self.Vida == True:
-			if self.rect.top <= 10:
-				self.rect.top = 10
-			elif self.rect.bottom > 758:
-				self.rect.bottom = 758
-
-	def dibujar(self, screen):
-		screen.blit(self.ImagenPez, self.rect)
-
-# Clase Obstaculo que son los enemigos del Juego Arriba Abajo
-class Obstaculo(pygame.sprite.Sprite):
-	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
-		pygame.sprite.Sprite.__init__(self)
-
-		self.imagenA = pygame.image.load(imagenUno)
-		self.imagenB = pygame.image.load(imagenDos)
-
-		self.listaImagenes = [self.imagenA, self.imagenB]
-		self.posImagen = 0
-
-		self.imagenObstaculo = self.listaImagenes[self.posImagen]
-		self.rect = self.imagenObstaculo.get_rect()
-
-		#self.listaDisparo = []
-		self.velocidad = 10
-		self.rect.top = posy
-		self.rect.left = posx
-
-		self.tiempoCambio = 1
-
-		self.abajo = True
-		self.contador = 0
-		self.MaxDerecha = self.rect.left + 40
-
-		self.limiteDerecha = posx + distancia
-		self.limiteIzquierda = posx - distancia
-
-	def dibujar(self, screen):
-		self.imagenObstaculo = self.listaImagenes[self.posImagen]
-		screen.blit(self.imagenObstaculo, self.rect)
-
-	def comportamiento(self, tiempo):
-		self.__movimientos()
-		# Animacion del Enemigo
-		if self.tiempoCambio != tiempo:
-			self.posImagen += 1
-			self.tiempoCambio += 1
-
-			if self.posImagen > len(self.listaImagenes)-1:
-				self.posImagen = 0
-
-	def __movimientos(self):
-		#if self.contador < 3:
-		#	self.__movimientoAbajo()
-		#else:
-			self.__Moviderecha()
-
-	def __Moviderecha(self):
-		if self.MaxDerecha == self.rect.left:
-			self.contador = 0
-			self.MaxDerecha = self.rect.left + 40
-		else:
-			self.rect.left += 1
-
-	def __movimientoAbajo(self):
-		if self.abajo == True:
-			self.rect.top = self.rect.top + self.velocidad
-			if self.rect.top > self.limiteDerecha:
-				self.abajo = False
-
-				self.contador += 1
-		else:
-			self.rect.top = self.rect.top - self.velocidad
-			if self.rect.top < self.limiteIzquierda:
-				self.abajo = True
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -348,6 +253,11 @@ class IdleScreen():
 
 			enemigo.conquista = True
 
+	# Funcion que detiene todo en el Juego Arriba Abajo
+	def detenerTodoArrAba(self):
+		for ObstaculoEne in listaObstaculos:
+			ObstaculoEne.conquista = True
+
 	# Funcion para cargar los enemigos
 	def cargarEnemigos(self):
 	    #posx = 100
@@ -357,7 +267,7 @@ class IdleScreen():
 	    #    posx = posx + 200
 	    posx = 470
 	    for x in range(1, 2):
-	        enemigo = Gallina(posx,80,460,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
+	        enemigo = Gallina.Gallinita(posx,80,460,'Imagenes/GallinaTrans.png', 'Imagenes/GallinaTransB.png')
 	        listaEnemigo.append(enemigo)
 	        posx = posx + 380
 
@@ -374,20 +284,19 @@ class IdleScreen():
 			valor = np.random.randint(2, size=1)
 			if valor == 1:
 				# posicion Abajo de los Obstaculos
-				#posy = 0
 				posy = np.random.randint(0,100)
-				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = posy + 700
-				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
 			else:
 				# posicion Arriba de los Obstaculos
 				posy = -300
-				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = 400
-				ObstaculoEne = Obstaculo(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
 			posx = posx + 300
 
@@ -677,10 +586,12 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar sonido principal
-		# pygame.mixer.music.load('Sonidos/Intro.mp3')
-		# pygame.mixer.music.play(3)
+		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
+		pygame.mixer.music.play(3)
+		# Cargar la Palaba de Fin del Juego
+		Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
 		# Instancia del Objeto Nave Espacial
-		jugador = Pez(self.scrWidth,self.scrHeight)
+		jugador = Pez.Pececito(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
 		#enemigo = Enemigo(100,100)
 		self.cargarObstaculos()
@@ -793,9 +704,11 @@ class IdleScreen():
 				for ObstaculoEne in listaObstaculos:
 					ObstaculoEne.comportamiento(tiempo)
 					ObstaculoEne.dibujar(screen)
-					# Verificar que la bala del enemigo dio al jugador
-			#		if enemigo.rect.colliderect(jugador.rect):
-			#			pass
+					# Verificar que el enemigo choco con el jugador
+					if ObstaculoEne.rect.colliderect(jugador.rect):
+						jugador.destruccion()
+						enJuego = False
+						self.detenerTodoArrAba()
 					# Verificar los disparos del enemigo
 			#		if len(enemigo.listaDisparo) > 0:
 			#			for x in enemigo.listaDisparo:
@@ -814,6 +727,9 @@ class IdleScreen():
 			#							jugador.listaDisparo.remove(disparo)
 			#							enemigo.listaDisparo.remove(x)
 
+			if enJuego == False:
+				pygame.mixer.music.fadeout(3000)
+				screen.blit(Texto,(320,200))
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
 			self.menuItemsArriba[self.lastActiveFocus].removeFocus()

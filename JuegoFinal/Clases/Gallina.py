@@ -2,7 +2,7 @@ import pygame
 from random import randint
 import Huevo
 # Clase para la Gallina que es el Enemigo
-class Gallina(pygame.sprite.Sprite):
+class Gallinita(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)
 
