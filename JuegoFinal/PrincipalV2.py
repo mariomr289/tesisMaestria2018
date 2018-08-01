@@ -69,15 +69,18 @@ class IdleScreen():
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
+		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
-		self.fontPuntaje = pygame.font.SysFont("Answer", 45)
+		self.fontPuntaje = pygame.font.SysFont("Answer", 50)
+		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 60)
 		self.fontColor = (16, 4, 130)
 		self.menuItems = list()
 		self.menuItemsArriba = list()
 		self.menuItemsLaberinto = list()
 		self.menuItemsIntro = list()
 		self.menuItemsMenuJuegos = list()
+		self.menuItemsFinJuego = list()
 		self.itemNames = ("Derecha", "Izquierda")
 		self.menuFuncs = { 	"Derecha" : self.ClickDerecho,
 							"Izquierda" : self.ClickIzquierdo}
@@ -92,6 +95,10 @@ class IdleScreen():
 							"Segundo" : self.ClickSegundoJuego,
 							"Tercero" : self.ClickTercerJuego,
 							"Cuarto" : self.ClickCuartoJuego}
+		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
+		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
+							"Menu Juegos" : self.ClickRegresar,
+							"Salir" : self.ClickSalir}
 		self.itemNamesLaberinto = ("Arriba", "Abajo", "Derecha", "Izquierda")
 		self.menuFuncsLaberinto = {"Arriba" : self.ClickArriba,
 							"Abajo" : self.ClickAbajo,
@@ -150,7 +157,7 @@ class IdleScreen():
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsArriba.append(mi)
 
-	# Crea el menu de los Botones de la Interfaz de Introduccion
+	# Crea el menu de los Botones de la Interfaz del Memu de los Juegos
 	def buildMenuJuegos(self):
 		self.items = []
 
@@ -164,6 +171,21 @@ class IdleScreen():
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsMenuJuegos.append(mi)
+
+	# Crea el menu de los Botones de la Interfaz de Fin del Juego
+	def buildFinJuego(self):
+		self.items = []
+
+		for index, item in enumerate(self.itemNamesFinJuego):
+			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
+			width = label.get_rect().width
+			height = label.get_rect().height + 30
+			posx = (self.scrWidth / 2) - (width / 2)
+			totalHeight  = len(self.itemNamesFinJuego) * height
+			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+
+			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsFinJuego.append(mi)
 
 	# Crea el menu de los Botones de la Interfaz de Introduccion
 	def buildMenuLaberinto(self):
@@ -192,6 +214,18 @@ class IdleScreen():
 		done = False
 		print "SALIR"
 		#sys.exit(128)
+
+	# Boton de Reiniciar los VideoJuegos
+	def ClickReiniciar(self):
+		global done
+		done = False
+		print "REINICIAR"
+
+	# Boton de Regresar al Menu de los Juegos
+	def ClickRegresar(self):
+		global done
+		done = False
+		print "REGRESAR"
 
 	# Boton de Ingreso al Primer Juego
 	def ClickPrimerJuego(self):
@@ -327,7 +361,7 @@ class IdleScreen():
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
 		# Cargar la Palaba de Fin del Juego
-		Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
+		#Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
 		# Instancia del Objeto Nave Espacial
 		jugador = Jugador.NenaCanasta(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
@@ -372,18 +406,12 @@ class IdleScreen():
 			mpos = pygame.mouse.get_pos()
 
 			for e in pygame.event.get():
-				#if e.type == pygame.QUIT:
-				#	screenloop = False
-				#	pygame.quit()
-				#	sys.exit()
-				if e.type == pygame.KEYDOWN:
-					if e.key == pygame.K_ESCAPE:
-						screenloop = False
-						done = False
-						pygame.mixer.music.fadeout(2000)
-						self.MenuJuegos()
-						#pygame.quit()
-						#sys.exit()
+				if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+					screenloop = False
+					done = False
+					pygame.mixer.music.fadeout(2000)
+					pygame.quit()
+					sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -481,7 +509,10 @@ class IdleScreen():
 
 			if enJuego == False:
 				pygame.mixer.music.fadeout(3000)
-				screen.blit(Texto,(320,200))
+				#screen.blit(Texto,(320,200))
+				# Llamar a la pantalla de Fin del Juego
+				done = False
+				self.FinJuego(puntos.score, 1)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
@@ -640,15 +671,10 @@ class IdleScreen():
 			mpos = pygame.mouse.get_pos()
 
 			for e in pygame.event.get():
-				#if e.type == pygame.QUIT:
-				#	screenloop = False
-				#	pygame.quit()
-				#	sys.exit()
-				if e.type == pygame.KEYDOWN:
-					if e.key == pygame.K_ESCAPE:
-						screenloop = False
-						pygame.quit()
-						sys.exit()
+				if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+					screenloop = False
+					pygame.quit()
+					sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -737,6 +763,10 @@ class IdleScreen():
 			if enJuego == False:
 				pygame.mixer.music.fadeout(3000)
 				screen.blit(Texto,(320,200))
+				# Llamar a la pantalla de Fin del Juego
+				done = False
+				self.FinJuego(4, 2)
+
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
 			self.menuItemsArriba[self.lastActiveFocus].removeFocus()
@@ -893,15 +923,10 @@ class IdleScreen():
 			mpos = pygame.mouse.get_pos()
 
 			for e in pygame.event.get():
-				#if e.type == pygame.QUIT:
-				#	screenloop = False
-				#	pygame.quit()
-				#	sys.exit()
-				if e.type == pygame.KEYDOWN:
-					if e.key == pygame.K_ESCAPE:
-						screenloop = False
-						pygame.quit()
-						sys.exit()
+				if e.type == pygame.QUIT or(e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+					screenloop = False
+					pygame.quit()
+					sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -1216,21 +1241,15 @@ class IdleScreen():
 			mpos = pygame.mouse.get_pos()
 
 			for e in pygame.event.get():
-				#if e.type == pygame.QUIT:
-				#	screenloop = False
-				#	pygame.quit()
-				#	sys.exit()
-				if e.type == pygame.KEYDOWN:
-					if e.key == pygame.K_ESCAPE:
-						screenloop = False
-						pygame.quit()
-						sys.exit()
+				if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+					screenloop = False
+					pygame.quit()
+					sys.exit()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
 						opcion = self.menuFuncsLaberinto[self.itemNamesLaberinto[self.activeFocus]]()
-						# break;
 						# Verificar cual de los botones se ha pulsado
 						if identidad == "arriba":
 							imagenRatonContento.dy = -2
@@ -1438,15 +1457,10 @@ class IdleScreen():
 				mpos = pygame.mouse.get_pos()
 
 				for e in pygame.event.get():
-					#if e.type == pygame.QUIT:
-					#	screenloop = False
-					#	pygame.quit()
-					#	sys.exit()
-					if e.type == pygame.KEYDOWN:
-						if e.key == pygame.K_ESCAPE:
-							screenloop = False
-							pygame.quit()
-							sys.exit()
+					if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+						screenloop = False
+						pygame.quit()
+						sys.exit()
 					elif e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
 						opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
@@ -1587,15 +1601,10 @@ class IdleScreen():
 				mpos = pygame.mouse.get_pos()
 
 				for e in pygame.event.get():
-					#if e.type == pygame.QUIT:
-					#	screenloop = False
-					#	pygame.quit()
-					#	sys.exit()
-					if e.type == pygame.KEYDOWN:
-						if e.key == pygame.K_ESCAPE:
-							screenloop = False
-							pygame.quit()
-							sys.exit()
+					if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+						screenloop = False
+						pygame.quit()
+						sys.exit()
 					elif e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
 						opcion = self.menuFuncsMenuJuegos[self.itemNamesMenuJuegos[self.activeFocus]]()
@@ -1636,6 +1645,173 @@ class IdleScreen():
 					self.lastActiveFocus = 0
 					self.secondActiveFocus = 1
 					self.thirdActiveFocus = 2
+
+				for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
+					pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
+				for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
+					pygame.draw.circle(screen,(0,0,255),blobData.centroid[i],10) #Dibuja un circulo azul en cada centroide
+					centroidList.append(blobData.centroid[i]) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
+					pygame.draw.lines(screen,(255,0,0),True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
+					pygame.draw.lines(screen,(0,255,0),True,blobData.contours[i],3) #Dibuja el contorno de cada blob
+
+					for tips in blobData.cHull[i]: #Itera a traves de los vertices del casco convexo para cada blob
+						pygame.draw.circle(screen,(255,0,255),tips,5) #Dibuja los vertices purpura
+
+				# Elimina la profundidad --> opencv problema de memoria
+				del depth
+				# Da vuelta la pantalla para que sea una pantalla de espejo
+				screenFlipped = pygame.transform.flip(screen,1,0)
+				# Actualiza la pantalla principal -> pantalla
+				screen.blit(screenFlipped,(0,0))
+				# Actualiza todo en la ventana
+				pygame.display.flip()
+
+				# Declaracion de prueba de mouse
+				try:
+					centroidX = blobData.centroid[0][0]
+					centroidY = blobData.centroid[0][1]
+					if dummy:
+						# Obtiene los atributos actuales del mouse
+						mousePtr = display.Display().screen().root.query_pointer()._data
+						# Encuentra el cambio en X
+						dX = centroidX - strX
+						# Encuentra el cambio en Y
+						dY = strY - centroidY
+						minChange = 3
+						# Si hubo un cambio en X mayor que minChange ...
+						if abs(dX) > minChange:
+							# Nueva coordenada X del mouse
+							mouseX = mousePtr["root_x"] - 2*dX
+							if mouseX < 0:
+								mouseX = 0
+							elif mouseX > self.scrWidth:
+								mouseX = self.scrWidth
+						# Si hubo un cambio en Y mayor que minChange ...
+						if abs(dY) > minChange:
+							# Nueva coordenada Y del mouse
+							mouseY = mousePtr["root_y"] - 2*dY
+							if mouseY < 0:
+								mouseY = 0
+							elif mouseY > self.scrHeight:
+								mouseY = self.scrHeight
+						print mouseX, mouseY
+						# Mueve el mouse a una nueva ubicación
+						move_mouse(mouseX, mouseY)
+						# Hace que la nueva X inicial del mouse sea la X actual del centroide mas nuevo
+						strX = centroidX
+						# Hace que la nueva Y inicial del mouse sea la Y actual del centroide mas nuevo
+						strY = centroidY
+						# Normaliza (elimina el ruido) en el area convexa del casco
+						cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0])
+						# Normaliza la relacion entre el area del contorno y el area convexa del casco
+						areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea)
+						print cArea, areaRatio, "(Must be: < 1000, > 0.82)"
+						# Define lo que es un clic abajo. El area debe ser pequenia y la mano debe verse como un circulo binario (casi)
+						if cArea < 25000 and areaRatio > 0.82:
+							click_down(1)
+						else:
+							click_up(1)
+					else:
+						# Inicializa la X inicial
+						strX = centroidX
+						# Inicializa el inicio Y
+						strY = centroidY
+						# Permite que la función continue en la primera parte de la sentencia if
+						dummy = True
+				except:
+					# No puede haber centroides y, por lo tanto, blobData.centroid [0] estará fuera de rango
+					# Espera un nuevo punto de partida
+					dummy = False
+
+	# Pantalla De Fin del Juego
+	def FinJuego(self, puntos, NroJuego):
+			global done
+			screenloop = True
+			(depth,_) = get_depth()
+			# Lista de cache en blanco para el area convexa del casco
+			cHullAreaCache = constList(5,12000)
+			# Lista de cache en blanco para la relacion de area del area de contorno al area de casco convexo
+			areaRatioCache = constList(5,1)
+			# Iniciar lista de centroides
+			centroidList = list()
+			screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
+			# Cargar la Palaba de Fin del Juego
+			if NroJuego == 1:
+				juego = "Izquierda, Derecha"
+			elif NroJuego == 2:
+				juego = "Arriba, Abajo"
+			elif NroJuego == 3:
+				juego = "Mover Objetos"
+			else:
+				juego = "Laberinto"
+			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (255, 14, 0)), 1, 0)
+			# Carga el Puntaje Obtenido en el JUEGO
+			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (255,120,100)), 1, 0)
+			# Iterator boolean -> Indica a programa cuando finalizar
+			# Muy importante bool para la manipulacion del raton
+			dummy = False
+			if not done:
+				self.buildFinJuego() #Construye el Menu Principal
+
+			while screenloop:
+				self.clock.tick(30)
+				# Obtenga la profundidad del kinect
+				(depth,_) = get_depth()
+				old_depth = depth
+				depth = cv2.resize(old_depth, (1024, 768))
+				# Convierta la profundidad en un flotador de 32 bits
+				depth = depth.astype(np.float32)
+				# Umbral de la profundidad de una imagen binaria. Umbral en 600 unidades arbitrarias
+				_,depthThresh = cv2.threshold(depth, 600, 255, cv2.THRESH_BINARY_INV)
+				# Umbral del fondo para tener un fondo delineado y un primer plano segmentado
+				_,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV)
+				# Crea el objeto blobData usando la clase BlobAnalysis
+				blobData = BlobAnalysis(depthThresh)
+				# Crea el objeto blobDataBack usando la clase BlobAnalysis
+				blobDataBack = BlobAnalysis(back)
+
+				mpos = pygame.mouse.get_pos()
+
+				for e in pygame.event.get():
+					if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+						screenloop = False
+						pygame.quit()
+						sys.exit()
+					elif e.type == pygame.MOUSEBUTTONDOWN:
+						screenloop = True
+						opcion = self.menuFuncsFinJuego[self.itemNamesFinJuego[self.activeFocus]]()
+						break;
+
+				# Se Carga el fondo de la Imagen de Introduccion
+				self.screen.blit(self.bgImageFinJuego, (0, 0))
+				# Aparece El Texto de Fin del Juego
+				screen.blit(Texto,(200,50))
+				# Muestra el Puntaje Obtenido por el Jugador
+				screen.blit(Marcador,(300,180))
+				# Se usa para que aparezca las imagenes que dan la vuelta
+				self.floatingPicture()
+				# Se establece en el menu que boton se hizo click
+				self.menuItemsFinJuego[self.activeFocus].applyFocus(self.screen)
+				self.menuItemsFinJuego[self.lastActiveFocus].removeFocus()
+				self.menuItemsFinJuego[self.secondActiveFocus].removeFocus()
+
+				# Se muestra el menú de la Interfaz del Menu de Juegos
+				for item in self.menuItemsFinJuego:
+					self.screen.blit(item.label, (item.xpos, item.ypos))
+
+				#  Se ejecuta la acción de click del mouse (Parte principal)
+				if mpos[1] < self.scrHeight / 3:
+					self.activeFocus = 0
+					self.lastActiveFocus = 1
+					self.secondActiveFocus = 2
+				elif mpos[1] < (self.scrHeight - self.scrHeight/3):
+					self.activeFocus = 1
+					self.lastActiveFocus = 0
+					self.secondActiveFocus = 2
+				else:
+					self.activeFocus = 2
+					self.lastActiveFocus = 0
+					self.secondActiveFocus = 1
 
 				for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
 					pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
@@ -1831,7 +2007,7 @@ El control del mouse tambien se dicta en esta funcion porque los comandos del mo
 
 if __name__ == "__main__":
 	screen = pygame.display.set_mode((1024, 768), 0, 32)
-	pygame.display.set_caption("PRINCIPAL")
+	pygame.display.set_caption("JUEGO DE UBICACION ESPACIAL UBIC")
 	idscr = IdleScreen(screen)
 	try:
 		idscr.introduccion()

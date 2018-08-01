@@ -1,45 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
-
-# La clase Pared es un sprite que representa cada uno de los dibujos que forman
-# las paredes. Las imágenes son h.png, v.png, id.png, etc. A efectos de hacer
-# las cosas bien y que encajen las piezas, todas las imágenes tienen 40x40 pixeles
-# de tamaño. Las paredes tienen un grosor de 20 pixeles y el margen, en caso de
-# que exista, es de 10 pixeles. Si te fijas en las imágenes, lo comprenderás.
-# Las defino como sprites para poder detectar cuando choca el jugador con ellas
-# y, por tanto, no puede pasar.
-
-class Pared(pygame.sprite.Sprite):
-    def __init__(self, imagen, pos):
-        pygame.sprite.Sprite.__init__( self )
-        self.image = imagen
-        self.rect = self.image.get_rect()
-        self.rect.topleft = pos
-
-class Queso(pygame.sprite.Sprite):
-
-    def __init__(self, imagen, pos):
-        pygame.sprite.Sprite.__init__( self )
-        self.image = imagen
-        self.rect = self.image.get_rect()
-        self.rect_colision = self.rect.inflate(-30, -10)
-        self.delay = 0
-        self.se_puede_comer = True
-        self.rect.topleft = pos
-
-    def update(self):
-        pass
-
-    def update_desaparecer(self):
-        self.delay -= 1
-        if self.delay < 1:
-            self.kill()
-
-
-    def comer(self):
-        self.delay = 30
-        self.update = self.update_desaparecer
-        self.se_puede_comer = False
+import Pared
+import Queso
 
 # La clase Mapa representa el mapa del nivel de nuestro juego. El mapa se ha escrito
 # previamente en un archivo de texto y se convierten los diferentes caracteres que
@@ -91,19 +53,19 @@ class Mapa:
                 # Cada carácter codifica un dibujo de pared distinto.
 
                 if c == '-':
-                    self.grupo.add(Pared(self.h, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.h, (x,y)))
                 elif c == '|':
-                    self.grupo.add(Pared(self.v, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.v, (x,y)))
                 elif c == '7':
-                    self.grupo.add(Pared(self.sd, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.sd, (x,y)))
                 elif c == 'J':
-                    self.grupo.add(Pared(self.id, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.id, (x,y)))
                 elif c == 'L':
-                    self.grupo.add(Pared(self.ii, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.ii, (x,y)))
                 elif c == 'T':
-                    self.grupo.add(Pared(self.si, (x,y)))
+                    self.grupo.add(Pared.Paredsita(self.si, (x,y)))
                 elif c == 'k':
-					self.quesos.add(Queso(self.q, (x,y)))
+					self.quesos.add(Queso.Quesito(self.q, (x,y)))
 
     # La función actualizar dibuja en pantalla el nivel. Aunque nuestras paredes
     # son fijas, el caso más general es que éstas se movieran; así lo que se hace

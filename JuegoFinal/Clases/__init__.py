@@ -8,7 +8,7 @@ from Puntaje import Score
 from Pez import Pececito
 from Obstaculo import Obstaculito
 from mapa import Mapa
-from mapa import Pared
-from mapa import Queso
+from Pared import Paredsita
+from Queso import Quesito
 from Raton import imagenRatonContento
 from Gato import imagenGatoContento
