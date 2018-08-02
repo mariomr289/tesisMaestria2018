@@ -7,8 +7,13 @@ class imagenRatonContento( pygame.sprite.Sprite ):
     def __init__( self, posX, posY ):
         pygame.sprite.Sprite.__init__( self )
         self.image = pygame.image.load('Imagenes/raton1.png').convert()
+        self.imagePerder = pygame.image.load('Imagenes/menuico.png').convert()
         self.image.set_colorkey((255,255,255))
+        self.imagePerder.set_colorkey((255,255,255))
         self.rect = self.image.get_rect()
+
+        self.vida = True
+        self.sonidoPerder = pygame.mixer.Sound("Sonidos/endGame.wav")
 
         # Aprovechando el constructor de la clase, situamos la posicion inicial
         # del sprite en las coordenadas posX y posY
@@ -34,13 +39,10 @@ class imagenRatonContento( pygame.sprite.Sprite ):
 
 
 
-
-        self.pos = self.rect.topleft
-
-        # Una vez hecho eso, ya podemos hacer la tentativa de mover el sprite.
-
-
-        self.rect.move_ip(self.dx,self.dy)
+        if self.vida == True:
+            self.pos = self.rect.topleft
+            # Una vez hecho eso, ya podemos hacer la tentativa de mover el sprite.
+            self.rect.move_ip(self.dx,self.dy)
 
     def deshacer(self):
 
@@ -49,3 +51,9 @@ class imagenRatonContento( pygame.sprite.Sprite ):
 
 
         self.rect.topleft = self.pos
+
+    # Funcion para cuando pierda el JUEGO
+    def destruccion(self):
+        self.sonidoPerder.play()
+        self.vida = False
+        self.image = self.imagePerder

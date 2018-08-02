@@ -1208,6 +1208,8 @@ class IdleScreen():
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
 		# ProyectilInvasor = Proyectil(self.scrWidth/4,self.scrHeight-700,"../Imagenes/disparob.jpg", False)
+		# Instancia del Objeto Puntaje
+		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Verificar si un jugador gano o perdio
 		enJuego = True
 		# Construye el Menu Principal si done = False
@@ -1299,16 +1301,28 @@ class IdleScreen():
 
 			# Se Realiza la actividad de comer los quesos por parte del Raton
 			for pum in pygame.sprite.groupcollide(grupoimagenRatonContento, nivel.quesos, 0, 1):
-				pass
+				puntos.score_up()
+
+			# Si Choca el Raton con el Gato se Termina el JUEGO
+			for pum in pygame.sprite.groupcollide(grupoimagenRatonContento, grupoimagenGatoContento, 1, 0):
+				imagenRatonContento.destruccion()
+				grupoimagenRatonContento = pygame.sprite.RenderUpdates(imagenRatonContento)
+				enJuego = False
 
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImageLaberinto, (0, 0))
 			# Actualiza el Nivel del Laberinto
 			nivel.actualizar(screen)
+			# Actualizar el Puntaje del JUEGO
+			puntos.update(screen)
 
 			# Y luego el Sprite del Jugador
 			grupoimagenRatonContento.draw(screen)
 			grupoimagenGatoContento.draw(screen)
+
+			if enJuego == False:
+				done = False
+				self.FinJuego(puntos.score, 4)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsLaberinto[self.activeFocus].applyFocus(self.screen)
