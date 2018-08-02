@@ -27,6 +27,7 @@ from Clases import Gallina
 # Importar las Clases del Juego  Arriba y Abajo
 from Clases import Pez
 from Clases import Obstaculo
+from Clases import Moneda
 # Importar la Clase de la Animacion Inicial de los Animales
 from Clases import BouncingSprite
 # Importar la Clase para crear el Menu
@@ -53,6 +54,8 @@ identidad = None
 listaEnemigo = []
 # lista de Obstaculos del Juego Arriba Abajo
 listaObstaculos = []
+# Lista de Monedas del Juego Arriba Abajo
+listaMonedas = []
 # Imagen del Queso
 imagenQueso = 'Imagenes/q.png'
 
@@ -318,9 +321,18 @@ class IdleScreen():
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
 
+	# Funcion para Cargar las Monedas del Juegos Arriba Abajo
+	def cargarMonedas(self, posx):
+		posy = 100
+		for y in range(1,5):
+			Recompensa = Moneda.Monedita(posx,posy, 40, 'Imagenes/Moneda1.png', 'Imagenes/Moneda2.png')
+			listaMonedas.append(Recompensa)
+			posy = posy + 200
+
 	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
 	def cargarObstaculos(self):
 		posx = -1000
+		posMonedax = -900
 		for x in range(1,7):
 			valor = np.random.randint(2, size=1)
 			if valor == 1:
@@ -331,6 +343,8 @@ class IdleScreen():
 				posy = posy + 700
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
+				#Cargar Las monedas
+				self.cargarMonedas(posMonedax)
 			else:
 				# posicion Arriba de los Obstaculos
 				posy = -300
@@ -339,7 +353,11 @@ class IdleScreen():
 				posy = 400
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
+				#Cargar Las monedas
+				self.cargarMonedas(posMonedax)
+
 			posx = posx + 300
+			posMonedax = posMonedax + 400
 
 	# Juego de La Galina y los Huevos (Derecha e Izquierda)
 	def JuegoDerIzq(self):
@@ -361,7 +379,7 @@ class IdleScreen():
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
 		# Cargar la Palaba de Fin del Juego
-		#Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
+		Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
 		# Instancia del Objeto Nave Espacial
 		jugador = Jugador.NenaCanasta(self.scrWidth,self.scrHeight)
 		# Instancia del objeto Invasor
@@ -408,7 +426,6 @@ class IdleScreen():
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
 					screenloop = False
-					done = False
 					pygame.mixer.music.fadeout(2000)
 					pygame.quit()
 					sys.exit()
@@ -509,7 +526,7 @@ class IdleScreen():
 
 			if enJuego == False:
 				pygame.mixer.music.fadeout(3000)
-				#screen.blit(Texto,(320,200))
+				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
 				self.FinJuego(puntos.score, 1)
@@ -633,7 +650,8 @@ class IdleScreen():
 		# Instancia del objeto Invasor
 		#enemigo = Enemigo(100,100)
 		self.cargarObstaculos()
-		# self.cargarEnemigos()
+		# Instancia del Objeto Puntaje
+		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
@@ -673,6 +691,7 @@ class IdleScreen():
 			for e in pygame.event.get():
 				if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
 					screenloop = False
+					pygame.mixer.music.fadeout(2000)
 					pygame.quit()
 					sys.exit()
 				# Controlamos que cliqueo con el mouse
@@ -703,6 +722,8 @@ class IdleScreen():
 
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImageArriba, (0, 0))
+			# Actualizar el Puntaje del Juego
+			puntos.update(screen)
 			# Se usa para que aparezca las imagenes con la variable animales = True
 			#if animales:
 				# Cuando se asigna a movimiento = True se empiezan a mover las imagenes
@@ -732,16 +753,29 @@ class IdleScreen():
 			#					listaEnemigo.remove(enemigo)
 			#					jugador.listaDisparo.remove(x)
 
-			# Cargar los enemigos
+			# Cargar los Obstaculos
 			if len(listaObstaculos) > 0:
 				for ObstaculoEne in listaObstaculos:
 					ObstaculoEne.comportamiento(tiempo)
 					ObstaculoEne.dibujar(screen)
-					# Verificar que el enemigo choco con el jugador
+					# Verificar que el Obstaculo choco con el jugador
 					if ObstaculoEne.rect.colliderect(jugador.rect):
 						jugador.destruccion()
 						enJuego = False
 						self.detenerTodoArrAba()
+
+			if len(listaMonedas) > 0:
+				for Recompensa in listaMonedas:
+					Recompensa.comportamiento(tiempo)
+					Recompensa.dibujar(screen)
+					# Verificar cuando el jugador choque con las monedas
+					if Recompensa.rect.colliderect(jugador.rect):
+						# Suma el puntaje las monedas que recoge el Jugador
+						puntos.score_up()
+						#Borrar de la Pantalla la moneda recogida
+						listaMonedas.remove(Recompensa)
+						enJuego = True
+
 					# Verificar los disparos del enemigo
 			#		if len(enemigo.listaDisparo) > 0:
 			#			for x in enemigo.listaDisparo:
@@ -765,7 +799,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				self.FinJuego(4, 2)
+				self.FinJuego(puntos.score, 2)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)

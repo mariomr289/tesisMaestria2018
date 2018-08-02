@@ -7,6 +7,7 @@ from Player import Kate
 from Puntaje import Score
 from Pez import Pececito
 from Obstaculo import Obstaculito
+from Moneda import Monedita
 from mapa import Mapa
 from Pared import Paredsita
 from Queso import Quesito
