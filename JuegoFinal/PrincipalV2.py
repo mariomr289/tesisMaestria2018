@@ -45,9 +45,6 @@ from Clases import Gato
 constList = lambda length, val: [val for _ in range(length)]
 # Variable Auxiliar para crear el menu
 done = False
-# Variables para generar las imagenes
-animales = False
-movimiento = False
 # Variable para seleccionar que boton Seleciono (izquierda o derecha)
 identidad = None
 # Lista de Enemigos del Juego de IzqDerecha
@@ -56,7 +53,7 @@ listaEnemigo = []
 listaObstaculos = []
 # Lista de Monedas del Juego Arriba Abajo
 listaMonedas = []
-# Imagen del Queso
+# Imagen del Queso del Juego del Laberinto
 imagenQueso = 'Imagenes/q.png'
 
 # Clase para el menu inactivo / juego
@@ -87,19 +84,20 @@ class IdleScreen():
 		self.menuItemsFinJuego = list()
 		self.menuItemsInstrucciones = list()
 		self.itemNames = ("Derecha", "Izquierda")
-		self.menuFuncs = { 	"Derecha" : self.ClickDerecho,
-							"Izquierda" : self.ClickIzquierdo}
+		self.menuFuncs = {"Derecha" : self.ClickDerecho,
+						"Izquierda" : self.ClickIzquierdo}
 		self.itemNamesArriba = ("Arriba", "Abajo")
 		self.menuFuncsArriba = {"Arriba" : self.ClickArriba,
 							"Abajo" : self.ClickAbajo}
 		self.itemNamesIntro = ("Entrar", "Salir")
 		self.menuFuncsIntro = {"Entrar" : self.ClickEntrar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesMenuJuegos = ("Primero", "Segundo", "Tercero", "Cuarto")
+		self.itemNamesMenuJuegos = ("Primero", "Segundo", "Tercero", "Cuarto", "Entrenamiento")
 		self.menuFuncsMenuJuegos = {"Primero" : self.ClickPrimerJuego,
 							"Segundo" : self.ClickSegundoJuego,
 							"Tercero" : self.ClickTercerJuego,
-							"Cuarto" : self.ClickCuartoJuego}
+							"Cuarto" : self.ClickCuartoJuego,
+							"Entrenamiento" : self.ClickEntrenamiento}
 		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
@@ -110,8 +108,8 @@ class IdleScreen():
 							"Derecha" : self.ClickDerecho,
 							"Izquierda" : self.ClickIzquierdo}
 		self.itemNamesInstrucciones = ("Anterior", "Siguiente")
-		self.menuFuncsInstrucciones = {"Anterior": self.ClickAnterior,
-									"Siguiente" : self.ClickSiguiente}
+		self.menuFuncsInstrucciones = {"Anterior" : self.ClickAnterior,
+							"Siguiente" : self.ClickSiguiente}
 		self.animalImgs = []
 		self.animalPictures = ["bison.png", "elephant.png", "giraffe.png", "goat.png", "lion.png",
 								"monkey.png", "sheep.png"]
@@ -119,6 +117,7 @@ class IdleScreen():
 		self.lastActiveFocus = 1
 		self.secondActiveFocus = 2
 		self.thirdActiveFocus = 3
+		self.FourActiveFocus = 4
 
 	# Crea el menu de los Botones de la Interfaz del Juego Izquierda y Derecha
 	def buildMenu(self):
@@ -229,6 +228,7 @@ class IdleScreen():
 	def ClickEntrar(self):
 		global done
 		done = False
+		print "ENTRAR"
 		self.MenuJuegos()
 
 	# Boton de Salir de la Pantalla de Introduccion
@@ -239,30 +239,41 @@ class IdleScreen():
 		#sys.exit(128)
 
 	# Boton de Anterior de la Pantalla de Instrucciones
-	def ClickAnterior(self):
+	def ClickAnterior(self, NroJuego):
 		global done
 		done = False
 		print "ANTERIOR"
-		self.introduccion()
+		self.MenuJuegos()
 
 	# Boton de Siguiente de la Pantalla de Instrucciones
-	def ClickSiguiente(self):
+	def ClickSiguiente(self, NroJuego):
 		global done
 		done = False
 		print "SIGUIENTE"
-		self.JuegoDerIzq()
+		if NroJuego == 1:
+			self.JuegoDerIzq()
+		elif NroJuego == 2:
+			self.JuegoArriAba()
+		elif NroJuego == 3:
+			self.JuegoLaberinto()
+		elif NroJuego == 4:
+			self.JuegoLaberintoTomJerry()
+		else:
+			self.introduccion()
 
 	# Boton de Reiniciar los VideoJuegos
 	def ClickReiniciar(self):
 		global done
 		done = False
 		print "REINICIAR"
+		self.introduccion()
 
 	# Boton de Regresar al Menu de los Juegos
 	def ClickRegresar(self):
 		global done
 		done = False
 		print "REGRESAR"
+		self.MenuJuegos()
 
 	# Boton de Ingreso al Primer Juego
 	def ClickPrimerJuego(self):
@@ -277,21 +288,31 @@ class IdleScreen():
 		global done
 		done = False
 		print "Segundo Juego"
-		self.JuegoArriAba()
+		self.Instrucciones(2)
+		#self.JuegoArriAba()
 
 	# Boton de Ingreso al Tercer Juego
 	def ClickTercerJuego(self):
 		global done
 		done = False
 		print "Tercer Juego"
-		self.JuegoLaberinto()
+		self.Instrucciones(3)
+		#self.JuegoLaberinto()
 
 	# Boton de Ingreso al Cuarto Juego
 	def ClickCuartoJuego(self):
 		global done
 		done = False
 		print "Cuarto Juego"
-		self.JuegoLaberintoTomJerry()
+		self.Instrucciones(4)
+		#self.JuegoLaberintoTomJerry()
+
+	# Boton de Ingreso al Entrenamiento
+	def ClickEntrenamiento(self):
+		global done
+		done = False
+		print "Juego Entrenamiento"
+		self.Instrucciones(5)
 
 	# Menu del Juego Derecha e Izquierda
 	def ClickDerecho(self):
@@ -1703,32 +1724,43 @@ class IdleScreen():
 				self.menuItemsMenuJuegos[self.lastActiveFocus].removeFocus()
 				self.menuItemsMenuJuegos[self.secondActiveFocus].removeFocus()
 				self.menuItemsMenuJuegos[self.thirdActiveFocus].removeFocus()
+				self.menuItemsMenuJuegos[self.FourActiveFocus].removeFocus()
 
 				# Se muestra el menú de la Interfaz del Menu de Juegos
 				for item in self.menuItemsMenuJuegos:
 					self.screen.blit(item.label, (item.xpos, item.ypos))
 
 				#  Se ejecuta la acción de click del mouse (Parte principal)
-				if mpos[1] < self.scrHeight / 4:
+				if mpos[1] < self.scrHeight / 5:
 					self.activeFocus = 0
 					self.lastActiveFocus = 1
 					self.secondActiveFocus = 2
 					self.thirdActiveFocus = 3
-				elif mpos[1] < self.scrHeight / 2:
+					self.FourActiveFocus = 4
+				elif mpos[1] < (2*self.scrHeight) / 5:
 					self.activeFocus = 1
 					self.lastActiveFocus = 0
 					self.secondActiveFocus = 2
 					self.thirdActiveFocus = 3
-				elif mpos[1] < (self.scrHeight / 4 + self.scrHeight/2):
+					self.FourActiveFocus = 4
+				elif mpos[1] < (3*self.scrHeight) /5:
 					self.activeFocus = 2
 					self.lastActiveFocus = 0
 					self.secondActiveFocus = 1
 					self.thirdActiveFocus = 3
-				else:
+					self.FourActiveFocus = 4
+				elif mpos[1] < (4*self.scrHeight)/5:
 					self.activeFocus = 3
 					self.lastActiveFocus = 0
 					self.secondActiveFocus = 1
 					self.thirdActiveFocus = 2
+					self.FourActiveFocus = 4
+				else:
+					self.activeFocus = 4
+					self.lastActiveFocus = 0
+					self.secondActiveFocus = 1
+					self.thirdActiveFocus = 2
+					self.FourActiveFocus = 3
 
 				for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
 					pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
@@ -1986,16 +2018,24 @@ class IdleScreen():
 			# Iniciar lista de centroides
 			centroidList = list()
 			screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
-			# Cargar la Palaba de Instrucciones:
+			# Cargar el Nombre de Cada VideoJuego y el Fondo de las Instrucciones
 			if NroJuego == 1:
-				juego = "Izquierda, Derecha"
+				TituloJuego = "Izquierda, Derecha"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			elif NroJuego == 2:
-				juego = "Arriba, Abajo"
+				TituloJuego = "Arriba, Abajo"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			elif NroJuego == 3:
-				juego = "Mover Objetos"
+				TituloJuego = "Mover Objetos"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+			elif NroJuego == 4:
+				TituloJuego = "Laberinto"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			else:
-				juego = "Laberinto"
-			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(juego), 1, (255, 14, 0)), 1, 0)
+				TituloJuego = "Entrenamiento"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+			# Carga el Titulo de las Instrucciones
+			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(TituloJuego), 1, (255, 14, 0)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
@@ -2029,25 +2069,25 @@ class IdleScreen():
 						sys.exit()
 					elif e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
-						opcion = self.menuFuncsInstrucciones[self.itemNamesInstrucciones[self.activeFocus]]()
+						opcion = self.menuFuncsInstrucciones[self.itemNamesInstrucciones[self.activeFocus]](NroJuego)
 						break;
 
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageInstrucciones, (0, 0))
-				# Aparece El Texto de Instrucciones
+				# Aparece El Titulo de las Instrucciones
 				screen.blit(Titulo,(130,50))
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
-				# Se establece en el menu que boton se hizo click
-				self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
-				self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
+				# Se establece en el menu que boton se hizo click (Aqui Aparece el error: List index out of range)
+				#self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
+				#self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
 
 				# Se muestra el menú de la Interfaz de Introduccion
 				for item in self.menuItemsInstrucciones:
 					self.screen.blit(item.label, (item.xpos, item.ypos))
 
 				#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
-				if mpos[1] > self.scrHeight / 2 :
+				if mpos[1] > self.scrHeight / 2:
 					self.activeFocus = 1
 					self.lastActiveFocus = 0
 				else:
