@@ -2079,9 +2079,12 @@ class IdleScreen():
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
 				# Se establece en el menu que boton se hizo click (Aqui Aparece el error: List index out of range)
-				#self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
-				#self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
-
+				try:
+					self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
+					self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
+				except IndexError:
+					break;
+					
 				# Se muestra el menú de la Interfaz de Introduccion
 				for item in self.menuItemsInstrucciones:
 					self.screen.blit(item.label, (item.xpos, item.ypos))
