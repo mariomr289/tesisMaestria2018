@@ -92,12 +92,12 @@ class IdleScreen():
 		self.itemNamesIntro = ("Entrar", "Salir")
 		self.menuFuncsIntro = {"Entrar" : self.ClickEntrar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesMenuJuegos = ("Primero", "Segundo", "Tercero", "Cuarto", "Entrenamiento")
-		self.menuFuncsMenuJuegos = {"Primero" : self.ClickPrimerJuego,
+		self.itemNamesMenuJuegos = ("Entrenamiento", "Primero", "Segundo", "Tercero", "Cuarto")
+		self.menuFuncsMenuJuegos = {"Entrenamiento" : self.ClickEntrenamiento,
+							"Primero" : self.ClickPrimerJuego,
 							"Segundo" : self.ClickSegundoJuego,
 							"Tercero" : self.ClickTercerJuego,
-							"Cuarto" : self.ClickCuartoJuego,
-							"Entrenamiento" : self.ClickEntrenamiento}
+							"Cuarto" : self.ClickCuartoJuego}
 		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
@@ -251,15 +251,15 @@ class IdleScreen():
 		done = False
 		print "SIGUIENTE"
 		if NroJuego == 1:
-			self.JuegoDerIzq()
-		elif NroJuego == 2:
-			self.JuegoArriAba()
-		elif NroJuego == 3:
-			self.JuegoLaberinto()
-		elif NroJuego == 4:
-			self.JuegoLaberintoTomJerry()
-		else:
 			self.introduccion()
+		elif NroJuego == 2:
+			self.JuegoDerIzq()
+		elif NroJuego == 3:
+			self.JuegoArriAba()
+		elif NroJuego == 4:
+			self.JuegoLaberinto()
+		else:
+			self.JuegoLaberintoTomJerry()
 
 	# Boton de Reiniciar los VideoJuegos
 	def ClickReiniciar(self):
@@ -280,7 +280,7 @@ class IdleScreen():
 		global done
 		done = False
 		print "Primer Juego"
-		self.Instrucciones(1)
+		self.Instrucciones(2)
 		#self.JuegoDerIzq()
 
 	# Boton de Ingreso al Segundo Juego
@@ -288,7 +288,7 @@ class IdleScreen():
 		global done
 		done = False
 		print "Segundo Juego"
-		self.Instrucciones(2)
+		self.Instrucciones(3)
 		#self.JuegoArriAba()
 
 	# Boton de Ingreso al Tercer Juego
@@ -296,7 +296,7 @@ class IdleScreen():
 		global done
 		done = False
 		print "Tercer Juego"
-		self.Instrucciones(3)
+		self.Instrucciones(4)
 		#self.JuegoLaberinto()
 
 	# Boton de Ingreso al Cuarto Juego
@@ -304,7 +304,7 @@ class IdleScreen():
 		global done
 		done = False
 		print "Cuarto Juego"
-		self.Instrucciones(4)
+		self.Instrucciones(5)
 		#self.JuegoLaberintoTomJerry()
 
 	# Boton de Ingreso al Entrenamiento
@@ -312,7 +312,7 @@ class IdleScreen():
 		global done
 		done = False
 		print "Juego Entrenamiento"
-		self.Instrucciones(5)
+		self.Instrucciones(1)
 
 	# Menu del Juego Derecha e Izquierda
 	def ClickDerecho(self):
@@ -2020,19 +2020,19 @@ class IdleScreen():
 			screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
 			# Cargar el Nombre de Cada VideoJuego y el Fondo de las Instrucciones
 			if NroJuego == 1:
-				TituloJuego = "Izquierda, Derecha"
+				TituloJuego = "Entrenamiento"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			elif NroJuego == 2:
-				TituloJuego = "Arriba, Abajo"
+				TituloJuego = "Izquierda, Derecha"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			elif NroJuego == 3:
-				TituloJuego = "Mover Objetos"
+				TituloJuego = "Arriba, Abajo"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			elif NroJuego == 4:
-				TituloJuego = "Laberinto"
+				TituloJuego = "Mover Objetos"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			else:
-				TituloJuego = "Entrenamiento"
+				TituloJuego = "Laberinto"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			# Carga el Titulo de las Instrucciones
 			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(TituloJuego), 1, (255, 14, 0)), 1, 0)
