@@ -5,6 +5,7 @@ from BouncingSprite import BouncingSprite
 from MenuItem import MenuItem
 from Player import Kate
 from Puntaje import Score
+from Temporizador import Tiempito
 from Pez import Pececito
 from Obstaculo import Obstaculito
 from Moneda import Monedita

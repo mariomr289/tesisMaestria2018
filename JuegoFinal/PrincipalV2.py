@@ -36,6 +36,8 @@ from Clases import MenuItem
 from Clases import Player
 # Importar la Clase para crear el Puntaje
 from Clases import Puntaje
+# Importar la Clase para crear el Temporizador
+from Clases import Temporizador
 # Importar las Clases del Juego Laberinto TomYJerry
 from Clases import mapa
 from Clases import Raton
@@ -55,6 +57,8 @@ listaObstaculos = []
 listaMonedas = []
 # Imagen del Queso del Juego del Laberinto
 imagenQueso = 'Imagenes/q.png'
+# Lista de Puntuacion Juego Entrenamiento
+listaPuntos = []
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -71,6 +75,8 @@ class IdleScreen():
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
 		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
 		self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
+		self.bgImageEntrenaIzquierda = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
+		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 50)
@@ -251,7 +257,7 @@ class IdleScreen():
 		done = False
 		print "SIGUIENTE"
 		if NroJuego == 1:
-			self.introduccion()
+			self.Entrenamiento(1)
 		elif NroJuego == 2:
 			self.JuegoDerIzq()
 		elif NroJuego == 3:
@@ -1668,6 +1674,191 @@ class IdleScreen():
 					# Espera un nuevo punto de partida
 					dummy = False
 
+	# Pantalla De Entrenamiento Izquierda, Derecha, Arriba, Abajo
+	def Entrenamiento(self, actividad):
+			global done
+			screenloop = True
+			(depth,_) = get_depth()
+			# Lista de cache en blanco para el area convexa del casco
+			cHullAreaCache = constList(5,12000)
+			# Lista de cache en blanco para la relacion de area del area de contorno al area de casco convexo
+			areaRatioCache = constList(5,1)
+			# Iniciar lista de centroides
+			centroidList = list()
+			screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
+			# Iterator boolean -> Indica a programa cuando finalizar
+			# Muy importante bool para la manipulacion del raton
+			dummy = False
+			# Cargar el Temporizador
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (200, 50))
+			# Instancia del Objeto Puntaje
+			puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
+			# Verificar que el jugador gano o perdio
+			enJuego = True
+			#Construye el Menu Principal Izquierda Derecha
+			if actividad == 1 or actividad == 2:
+				if not done:
+					self.buildMenu()
+
+			while screenloop:
+				# Regulamos los frames por segundo
+				self.clock.tick(30)
+				# Obtenemos el tiempo del Juego en Milisegundos
+				tiempo = pygame.time.get_ticks()/1000
+				print "Tiempo actual: " + str(tiempo)
+				# Llamar a la funcion que inicializa el tiempo
+				Tempo.tiempo_sube()
+				# Obtenga la profundidad del kinect
+				(depth,_) = get_depth()
+				old_depth = depth
+				depth = cv2.resize(old_depth, (1024, 768))
+				# Convierta la profundidad en un flotador de 32 bits
+				depth = depth.astype(np.float32)
+				# Umbral de la profundidad de una imagen binaria. Umbral en 600 unidades arbitrarias
+				_,depthThresh = cv2.threshold(depth, 600, 255, cv2.THRESH_BINARY_INV)
+				# Umbral del fondo para tener un fondo delineado y un primer plano segmentado
+				_,back = cv2.threshold(depth, 900, 255, cv2.THRESH_BINARY_INV)
+				# Crea el objeto blobData usando la clase BlobAnalysis
+				blobData = BlobAnalysis(depthThresh)
+				# Crea el objeto blobDataBack usando la clase BlobAnalysis
+				blobDataBack = BlobAnalysis(back)
+
+				mpos = pygame.mouse.get_pos()
+
+				for e in pygame.event.get():
+					if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
+						screenloop = False
+						pygame.quit()
+						sys.exit()
+					# Controlamos el cliqueo del mouse
+					if actividad == 1 or actividad ==2:
+						if enJuego == True:
+							if e.type == pygame.MOUSEBUTTONDOWN:
+								screenloop = True
+								opcion = self.menuFuncs[self.itemNames[self.activeFocus]]()
+								# Verificar cual de los botones se ha pulsado
+								if identidad == "izquierda" and actividad == 1:
+									puntos.score_up()
+								if identidad == "derecha" and actividad == 2:
+									puntos.score_up()
+
+				# Se Carga el fondo de la Imagen de Entrenamiento
+				if actividad == 1:
+					self.screen.blit(self.bgImageEntrenaIzquierda, (0, 0))
+				elif actividad == 2:
+					self.screen.blit(self.bgImageEntrenaDerecha, (0,0))
+				# Se muestra el tiempo de la actividad
+				Tempo.update(screen)
+				# Actualizar el Puntaje del jugador
+				puntos.update(screen)
+				# Verificar la cantidad de intentos
+				if Tempo.temporal == 300:
+					enJuego = False
+
+				# LLama a la Pantalla de Fin de Juego
+				if enJuego == False and actividad == 1:
+					listaPuntos.append(puntos.score)
+					done = False
+					self.Entrenamiento(2)
+				elif enJuego == False and actividad == 2:
+					listaPuntos.append(puntos.score)
+					done = False
+					self.FinJuego(listaPuntos[0],1)
+
+				if actividad == 1 or actividad == 2:
+					# Se establece en el menu que boton se hizo click
+					self.menuItems[self.activeFocus].applyFocus(self.screen)
+					self.menuItems[self.lastActiveFocus].removeFocus()
+
+					# Se muestra el menú de la Interfaz de Introduccion
+					for item in self.menuItems:
+						self.screen.blit(item.label, (item.xpos, item.ypos))
+
+					#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
+					if mpos[0] > self.scrWidth / 2:
+						self.activeFocus = 0
+						self.lastActiveFocus = 1
+					else:
+						self.activeFocus = 1
+						self.lastActiveFocus = 0
+
+				for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
+					pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
+				for i in range(blobData.counter): #Itera de 0 a la cantidad de blobs menos 1
+					pygame.draw.circle(screen,(0,0,255),blobData.centroid[i],10) #Dibuja un circulo azul en cada centroide
+					centroidList.append(blobData.centroid[i]) #Agrega la tupla centroide al centroidList -> utilizado para el dibujo
+					pygame.draw.lines(screen,(255,0,0),True,blobData.cHull[i],3) #Dibuja el casco convexo para cada blob
+					pygame.draw.lines(screen,(0,255,0),True,blobData.contours[i],3) #Dibuja el contorno de cada blob
+
+					for tips in blobData.cHull[i]: #Itera a traves de los vertices del casco convexo para cada blob
+						pygame.draw.circle(screen,(255,0,255),tips,5) #Dibuja los vertices purpura
+
+				# Elimina la profundidad --> opencv problema de memoria
+				del depth
+				# Da vuelta la pantalla para que sea una pantalla de espejo
+				screenFlipped = pygame.transform.flip(screen,1,0)
+				# Actualiza la pantalla principal -> pantalla
+				screen.blit(screenFlipped,(0,0))
+				# Actualiza todo en la ventana
+				pygame.display.flip()
+
+				# Declaracion de prueba de mouse
+				try:
+					centroidX = blobData.centroid[0][0]
+					centroidY = blobData.centroid[0][1]
+					if dummy:
+						# Obtiene los atributos actuales del mouse
+						mousePtr = display.Display().screen().root.query_pointer()._data
+						# Encuentra el cambio en X
+						dX = centroidX - strX
+						# Encuentra el cambio en Y
+						dY = strY - centroidY
+						minChange = 3
+						# Si hubo un cambio en X mayor que minChange ...
+						if abs(dX) > minChange:
+							# Nueva coordenada X del mouse
+							mouseX = mousePtr["root_x"] - 2*dX
+							if mouseX < 0:
+								mouseX = 0
+							elif mouseX > self.scrWidth:
+								mouseX = self.scrWidth
+						# Si hubo un cambio en Y mayor que minChange ...
+						if abs(dY) > minChange:
+							# Nueva coordenada Y del mouse
+							mouseY = mousePtr["root_y"] - 2*dY
+							if mouseY < 0:
+								mouseY = 0
+							elif mouseY > self.scrHeight:
+								mouseY = self.scrHeight
+						print mouseX, mouseY
+						# Mueve el mouse a una nueva ubicación
+						move_mouse(mouseX, mouseY)
+						# Hace que la nueva X inicial del mouse sea la X actual del centroide mas nuevo
+						strX = centroidX
+						# Hace que la nueva Y inicial del mouse sea la Y actual del centroide mas nuevo
+						strY = centroidY
+						# Normaliza (elimina el ruido) en el area convexa del casco
+						cArea = cacheAppendMean(cHullAreaCache,blobData.cHullArea[0])
+						# Normaliza la relacion entre el area del contorno y el area convexa del casco
+						areaRatio = cacheAppendMean(areaRatioCache, blobData.contourArea[0]/cArea)
+						print cArea, areaRatio, "(Must be: < 1000, > 0.82)"
+						# Define lo que es un clic abajo. El area debe ser pequenia y la mano debe verse como un circulo binario (casi)
+						if cArea < 25000 and areaRatio > 0.82:
+							click_down(1)
+						else:
+							click_up(1)
+					else:
+						# Inicializa la X inicial
+						strX = centroidX
+						# Inicializa el inicio Y
+						strY = centroidY
+						# Permite que la función continue en la primera parte de la sentencia if
+						dummy = True
+				except:
+					# No puede haber centroides y, por lo tanto, blobData.centroid [0] estará fuera de rango
+					# Espera un nuevo punto de partida
+					dummy = False
+
 	# Pantalla Del Menu de los Juegos
 	def MenuJuegos(self):
 			global done
@@ -2084,7 +2275,7 @@ class IdleScreen():
 					self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
 				except IndexError:
 					break;
-					
+
 				# Se muestra el menú de la Interfaz de Introduccion
 				for item in self.menuItemsInstrucciones:
 					self.screen.blit(item.label, (item.xpos, item.ypos))
