@@ -77,6 +77,8 @@ class IdleScreen():
 		self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
 		self.bgImageEntrenaIzquierda = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
 		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
+		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
+		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 50)
@@ -1699,6 +1701,9 @@ class IdleScreen():
 			if actividad == 1 or actividad == 2:
 				if not done:
 					self.buildMenu()
+			elif actividad == 3 or actividad == 4:
+				if not done:
+					self.buildMenuArriba()
 
 			while screenloop:
 				# Regulamos los frames por segundo
@@ -1731,7 +1736,7 @@ class IdleScreen():
 						pygame.quit()
 						sys.exit()
 					# Controlamos el cliqueo del mouse
-					if actividad == 1 or actividad ==2:
+					if actividad == 1 or actividad == 2:
 						if enJuego == True:
 							if e.type == pygame.MOUSEBUTTONDOWN:
 								screenloop = True
@@ -1741,17 +1746,32 @@ class IdleScreen():
 									puntos.score_up()
 								if identidad == "derecha" and actividad == 2:
 									puntos.score_up()
+					# Controlamos el cliqueo del mouse
+					if actividad == 3 or actividad == 4:
+						if enJuego == True:
+							if e.type == pygame.MOUSEBUTTONDOWN:
+								screenloop = True
+								opcion = self.menuFuncsArriba[self.itemNamesArriba[self.activeFocus]]()
+								# Verificar cual de los botones se ha pulsado
+								if identidad == "arriba" and actividad == 3:
+									puntos.score_up()
+								if identidad == "abajo" and actividad == 4:
+									puntos.score_up()
 
 				# Se Carga el fondo de la Imagen de Entrenamiento
 				if actividad == 1:
 					self.screen.blit(self.bgImageEntrenaIzquierda, (0, 0))
 				elif actividad == 2:
 					self.screen.blit(self.bgImageEntrenaDerecha, (0,0))
+				elif actividad == 3:
+					self.screen.blit(self.bgImageEntrenaArriba, (0,0))
+				elif actividad == 4:
+					self.screen.blit(self.bgImageEntrenaAbajo, (0,0))
 				# Se muestra el tiempo de la actividad
 				Tempo.update(screen)
 				# Actualizar el Puntaje del jugador
 				puntos.update(screen)
-				# Verificar la cantidad de intentos
+				# Verificar el Tiempo Transcurrido
 				if Tempo.temporal == 300:
 					enJuego = False
 
@@ -1761,6 +1781,14 @@ class IdleScreen():
 					done = False
 					self.Entrenamiento(2)
 				elif enJuego == False and actividad == 2:
+					listaPuntos.append(puntos.score)
+					done = False
+					self.Entrenamiento(3)
+				elif enJuego == False and actividad == 3:
+					listaPuntos.append(puntos.score)
+					done = False
+					self.Entrenamiento(4)
+				elif enJuego == False and actividad == 4:
 					listaPuntos.append(puntos.score)
 					done = False
 					self.FinJuego(listaPuntos[0],1)
@@ -1781,6 +1809,23 @@ class IdleScreen():
 					else:
 						self.activeFocus = 1
 						self.lastActiveFocus = 0
+
+				if actividad == 3 or actividad == 4:
+					# Se establece en el menu que boton se hizo click
+					self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
+					self.menuItemsArriba[self.lastActiveFocus].removeFocus()
+
+					# Se muestra el menú de la Interfaz de Introduccion
+					for item in self.menuItemsArriba:
+						self.screen.blit(item.label, (item.xpos, item.ypos))
+
+					#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
+					if mpos[1] > self.scrHeight / 2:
+						self.activeFocus = 1
+						self.lastActiveFocus = 0
+					else:
+						self.activeFocus = 0
+						self.lastActiveFocus = 1
 
 				for cont in blobDataBack.contours: #Itera a traves de contornos en el fondo
 					pygame.draw.lines(screen,(255,255,0),True,cont,3) #Colorea los limites binarios del fondo amarillo
