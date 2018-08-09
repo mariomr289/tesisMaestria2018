@@ -1710,7 +1710,7 @@ class IdleScreen():
 				self.clock.tick(30)
 				# Obtenemos el tiempo del Juego en Milisegundos
 				tiempo = pygame.time.get_ticks()/1000
-				print "Tiempo actual: " + str(tiempo)
+				#print "Tiempo actual: " + str(tiempo)
 				# Llamar a la funcion que inicializa el tiempo
 				Tempo.tiempo_sube()
 				# Obtenga la profundidad del kinect
@@ -2149,12 +2149,11 @@ class IdleScreen():
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (255,120,100)), 1, 0)
 						screen.blit(Marcador,(280,y))
-						y = y + 40
-						if y == 130:
-							accion = "Derecha"
-						elif y == 170:
+						y += 40
+						accion = "Derecha"
+						if y == 170:
 							accion = "Arriba"
-						else:
+						elif y == 210:
 							accion = "Abajo"
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
