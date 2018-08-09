@@ -81,7 +81,7 @@ class IdleScreen():
 		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
-		self.fontPuntaje = pygame.font.SysFont("Answer", 50)
+		self.fontPuntaje = pygame.font.SysFont("Answer", 40)
 		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 60)
 		self.fontColor = (16, 4, 130)
 		self.menuItems = list()
@@ -1791,7 +1791,7 @@ class IdleScreen():
 				elif enJuego == False and actividad == 4:
 					listaPuntos.append(puntos.score)
 					done = False
-					self.FinJuego(listaPuntos[0],1)
+					self.FinJuego(listaPuntos[0],5)
 
 				if actividad == 1 or actividad == 2:
 					# Se establece en el menu que boton se hizo click
@@ -2094,8 +2094,10 @@ class IdleScreen():
 				juego = "Arriba, Abajo"
 			elif NroJuego == 3:
 				juego = "Mover Objetos"
-			else:
+			elif NroJuego == 4:
 				juego = "Laberinto"
+			else:
+				juego = "Entrenamiento"
 			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (255, 14, 0)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (255,120,100)), 1, 0)
@@ -2137,9 +2139,23 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageFinJuego, (0, 0))
 				# Aparece El Texto de Fin del Juego
-				screen.blit(Texto,(200,50))
-				# Muestra el Puntaje Obtenido por el Jugador
-				screen.blit(Marcador,(300,180))
+				screen.blit(Texto,(200,15))
+				if NroJuego < 5:
+					# Muestra el Puntaje Obtenido por el Jugador
+					screen.blit(Marcador,(280,180))
+				else:
+					y = 90
+					accion = "Izquierda"
+					for item in listaPuntos:
+						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (255,120,100)), 1, 0)
+						screen.blit(Marcador,(280,y))
+						y = y + 40
+						if y == 130:
+							accion = "Derecha"
+						elif y == 170:
+							accion = "Arriba"
+						else:
+							accion = "Abajo"
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
 				# Se establece en el menu que boton se hizo click
