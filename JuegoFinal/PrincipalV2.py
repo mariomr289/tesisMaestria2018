@@ -58,7 +58,7 @@ listaMonedas = []
 # Imagen del Queso del Juego del Laberinto
 imagenQueso = 'Imagenes/q.png'
 # Lista de Puntuacion Juego Entrenamiento
-listaPuntos = []
+listaPuntos = [0,0,0,0]
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -1777,19 +1777,19 @@ class IdleScreen():
 
 				# LLama a la Pantalla de Fin de Juego
 				if enJuego == False and actividad == 1:
-					listaPuntos.append(puntos.score)
+					listaPuntos[0] = puntos.score
 					done = False
 					self.Entrenamiento(2)
 				elif enJuego == False and actividad == 2:
-					listaPuntos.append(puntos.score)
+					listaPuntos[1] = puntos.score
 					done = False
 					self.Entrenamiento(3)
 				elif enJuego == False and actividad == 3:
-					listaPuntos.append(puntos.score)
+					listaPuntos[2] = puntos.score
 					done = False
 					self.Entrenamiento(4)
 				elif enJuego == False and actividad == 4:
-					listaPuntos.append(puntos.score)
+					listaPuntos[3] = puntos.score
 					done = False
 					self.FinJuego(listaPuntos[0],5)
 
