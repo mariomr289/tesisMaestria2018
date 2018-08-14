@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase para un elemento de menu (welp, en realidad tenemos dos elementos de menu, pero lo que sea)
 class MenuItem(pygame.font.Font):

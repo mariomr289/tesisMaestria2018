@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 from random import randint
 import Huevo

@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase para el Puntaje de los Juegos
 class Tiempito(pygame.sprite.Sprite):

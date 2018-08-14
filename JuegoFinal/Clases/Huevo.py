@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase para el Huevo de la Gallina
 class Huevo(pygame.sprite.Sprite):

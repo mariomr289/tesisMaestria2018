@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase Pez Juego Arriba Abajo
 class Pececito(pygame.sprite.Sprite):

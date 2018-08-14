@@ -1,5 +1,7 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
-# Clase Obstaculo que son los enemigos del Juego Arriba Abajo
+# Clase Moneda que son las Estrellas que recoge el Juego Arriba Abajo
 class Monedita(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)

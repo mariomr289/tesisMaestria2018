@@ -42,6 +42,9 @@ from Clases import Temporizador
 from Clases import mapa
 from Clases import Raton
 from Clases import Gato
+# Importar las Clases para el Juego de Mover Juego de Mover Objetos
+from Clases import Oso
+from Clases import Objetivo
 
 # Da una lista de longitud del tamanio lleno con la variable val la longitud es una lista y val es dinamica
 constList = lambda length, val: [val for _ in range(length)]
@@ -59,25 +62,6 @@ listaMonedas = []
 imagenQueso = 'Imagenes/q.png'
 # Lista de Puntuacion Juego Entrenamiento
 listaPuntos = [0,0,0,0]
-
-#Clase Cuadro para el JuegoMoverObjetos
-class Cuadro(pygame.sprite.Sprite):
-	def __init__(self, scrWidth, scrHeight):
-		pygame.sprite.Sprite.__init__(self)
-		self.ImagenOso = pygame.image.load("Imagenes/mario.png")
-		self.rect = self.ImagenOso.get_rect()
-		self.click = False
-		self.rect.centerx = scrWidth/2
-		self.rect.centery = scrHeight - 250
-
-		self.PosOsoX = self.rect.centerx
-
-	def update(self,screen, scrWidth):
-		if self.click:
-			self.rect.center = pygame.mouse.get_pos()
-			print "Posicion mouse" + str(self.rect.centerx)
-			self.PosOsoX = scrWidth - self.rect.centerx
-		screen.blit(self.ImagenOso, (self.PosOsoX - 100, self.rect.centery - 100))
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -1603,13 +1587,17 @@ class IdleScreen():
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
 			# Instancia del objeto Cuadro
-			Oso = Cuadro(self.scrWidth, self.scrHeight)
+			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight)
+			# Instancia del Objeto ObjetivoMover
+			Lugar = Objetivo.ObjetivoMover(100,100,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
 
 			#if not done:
 			#	self.buildMenuIntro() #Construye el Menu Principal
 
 			while screenloop:
 				self.clock.tick(30)
+				# Obtenemos el tiempo del Juego
+				tiempo = pygame.time.get_ticks()/1000
 				# Obtenga la profundidad del kinect
 				(depth,_) = get_depth()
 				old_depth = depth
@@ -1637,16 +1625,22 @@ class IdleScreen():
 						print "Mouse Down"
 						#opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
 						#break;
-						if Oso.rect.collidepoint(e.pos):
-							Oso.click = True
+						if ObjJug.rect.collidepoint(e.pos):
+							ObjJug.click = True
 					elif e.type == pygame.MOUSEBUTTONUP:
-						Oso.click = False
+						ObjJug.click = False
 						print "Mouse Up"
+
 
 				# Se Carga el fondo de la Imagen de Mover Objetos
 				self.screen.blit(self.bgImageMoverObjeto, (0, 0))
 				# Actualiza el Cuadro en la Pantalla
-				Oso.update(screen, self.scrWidth)
+				ObjJug.update(screen, self.scrWidth)
+
+				# Animacion del ObjetivoMover
+				Lugar.comportamiento(tiempo)
+				# Dibuja el Objetivo a Realizar
+				Lugar.dibujar(screen)
 
 				# Se establece en el menu que boton se hizo click
 				#self.menuItemsIntro[self.activeFocus].applyFocus(self.screen)

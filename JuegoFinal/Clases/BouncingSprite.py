@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase de imagen de animal que rebota
 class BouncingSprite(pygame.sprite.Sprite):

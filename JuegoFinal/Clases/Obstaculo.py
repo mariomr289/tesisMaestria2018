@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
 # Clase Obstaculo que son los enemigos del Juego Arriba Abajo
 class Obstaculito(pygame.sprite.Sprite):

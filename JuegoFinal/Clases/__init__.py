@@ -14,3 +14,5 @@ from Pared import Paredsita
 from Queso import Quesito
 from Raton import imagenRatonContento
 from Gato import imagenGatoContento
+from Oso import Osito
+from Objetivo import ObjetivoMover

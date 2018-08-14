@@ -1,5 +1,6 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import pygame
-# import Proyectil
 # Clase Para la Nena de la Canasta
 class NenaCanasta(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
@@ -15,7 +16,6 @@ class NenaCanasta(pygame.sprite.Sprite):
 
 		self.velocidad = 20
 
-		#self.sonidoDisparo = pygame.mixer.Sound("Sonidos/laserSpace.wav")
 		self.sonidoPerder = pygame.mixer.Sound("Sonidos/endGame.wav")
 
 	"""Nuevos Cambios (Metodos)"""
@@ -34,11 +34,6 @@ class NenaCanasta(pygame.sprite.Sprite):
 				self.rect.left = 10
 			elif self.rect.right > 1014:
 				self.rect.right = 1014
-
-	#def disparar(self,x,y):
-	#	miProyectil = Proyectil.Proyectil(x,y,"Imagenes/bala.png", True)
-	#	self.listaDisparo.append(miProyectil)
-	#	self.sonidoDisparo.play()
 
 	# Funcion para cuando pierda el juego
 	def destruccion(self):
