@@ -3,7 +3,7 @@ import pygame
 class Pececito(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
-		self.ImagenPez = pygame.image.load('Imagenes/Pez.png')
+		self.ImagenPez = pygame.image.load('Imagenes/NenaNadando.png')
 		self.ImagenPerder = pygame.image.load('Imagenes/explosion.jpg')
 		self.rect = self.ImagenPez.get_rect()
 		self.rect.centerx = scrWidth - 100

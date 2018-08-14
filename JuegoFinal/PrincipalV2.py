@@ -68,12 +68,16 @@ class Cuadro(pygame.sprite.Sprite):
 		self.rect = self.ImagenOso.get_rect()
 		self.click = False
 		self.rect.centerx = scrWidth/2
-		self.rect.centery = scrHeight - 100
+		self.rect.centery = scrHeight - 250
 
-	def update(self,screen):
+		self.PosOsoX = self.rect.centerx
+
+	def update(self,screen, scrWidth):
 		if self.click:
 			self.rect.center = pygame.mouse.get_pos()
-		screen.blit(self.ImagenOso, self.rect)
+			print "Posicion mouse" + str(self.rect.centerx)
+			self.PosOsoX = scrWidth - self.rect.centerx
+		screen.blit(self.ImagenOso, (self.PosOsoX - 100, self.rect.centery - 100))
 
 # Clase para el menu inactivo / juego
 class IdleScreen():
@@ -1642,7 +1646,7 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Mover Objetos
 				self.screen.blit(self.bgImageMoverObjeto, (0, 0))
 				# Actualiza el Cuadro en la Pantalla
-				Oso.update(screen)
+				Oso.update(screen, self.scrWidth)
 
 				# Se establece en el menu que boton se hizo click
 				#self.menuItemsIntro[self.activeFocus].applyFocus(self.screen)
