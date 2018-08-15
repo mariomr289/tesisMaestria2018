@@ -599,7 +599,7 @@ class IdleScreen():
 				# Llamar a la pantalla de Fin del Juego
 				done = False
 				pygame.time.delay(3000)
-				self.FinJuego(puntos.score, 1)
+				self.FinJuego(puntos.score, 2)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
@@ -869,7 +869,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				self.FinJuego(puntos.score, 2)
+				self.FinJuego(puntos.score, 3)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
@@ -1316,7 +1316,7 @@ class IdleScreen():
 
 			if enJuego == False:
 				done = False
-				self.FinJuego(puntos.score, 4)
+				self.FinJuego(puntos.score, 5)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsLaberinto[self.activeFocus].applyFocus(self.screen)
@@ -1862,7 +1862,7 @@ class IdleScreen():
 				elif enJuego == False and actividad == 4:
 					listaPuntos[3] = puntos.score
 					done = False
-					self.FinJuego(listaPuntos[0],5)
+					self.FinJuego(listaPuntos[0],1)
 
 				if actividad == 1 or actividad == 2:
 					# Se establece en el menu que boton se hizo click
@@ -2160,15 +2160,15 @@ class IdleScreen():
 			screenFlipped = pygame.display.set_mode((self.scrWidth, self.scrHeight), pygame.FULLSCREEN)
 			# Cargar la Palaba de Fin del Juego
 			if NroJuego == 1:
-				juego = "Izquierda, Derecha"
-			elif NroJuego == 2:
-				juego = "Arriba, Abajo"
-			elif NroJuego == 3:
-				juego = "Mover Objetos"
-			elif NroJuego == 4:
-				juego = "Laberinto"
-			else:
 				juego = "Entrenamiento"
+			elif NroJuego == 2:
+				juego = "Izquierda, Derecha"
+			elif NroJuego == 3:
+				juego = "Arriba, Abajo"
+			elif NroJuego == 4:
+				juego = "Mover Objetos"
+			else:
+				juego = "Laberinto"
 			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (255, 14, 0)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (255,120,100)), 1, 0)
@@ -2211,7 +2211,7 @@ class IdleScreen():
 				self.screen.blit(self.bgImageFinJuego, (0, 0))
 				# Aparece El Texto de Fin del Juego
 				screen.blit(Texto,(200,15))
-				if NroJuego < 5:
+				if NroJuego > 1:
 					# Muestra el Puntaje Obtenido por el Jugador
 					screen.blit(Marcador,(280,180))
 				else:
