@@ -72,7 +72,7 @@ class IdleScreen():
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
-		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoMarino.jpg").convert(), 1, 0)
+		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArriba.jpg").convert(), 1, 0)
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
@@ -410,7 +410,7 @@ class IdleScreen():
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = posy + 700
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las monedas
 				self.cargarMonedas(posMonedax)
@@ -420,7 +420,7 @@ class IdleScreen():
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = 400
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las monedas
 				self.cargarMonedas(posMonedax)
