@@ -1590,7 +1590,12 @@ class IdleScreen():
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight)
 			# Instancia del Objeto ObjetivoMover
 			Lugar = Objetivo.ObjetivoMover(100,100,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
-
+			# Instancia del Objeto Puntaje
+			puntos = Puntaje.Score(self.fontPuntaje, (900,50))
+			# Cargar el Temporizador
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (200,50))
+			# Verificar si el Jugador gano o perdio
+			enJuego = True
 			#if not done:
 			#	self.buildMenuIntro() #Construye el Menu Principal
 
@@ -1598,6 +1603,8 @@ class IdleScreen():
 				self.clock.tick(30)
 				# Obtenemos el tiempo del Juego
 				tiempo = pygame.time.get_ticks()/1000
+				# Llamar a la funcion que inicializa el tiempo
+				Tempo.tiempo_sube()
 				# Obtenga la profundidad del kinect
 				(depth,_) = get_depth()
 				old_depth = depth
@@ -1620,21 +1627,26 @@ class IdleScreen():
 						screenloop = False
 						pygame.quit()
 						sys.exit()
-					elif e.type == pygame.MOUSEBUTTONDOWN:
-						screenloop = True
-						print "Mouse Down"
-						#opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
-						#break;
-						if ObjJug.rect.collidepoint(e.pos):
-							ObjJug.click = True
-					elif e.type == pygame.MOUSEBUTTONUP:
-						ObjJug.click = False
-						print "Mouse Up"
-
+					# Controlamos el clic del MOUSE
+					if enJuego == True:
+						if e.type == pygame.MOUSEBUTTONDOWN:
+							screenloop = True
+							print "Mouse Down"
+							#opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
+							#break;
+							if ObjJug.rect.collidepoint(e.pos):
+								ObjJug.click = True
+						elif e.type == pygame.MOUSEBUTTONUP:
+							ObjJug.click = False
+							print "Mouse Up"
 
 				# Se Carga el fondo de la Imagen de Mover Objetos
 				self.screen.blit(self.bgImageMoverObjeto, (0, 0))
-				# Actualiza el Cuadro en la Pantalla
+				# Se muestra el tiempo de la actividad
+				Tempo.update(screen)
+				# Actualizar el Puntaje del JUEGO
+				puntos.update(screen)
+				# Actualiza el Osito en la Pantalla
 				ObjJug.update(screen, self.scrWidth)
 
 				# Animacion del ObjetivoMover
