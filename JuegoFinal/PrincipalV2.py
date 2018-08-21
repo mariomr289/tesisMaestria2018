@@ -62,7 +62,8 @@ listaMonedas = []
 imagenQueso = 'Imagenes/q.png'
 # Lista de Puntuacion Juego Entrenamiento
 listaPuntos = [0,0,0,0]
-
+# Lista de Tiempo Juego Mover Objetos
+listaTiempo = [0,0,0,0]
 # Clase para el menu inactivo / juego
 class IdleScreen():
 	def __init__(self, screen):
@@ -1587,9 +1588,9 @@ class IdleScreen():
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
 			# Instancia del objeto Cuadro
-			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight)
+			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, 150, 150)
 			# Instancia del Objeto ObjetivoMover
-			Lugar = Objetivo.ObjetivoMover(100,100,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
+			Lugar = Objetivo.ObjetivoMover(100,600,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
 			# Instancia del Objeto Puntaje
 			puntos = Puntaje.Score(self.fontPuntaje, (900,50))
 			# Cargar el Temporizador
@@ -1653,6 +1654,11 @@ class IdleScreen():
 				Lugar.comportamiento(tiempo)
 				# Dibuja el Objetivo a Realizar
 				Lugar.dibujar(screen)
+
+				#Verificar Colision del Jugador con el Objetivo
+				if ObjJug.rect.collidepoint(self.scrWidth - 100,600):
+					puntos.score_up()
+					print "Colisiono el Jugador"
 
 				# Se establece en el menu que boton se hizo click
 				#self.menuItemsIntro[self.activeFocus].applyFocus(self.screen)

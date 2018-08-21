@@ -3,15 +3,15 @@
 import pygame
 #Clase Osito para el JuegoMoverObjetos
 class Osito(pygame.sprite.Sprite):
-	def __init__(self, scrWidth, scrHeight):
+	def __init__(self, scrWidth, scrHeight, posx, posy):
 		pygame.sprite.Sprite.__init__(self)
 		self.ImagenOso = pygame.image.load("Imagenes/mario.png")
 		self.rect = self.ImagenOso.get_rect()
 		self.click = False
-		self.rect.centerx = scrWidth/2
-		self.rect.centery = scrHeight - 250
+		self.rect.centerx = posx
+		self.rect.centery = scrHeight - posy
 		# Posición en X del Oso en la pantalla invertida
-		self.PosOsoX = self.rect.centerx
+		self.PosOsoX = scrWidth - self.rect.centerx
 
 	def update(self,screen, scrWidth):
 		if self.click:
