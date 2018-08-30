@@ -75,14 +75,14 @@ class IdleScreen():
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
 		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArriba.jpg").convert(), 1, 0)
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
-		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntroduccion.jpg").convert(), 1, 0)
-		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
-		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/MenuJuegos.jpg").convert(), 1, 0)
+		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicio.jpg").convert(), 1, 0)
+		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/FondoMenu.jpg").convert(), 1, 0)
+		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/FondoFinJuego.jpg").convert(), 1, 0)
 		self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
-		self.bgImageEntrenaIzquierda = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
-		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
-		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
-		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/FondoIntro.jpg").convert(), 1, 0)
+		self.bgImageEntrenaIzquierda = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaIzquierda.jpg").convert(), 1, 0)
+		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaDerecha.jpg").convert(), 1, 0)
+		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaArriba.jpg").convert(), 1, 0)
+		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaAbajo.jpg").convert(), 1, 0)
 		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/fondoMover.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
@@ -105,12 +105,12 @@ class IdleScreen():
 		self.itemNamesIntro = ("Entrar", "Salir")
 		self.menuFuncsIntro = {"Entrar" : self.ClickEntrar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesMenuJuegos = ("Entrenamiento", "Primero", "Segundo", "Tercero", "Cuarto")
+		self.itemNamesMenuJuegos = ("Entrenamiento", "Izquierda-Derecha", "Arriba-Abajo", "Adentro-Afuera", "Laberinto")
 		self.menuFuncsMenuJuegos = {"Entrenamiento" : self.ClickEntrenamiento,
-							"Primero" : self.ClickPrimerJuego,
-							"Segundo" : self.ClickSegundoJuego,
-							"Tercero" : self.ClickTercerJuego,
-							"Cuarto" : self.ClickCuartoJuego}
+							"Izquierda-Derecha" : self.ClickPrimerJuego,
+							"Arriba-Abajo" : self.ClickSegundoJuego,
+							"Adentro-Afuera" : self.ClickTercerJuego,
+							"Laberinto" : self.ClickCuartoJuego}
 		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
@@ -199,8 +199,8 @@ class IdleScreen():
 		for index, item in enumerate(self.itemNamesMenuJuegos):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
 			width = label.get_rect().width
-			height = label.get_rect().height + 30
-			posx = (self.scrWidth / 2) - (width / 2)
+			height = label.get_rect().height + 26
+			posx = (self.scrWidth / 6) - (width / 6)
 			totalHeight  = len(self.itemNamesMenuJuegos) * height
 			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
 
@@ -217,7 +217,7 @@ class IdleScreen():
 			height = label.get_rect().height + 30
 			posx = (self.scrWidth / 2) - (width / 2)
 			totalHeight  = len(self.itemNamesFinJuego) * height
-			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+			posy = (self.scrHeight) - (400) + (index * height)
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsFinJuego.append(mi)
@@ -1769,9 +1769,9 @@ class IdleScreen():
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
 			# Cargar el Temporizador
-			Tempo = Temporizador.Tiempito(self.fontPuntaje, (200, 50))
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 67))
 			# Instancia del Objeto Puntaje
-			puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
+			puntos = Puntaje.Score(self.fontPuntaje, (890, 67))
 			# Verificar que el jugador gano o perdio
 			enJuego = True
 			#Construye el Menu Principal Izquierda Derecha
@@ -1875,9 +1875,9 @@ class IdleScreen():
 					self.menuItems[self.activeFocus].applyFocus(self.screen)
 					self.menuItems[self.lastActiveFocus].removeFocus()
 
-					# Se muestra el menú de la Interfaz de Introduccion
-					for item in self.menuItems:
-						self.screen.blit(item.label, (item.xpos, item.ypos))
+					# Se muestra el menú de la Interfaz de Entrenamiento Izquierda y Derecha
+					#for item in self.menuItems:
+					#	self.screen.blit(item.label, (item.xpos, item.ypos))
 
 					#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
 					if mpos[0] > self.scrWidth / 2:
@@ -1892,9 +1892,9 @@ class IdleScreen():
 					self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
 					self.menuItemsArriba[self.lastActiveFocus].removeFocus()
 
-					# Se muestra el menú de la Interfaz de Introduccion
-					for item in self.menuItemsArriba:
-						self.screen.blit(item.label, (item.xpos, item.ypos))
+					# Se muestra el menú de la Interfaz de Entrenamiento Arriba y Abajo
+					#for item in self.menuItemsArriba:
+					#	self.screen.blit(item.label, (item.xpos, item.ypos))
 
 					#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
 					if mpos[1] > self.scrHeight / 2:
@@ -2175,9 +2175,9 @@ class IdleScreen():
 				juego = "Mover Objetos"
 			else:
 				juego = "Laberinto"
-			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (255, 14, 0)), 1, 0)
+			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (23, 131, 191)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
-			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (255,120,100)), 1, 0)
+			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (143,31,130)), 1, 0)
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
@@ -2216,21 +2216,22 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageFinJuego, (0, 0))
 				# Aparece El Texto de Fin del Juego
-				screen.blit(Texto,(200,15))
+				screen.blit(Texto,(200,10))
 				if NroJuego > 1:
 					# Muestra el Puntaje Obtenido por el Jugador
-					screen.blit(Marcador,(280,180))
+					screen.blit(Marcador,(350,200))
 				else:
-					y = 90
+					y = 130
 					accion = "Izquierda"
 					for item in listaPuntos:
-						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (255,120,100)), 1, 0)
-						screen.blit(Marcador,(280,y))
-						y += 40
-						accion = "Derecha"
-						if y == 170:
+						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
+						screen.blit(Marcador,(350,y))
+						y += 50
+						if y == 180:
+							accion = "Derecha"
+						elif y == 230:
 							accion = "Arriba"
-						elif y == 210:
+						elif y == 280:
 							accion = "Abajo"
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
@@ -2418,7 +2419,7 @@ class IdleScreen():
 					self.screen.blit(item.label, (item.xpos, item.ypos))
 
 				#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
-				if mpos[1] > self.scrHeight / 2:
+				if mpos[0] > self.scrWidth / 2:
 					self.activeFocus = 1
 					self.lastActiveFocus = 0
 				else:

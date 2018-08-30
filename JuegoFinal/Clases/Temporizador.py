@@ -15,6 +15,6 @@ class Tiempito(pygame.sprite.Sprite):
         self.temporal += 1
 
     def update(self, screen):
-        self.image = pygame.transform.flip(self.font.render("Tiempo: " + str(self.temporal), 1, (46, 255, 246)), 1, 0)
+        self.image = pygame.transform.flip(self.font.render("Tiempo: " + str(self.temporal), 1, (255, 255, 255)), 1, 0)
         self.rect = self.image.get_rect(center = self.pos)
         screen.blit(self.image, self.rect)

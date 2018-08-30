@@ -5,7 +5,7 @@ import pygame
 class Osito(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight, posx, posy):
 		pygame.sprite.Sprite.__init__(self)
-		self.ImagenOso = pygame.image.load("Imagenes/mario.png")
+		self.ImagenOso = pygame.image.load("Imagenes/PANDITA.png")
 		self.rect = self.ImagenOso.get_rect()
 		self.click = False
 		self.rect.centerx = posx
