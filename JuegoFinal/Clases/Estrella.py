@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import pygame
 # Clase Moneda que son las Estrellas que recoge el Juego Arriba Abajo
-class Monedita(pygame.sprite.Sprite):
+class Estrellita(pygame.sprite.Sprite):
 	def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
 		pygame.sprite.Sprite.__init__(self)
 

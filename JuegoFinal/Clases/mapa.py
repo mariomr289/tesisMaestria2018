@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import pygame
 import Pared
-import Queso
+import Nuez
 
 # La clase Mapa representa el mapa del nivel de nuestro juego. El mapa se ha escrito
 # previamente en un archivo de texto y se convierten los diferentes caracteres que
@@ -14,7 +14,7 @@ class Mapa:
         # grupo contiene a todos los sprites de las paredes
 
         self.grupo = pygame.sprite.RenderUpdates()
-        self.quesos = pygame.sprite.RenderUpdates()
+        self.nueces = pygame.sprite.RenderUpdates()
 
         # Cargamos las diferentes imágenes de las piezas de las paredes
 
@@ -66,7 +66,7 @@ class Mapa:
                 elif c == 'T':
                     self.grupo.add(Pared.Paredsita(self.si, (x,y)))
                 elif c == 'k':
-					self.quesos.add(Queso.Quesito(self.q, (x,y)))
+					self.nueces.add(Nuez.Nuecesita(self.q, (x,y)))
 
     # La función actualizar dibuja en pantalla el nivel. Aunque nuestras paredes
     # son fijas, el caso más general es que éstas se movieran; así lo que se hace
@@ -80,8 +80,8 @@ class Mapa:
         #visor.fill((255,255,255))
         self.grupo.update()
         self.grupo.draw(visor)
-        self.quesos.update()
-        self.quesos.draw(visor)
+        self.nueces.update()
+        self.nueces.draw(visor)
 
     # aPixel es una función que convierte las coordenadas de un sprite, fila y
     # columna, en los pixeles reales donde se situa en pantalla. Recuerda que

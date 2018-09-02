@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import pygame
 
-class Quesito(pygame.sprite.Sprite):
+class Nuecesita(pygame.sprite.Sprite):
 
     def __init__(self, imagen, pos):
         pygame.sprite.Sprite.__init__( self )

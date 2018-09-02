@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import pygame
 
-class imagenGatoContento( pygame.sprite.Sprite ):
+class imagenArbol( pygame.sprite.Sprite ):
 
     def __init__( self, posX, posY ):
         pygame.sprite.Sprite.__init__( self )

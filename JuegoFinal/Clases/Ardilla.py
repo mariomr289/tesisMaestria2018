@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import pygame
 
-class imagenRatonContento( pygame.sprite.Sprite ):
+class imagenArdillita( pygame.sprite.Sprite ):
 
     def __init__( self, posX, posY ):
         pygame.sprite.Sprite.__init__( self )

@@ -8,11 +8,11 @@ from Puntaje import Score
 from Temporizador import Tiempito
 from Pez import Pececito
 from Obstaculo import Obstaculito
-from Moneda import Monedita
+from Estrella import Estrellita
 from mapa import Mapa
 from Pared import Paredsita
-from Queso import Quesito
-from Raton import imagenRatonContento
-from Gato import imagenGatoContento
+from Nuez import Nuecesita
+from Ardilla import imagenArdillita
+from Arbolito import imagenArbol
 from Oso import Osito
 from Objetivo import ObjetivoMover

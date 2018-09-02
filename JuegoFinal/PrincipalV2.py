@@ -27,7 +27,7 @@ from Clases import Gallina
 # Importar las Clases del Juego  Arriba y Abajo
 from Clases import Pez
 from Clases import Obstaculo
-from Clases import Moneda
+from Clases import Estrella
 # Importar la Clase de la Animacion Inicial de los Animales
 from Clases import BouncingSprite
 # Importar la Clase para crear el Menu
@@ -40,8 +40,8 @@ from Clases import Puntaje
 from Clases import Temporizador
 # Importar las Clases del Juego Laberinto TomYJerry
 from Clases import mapa
-from Clases import Raton
-from Clases import Gato
+from Clases import Ardilla
+from Clases import Arbolito
 # Importar las Clases para el Juego de Mover Juego de Mover Objetos
 from Clases import Oso
 from Clases import Objetivo
@@ -56,10 +56,10 @@ identidad = None
 listaEnemigo = []
 # lista de Obstaculos del Juego Arriba Abajo
 listaObstaculos = []
-# Lista de Monedas del Juego Arriba Abajo
-listaMonedas = []
-# Imagen del Queso del Juego del Laberinto
-imagenQueso = 'Imagenes/q.png'
+# Lista de Estrellas del Juego Arriba Abajo
+listaEstrellas = []
+# Imagen de la Nuez del Juego del Laberinto
+imagenNuez = 'Imagenes/q.png'
 # Lista de Puntuacion Juego Entrenamiento
 listaPuntos = [0,0,0,0]
 # Lista de Tiempo Juego Mover Objetos
@@ -273,7 +273,7 @@ class IdleScreen():
 			#self.JuegoLaberinto()
 			self.JuegoMoverObjetos()
 		else:
-			self.JuegoLaberintoTomJerry()
+			self.JuegoLaberintoArdilla()
 
 	# Boton de Reiniciar los VideoJuegos
 	def ClickReiniciar(self):
@@ -391,43 +391,43 @@ class IdleScreen():
 	    #    listaEnemigo.append(enemigo)
 	    #    posx = posx + 200
 
-	# Funcion para Cargar las Monedas del Juegos Arriba Abajo
-	def cargarMonedas(self, posx):
+	# Funcion para Cargar las Estrellas del Juegos Arriba Abajo
+	def cargarEstrellas(self, posx):
 		posy = 100
 		for y in range(1,5):
-			Recompensa = Moneda.Monedita(posx,posy, 40, 'Imagenes/Moneda1.png', 'Imagenes/Moneda2.png')
-			listaMonedas.append(Recompensa)
+			Recompensa = Estrella.Estrellita(posx,posy, 40, 'Imagenes/estrellita1.png', 'Imagenes/estrellita2.png')
+			listaEstrellas.append(Recompensa)
 			posy = posy + 200
 
 	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
 	def cargarObstaculos(self):
 		posx = -1000
-		posMonedax = -900
+		posEstrellaX = -900
 		for x in range(1,7):
 			valor = np.random.randint(2, size=1)
 			if valor == 1:
 				# posicion Abajo de los Obstaculos
 				posy = np.random.randint(0,100)
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/MedusaAA.png', 'Imagenes/MedusaAA.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = posy + 700
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las monedas
-				self.cargarMonedas(posMonedax)
+				self.cargarEstrellas(posEstrellaX)
 			else:
 				# posicion Arriba de los Obstaculos
 				posy = -300
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/MedusaAA.png', 'Imagenes/MedusaAA.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = 400
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las monedas
-				self.cargarMonedas(posMonedax)
+				self.cargarEstrellas(posEstrellaX)
 
 			posx = posx + 300
-			posMonedax = posMonedax + 400
+			posEstrellaX = posEstrellaX + 400
 
 	# Juego de La Galina y los Huevos (Derecha e Izquierda)
 	def JuegoDerIzq(self):
@@ -835,8 +835,8 @@ class IdleScreen():
 						enJuego = False
 						self.detenerTodoArrAba()
 
-			if len(listaMonedas) > 0:
-				for Recompensa in listaMonedas:
+			if len(listaEstrellas) > 0:
+				for Recompensa in listaEstrellas:
 					Recompensa.comportamiento(tiempo)
 					Recompensa.dibujar(screen)
 					# Verificar cuando el jugador choque con las monedas
@@ -844,7 +844,7 @@ class IdleScreen():
 						# Suma el puntaje las monedas que recoge el Jugador
 						puntos.score_up()
 						#Borrar de la Pantalla la moneda recogida
-						listaMonedas.remove(Recompensa)
+						listaEstrellas.remove(Recompensa)
 						enJuego = True
 
 					# Verificar los disparos del enemigo
@@ -1166,7 +1166,7 @@ class IdleScreen():
 				dummy = False
 
 	# Juego de Labarinto (Arriba, Abajo, Derecha, Izquierda)
-	def JuegoLaberintoTomJerry(self):
+	def JuegoLaberintoArdilla(self):
 		global done
 		global identidad
 		screenloop = True
@@ -1185,11 +1185,11 @@ class IdleScreen():
 		# pygame.mixer.music.load('Sonidos/Intro.mp3')
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Raton y Gato
-		imagenRatonContento = Raton.imagenRatonContento(50,50)
-		imagenGatoContento = Gato.imagenGatoContento(900,650)
+		imagenArdillita = Ardilla.imagenArdillita(50,50)
+		imagenArbol = Arbolito.imagenArbol(900,650)
 
-		grupoimagenRatonContento = pygame.sprite.RenderUpdates(imagenRatonContento)
-		grupoimagenGatoContento = pygame.sprite.RenderUpdates(imagenGatoContento)
+		grupoimagenArdillita = pygame.sprite.RenderUpdates(imagenArdillita)
+		grupoimagenArbol = pygame.sprite.RenderUpdates(imagenArbol)
 
 		nivel = mapa.Mapa('Imagenes/mapa.txt')
 
@@ -1249,7 +1249,7 @@ class IdleScreen():
 						opcion = self.menuFuncsLaberinto[self.itemNamesLaberinto[self.activeFocus]]()
 						# Verificar cual de los botones se ha pulsado
 						if identidad == "arriba":
-							imagenRatonContento.dy = -2
+							imagenArdillita.dy = -2
 							#jugador.update('up')
 							# Movimiento del Jugador a la Izquierda
 							#jugador.movimientoArriba()
@@ -1257,7 +1257,7 @@ class IdleScreen():
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
 						elif identidad == "abajo":
-							imagenRatonContento.dy = 2
+							imagenArdillita.dy = 2
 							#jugador.update('down')
 							# Movimiento del Jugador a la Derecha
 							#jugador.movimientoAbajo()
@@ -1265,10 +1265,10 @@ class IdleScreen():
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
 						else:
-							imagenRatonContento.dy = 0
+							imagenArdillita.dy = 0
 
 						if identidad == "derecha":
-							imagenRatonContento.dx = -2
+							imagenArdillita.dx = -2
 							#jugador.update('right')
 							# Movimiento del Jugador a la Derecha
 							#jugador.movimientoArriba()
@@ -1276,7 +1276,7 @@ class IdleScreen():
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
 						elif identidad == "izquierda":
-							imagenRatonContento.dx = 2
+							imagenArdillita.dx = 2
 							#jugador.update('left')
 							# Movimiento del Jugador a la Derecha
 							#jugador.movimientoAbajo()
@@ -1284,24 +1284,24 @@ class IdleScreen():
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
 						else:
-							imagenRatonContento.dx = 0
+							imagenArdillita.dx = 0
 
 
 			# Actualiza los movimientos del Raton
-			grupoimagenRatonContento.update()
+			grupoimagenArdillita.update()
 
 			# Verifica las Colisiones del Raton con el Laberinto
-			if pygame.sprite.spritecollide(imagenRatonContento, nivel.grupo, 0, pygame.sprite.collide_mask):
-				imagenRatonContento.deshacer()
+			if pygame.sprite.spritecollide(imagenArdillita, nivel.grupo, 0, pygame.sprite.collide_mask):
+				imagenArdillita.deshacer()
 
 			# Se Realiza la actividad de comer los quesos por parte del Raton
-			for pum in pygame.sprite.groupcollide(grupoimagenRatonContento, nivel.quesos, 0, 1):
+			for pum in pygame.sprite.groupcollide(grupoimagenArdillita, nivel.nueces, 0, 1):
 				puntos.score_up()
 
-			# Si Choca el Raton con el Gato se Termina el JUEGO
-			for pum in pygame.sprite.groupcollide(grupoimagenRatonContento, grupoimagenGatoContento, 1, 0):
-				imagenRatonContento.destruccion()
-				grupoimagenRatonContento = pygame.sprite.RenderUpdates(imagenRatonContento)
+			# Si Choca la Ardillla con el Arbol se Termina el JUEGO
+			for pum in pygame.sprite.groupcollide(grupoimagenArdillita, grupoimagenArbol, 1, 0):
+				imagenArdillita.destruccion()
+				grupoimagenArdillita = pygame.sprite.RenderUpdates(imagenArdillita)
 				enJuego = False
 
 			# Carga el Fondo del Juego
@@ -1312,8 +1312,8 @@ class IdleScreen():
 			puntos.update(screen)
 
 			# Y luego el Sprite del Jugador
-			grupoimagenRatonContento.draw(screen)
-			grupoimagenGatoContento.draw(screen)
+			grupoimagenArdillita.draw(screen)
+			grupoimagenArbol.draw(screen)
 
 			if enJuego == False:
 				done = False
@@ -2168,11 +2168,11 @@ class IdleScreen():
 			if NroJuego == 1:
 				juego = "Entrenamiento"
 			elif NroJuego == 2:
-				juego = "Izquierda, Derecha"
+				juego = "Izquierda-Derecha"
 			elif NroJuego == 3:
-				juego = "Arriba, Abajo"
+				juego = "Arriba-Abajo"
 			elif NroJuego == 4:
-				juego = "Mover Objetos"
+				juego = "Adentro-Afuera"
 			else:
 				juego = "Laberinto"
 			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (23, 131, 191)), 1, 0)
