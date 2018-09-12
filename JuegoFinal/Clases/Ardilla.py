@@ -6,8 +6,8 @@ class imagenArdillita( pygame.sprite.Sprite ):
 
     def __init__( self, posX, posY ):
         pygame.sprite.Sprite.__init__( self )
-        self.image = pygame.image.load('Imagenes/raton1.png').convert()
-        self.imagePerder = pygame.image.load('Imagenes/menuico.png').convert()
+        self.image = pygame.image.load('Imagenes/ardilla.png')
+        self.imagePerder = pygame.image.load('Imagenes/ardilla.png')
         self.image.set_colorkey((255,255,255))
         self.imagePerder.set_colorkey((255,255,255))
         self.rect = self.image.get_rect()

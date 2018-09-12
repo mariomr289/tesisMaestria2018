@@ -72,7 +72,7 @@ class IdleScreen():
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
 		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArriba.jpg").convert(), 1, 0)
-		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoJuego.jpg").convert(), 1, 0)
+		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoLaberinto.png").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicio.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/FondoMenu.jpg").convert(), 1, 0)
 		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/FondoFinJuego.jpg").convert(), 1, 0)

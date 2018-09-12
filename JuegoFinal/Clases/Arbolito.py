@@ -6,7 +6,7 @@ class imagenArbol( pygame.sprite.Sprite ):
 
     def __init__( self, posX, posY ):
         pygame.sprite.Sprite.__init__( self )
-        self.image = pygame.image.load('Imagenes/gato.png').convert()
+        self.image = pygame.image.load('Imagenes/arbol.png')
         self.image.set_colorkey((255,255,255))
         self.rect = self.image.get_rect()
 
