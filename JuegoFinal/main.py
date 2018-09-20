@@ -400,8 +400,11 @@ class IdleScreen():
 	def cargarObstaculos(self):
 		posx = -1000
 		posEstrellaX = -900
+		# Establece el orden de como aparecen los Obstaculos
+		listaUbicacion = [1,1,0,0,1,0,1]
 		for x in range(1,7):
-			valor = np.random.randint(2, size=1)
+			valor = listaUbicacion[x]
+			#valor = np.random.randint(2, size=1)
 			if valor == 1:
 				# posicion Abajo de los Obstaculos
 				posy = np.random.randint(0,100)
@@ -821,7 +824,7 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verifica el Tiempo Transcurrido
-			if Tempo.temporal == 500:
+			if Tempo.temporal == 2000:
 				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			#enemigo.dibujar(screen)
