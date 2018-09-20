@@ -447,11 +447,13 @@ class IdleScreen():
 		pygame.mixer.music.play(3)
 		# Cargar la Palaba de Fin del Juego
 		Texto = pygame.transform.flip(self.font.render("Fin del Juego", 1, (255, 14, 0)), 1, 0)
-		# Instancia del Objeto Nave Espacial
+		# Instancia del Objeto Jugador
 		jugador = Jugador.NenaCanasta(self.scrWidth,self.scrHeight)
-		# Instancia del objeto Invasor
+		# Instancia del objeto Gallina o Ebemigo
 		#enemigo = Invasor(100,100)
 		self.cargarEnemigos()
+		# Cargar el Temporizador
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
 		# Instancia del Objeto Puntaje
 		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Instancia del Objeto Proyectil para el Jugador
@@ -473,6 +475,8 @@ class IdleScreen():
 			self.clock.tick(30)
 			# Obtenemos el tiempo del Juego
 			tiempo = pygame.time.get_ticks()/1000
+			# Llamar a la funcion que inicializa el tiempo
+			Tempo.tiempo_sube()
 			# Obtenga la profundidad del kinect
 			(depth,_) = get_depth()
 			old_depth = depth
@@ -523,6 +527,8 @@ class IdleScreen():
 					#		jugador.disparar(x,y)
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImage, (0, 0))
+			# Se muestra el tiempo del VideoJuego
+			Tempo.update(screen)
 			# Actualizar el Puntaje del Juego
 			puntos.update(screen)
 			# Se usa para que aparezca las imagenes con la variable animales = True
@@ -538,6 +544,9 @@ class IdleScreen():
 			# enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
+			# Verificar el Tiempo Transcurrido
+			if Tempo.temporal == 2000:
+				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
@@ -718,6 +727,8 @@ class IdleScreen():
 		# Instancia del objeto Invasor
 		#enemigo = Enemigo(100,100)
 		self.cargarObstaculos()
+		# Cargar el Temporizador
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
 		# Instancia del Objeto Puntaje
 		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Instancia del Objeto Proyectil para el Jugador
@@ -739,6 +750,8 @@ class IdleScreen():
 			self.clock.tick(30)
 			# Obtenemos el tiempo del Juego
 			tiempo = pygame.time.get_ticks()/1000
+			# llamar a la funcion que inicializa el tiempo
+			Tempo.tiempo_sube()
 			# Obtenga la profundidad del kinect
 			(depth,_) = get_depth()
 			old_depth = depth
@@ -790,6 +803,8 @@ class IdleScreen():
 
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImageArriba, (0, 0))
+			# Se muestra el tiempo del VideoJuego
+			Tempo.update(screen)
 			# Actualizar el Puntaje del Juego
 			puntos.update(screen)
 			# Se usa para que aparezca las imagenes con la variable animales = True
@@ -805,6 +820,9 @@ class IdleScreen():
 			#enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
+			# Verifica el Tiempo Transcurrido
+			if Tempo.temporal == 500:
+				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			#enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
@@ -1000,6 +1018,8 @@ class IdleScreen():
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
 		# ProyectilInvasor = Proyectil(self.scrWidth/4,self.scrHeight-700,"../Imagenes/disparob.jpg", False)
+		# Cargar el Temporizador
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
 		# Instancia del Objeto Puntaje
 		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
 		# Verificar si un jugador gano o perdio
@@ -1017,6 +1037,8 @@ class IdleScreen():
 			self.clock.tick(30)
 			# Obtenemos el tiempo del Juego
 			tiempo = pygame.time.get_ticks()/1000
+			# Llamar a la funcion que inicializa el tiempo
+			Tempo.tiempo_sube()
 			# Obtenga la profundidad del kinect
 			(depth,_) = get_depth()
 			old_depth = depth
@@ -1105,6 +1127,8 @@ class IdleScreen():
 			self.screen.blit(self.bgImageLaberinto, (0, 0))
 			# Actualiza el Nivel del Laberinto
 			nivel.actualizar(screen)
+			# Se muestra el Tiempo del VideoJuego
+			Tempo.update(screen)
 			# Actualizar el Puntaje del JUEGO
 			puntos.update(screen)
 
