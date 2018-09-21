@@ -91,10 +91,10 @@ class Mapa:
     # pixeles (40x20 = 800, 40x15 = 600)
 
     def aPixel(self, fila, columna):
-        return (columna*40, fila*40)
+        return (columna*32, fila*32)
 
     # aCuadricula hace lo contrario. Dada una posición en pixeles en Pantalla
     # averigua cuál es la fila y la columna correspondientes en el mapa.
 
     def aCuadricula(self, x, y):
-        return (y/40, x/40)
+        return (y/32, x/32)

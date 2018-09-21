@@ -81,7 +81,7 @@ class IdleScreen():
 		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaDerecha.jpg").convert(), 1, 0)
 		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaArriba.jpg").convert(), 1, 0)
 		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaAbajo.jpg").convert(), 1, 0)
-		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/fondoMover.jpg").convert(), 1, 0)
+		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/FondoMover.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 60)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 40)
@@ -398,14 +398,13 @@ class IdleScreen():
 
 	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
 	def cargarObstaculos(self):
-		posx = -1000
-		posEstrellaX = -900
+		posx = -2000
+		posEstrellaX = -1900
 		# Establece el orden de como aparecen los Obstaculos
-		listaUbicacion = [1,1,0,0,1,0,1]
-		for x in range(1,7):
-			valor = listaUbicacion[x]
+		listaUbicacion = [1,0,1,0,1,0,1,0,1,0]
+		for x in range(1,10):
 			#valor = np.random.randint(2, size=1)
-			if valor == 1:
+			if listaUbicacion[x] == 1:
 				# posicion Abajo de los Obstaculos
 				posy = np.random.randint(0,100)
 				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/MedusaAA.png', 'Imagenes/MedusaAA.png')
@@ -1003,8 +1002,8 @@ class IdleScreen():
 		# pygame.mixer.music.load('Sonidos/Intro.mp3')
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Raton y Gato
-		imagenArdillita = Ardilla.imagenArdillita(50,50)
-		imagenArbol = Arbolito.imagenArbol(900,650)
+		imagenArdillita = Ardilla.imagenArdillita(30,30)
+		imagenArbol = Arbolito.imagenArbol(920,670)
 
 		grupoimagenArdillita = pygame.sprite.RenderUpdates(imagenArdillita)
 		grupoimagenArbol = pygame.sprite.RenderUpdates(imagenArbol)
@@ -1024,7 +1023,7 @@ class IdleScreen():
 		# Cargar el Temporizador
 		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
 		# Instancia del Objeto Puntaje
-		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
+		puntos = Puntaje.Score(self.fontPuntaje, (920, 50))
 		# Verificar si un jugador gano o perdio
 		enJuego = True
 		# Construye el Menu Principal si done = False
