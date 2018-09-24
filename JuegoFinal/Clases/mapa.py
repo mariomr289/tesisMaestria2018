@@ -24,6 +24,10 @@ class Mapa:
         self.id=pygame.image.load('Imagenes/id.png').convert_alpha()
         self.ii=pygame.image.load('Imagenes/ii.png').convert_alpha()
         self.si=pygame.image.load('Imagenes/si.png').convert_alpha()
+        self.ta=pygame.image.load('Imagenes/ta.png').convert_alpha()
+        self.ts=pygame.image.load('Imagenes/ts.png').convert_alpha()
+        self.ti=pygame.image.load('Imagenes/ti.png').convert_alpha()
+        self.td=pygame.image.load('Imagenes/td.png').convert_alpha()
         self.q=pygame.image.load('Imagenes/q.png').convert_alpha()
 
         # En la variable textoMapa se almacenan las líneas del archivo que
@@ -65,6 +69,14 @@ class Mapa:
                     self.grupo.add(Pared.Paredsita(self.ii, (x,y)))
                 elif c == 'T':
                     self.grupo.add(Pared.Paredsita(self.si, (x,y)))
+                elif c == 'A':
+                	self.grupo.add(Pared.Paredsita(self.ta, (x,y)))
+                elif c == 'S':
+                	self.grupo.add(Pared.Paredsita(self.ts, (x,y)))
+                elif c == 'D':
+                	self.grupo.add(Pared.Paredsita(self.td, (x,y)))
+                elif c == 'Z':
+                	self.grupo.add(Pared.Paredsita(self.ti, (x,y)))
                 elif c == 'k':
 					self.nueces.add(Nuez.Nuecesita(self.q, (x,y)))
 

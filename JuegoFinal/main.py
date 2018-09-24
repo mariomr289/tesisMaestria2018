@@ -607,8 +607,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				pygame.time.delay(3000)
-				self.FinJuego(puntos.score, 2)
+				self.FinJuego(puntos.score, Tempo.temporal, 2)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
@@ -887,7 +886,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				self.FinJuego(puntos.score, 3)
+				self.FinJuego(puntos.score, Tempo.temporal, 3)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
@@ -1108,14 +1107,14 @@ class IdleScreen():
 							imagenArdillita.dx = 0
 
 
-			# Actualiza los movimientos del Raton
+			# Actualiza los movimientos de la Ardilla
 			grupoimagenArdillita.update()
 
-			# Verifica las Colisiones del Raton con el Laberinto
+			# Verifica las Colisiones de la Ardilla con el Laberinto
 			if pygame.sprite.spritecollide(imagenArdillita, nivel.grupo, 0, pygame.sprite.collide_mask):
 				imagenArdillita.deshacer()
 
-			# Se Realiza la actividad de comer los quesos por parte del Raton
+			# Se Realiza la actividad de comer las nueces por parte de la Ardilla
 			for pum in pygame.sprite.groupcollide(grupoimagenArdillita, nivel.nueces, 0, 1):
 				puntos.score_up()
 
@@ -1140,7 +1139,7 @@ class IdleScreen():
 
 			if enJuego == False:
 				done = False
-				self.FinJuego(puntos.score, 5)
+				self.FinJuego(puntos.score, Tempo.temporal, 5)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsLaberinto[self.activeFocus].applyFocus(self.screen)
@@ -1456,8 +1455,6 @@ class IdleScreen():
 						if e.type == pygame.MOUSEBUTTONDOWN:
 							screenloop = True
 							print "Mouse Down"
-							#opcion = self.menuFuncsIntro[self.itemNamesIntro[self.activeFocus]]()
-							#break;
 							if ObjJug.rect.collidepoint(e.pos):
 								ObjJug.click = True
 						elif e.type == pygame.MOUSEBUTTONUP:
@@ -1691,7 +1688,7 @@ class IdleScreen():
 				elif enJuego == False and actividad == 4:
 					listaPuntos[3] = puntos.score
 					done = False
-					self.FinJuego(listaPuntos[0],1)
+					self.FinJuego(listaPuntos[0],500,1)
 
 				if actividad == 1 or actividad == 2:
 					# Se establece en el menu que boton se hizo click
@@ -1976,7 +1973,7 @@ class IdleScreen():
 					dummy = False
 
 	# Pantalla De Fin del Juego
-	def FinJuego(self, puntos, NroJuego):
+	def FinJuego(self, puntos, TiempoJuego, NroJuego):
 			global done
 			screenloop = True
 			(depth,_) = get_depth()
@@ -2001,6 +1998,8 @@ class IdleScreen():
 			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (23, 131, 191)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (143,31,130)), 1, 0)
+			# Carga el Tiempo Obtenido en el JUEGO
+			TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo: " + str(TiempoJuego), 1, (143,31,130)), 1, 0)
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
@@ -2042,13 +2041,15 @@ class IdleScreen():
 				screen.blit(Texto,(200,10))
 				if NroJuego > 1:
 					# Muestra el Puntaje Obtenido por el Jugador
-					screen.blit(Marcador,(350,200))
+					screen.blit(Marcador,(350,170))
+					screen.blit(TiempoFinal,(410,230))
 				else:
 					y = 130
 					accion = "Izquierda"
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
-						screen.blit(Marcador,(350,y))
+						screen.blit(Marcador,(480,y))
+						screen.blit(TiempoFinal,(200,y))
 						y += 50
 						if y == 180:
 							accion = "Derecha"
