@@ -70,7 +70,7 @@ class IdleScreen():
 		self.scrWidth = self.screen.get_rect().width
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
-		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoGranja2.jpg").convert(), 1, 0)
+		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoIzquierdaDerecha.jpg").convert(), 1, 0)
 		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArriba.jpg").convert(), 1, 0)
 		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoLaberinto.png").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicio.jpg").convert(), 1, 0)
@@ -367,6 +367,10 @@ class IdleScreen():
 	# Funcion que detiene todo en el Juego Arriba Abajo
 	def detenerTodoArrAba(self):
 		for ObstaculoEne in listaObstaculos:
+			for Recompensa in listaEstrellas:
+				listaEstrellas.remove(Recompensa)
+			listaObstaculos.remove(ObstaculoEne)
+
 			ObstaculoEne.conquista = True
 
 	# Funcion para cargar los enemigos
@@ -390,43 +394,43 @@ class IdleScreen():
 
 	# Funcion para Cargar las Estrellas del Juegos Arriba Abajo
 	def cargarEstrellas(self, posx):
-		posy = 100
-		for y in range(1,5):
+		posy = 60
+		for y in range(1,6):
 			Recompensa = Estrella.Estrellita(posx,posy, 40, 'Imagenes/estrellita1.png', 'Imagenes/estrellita2.png')
 			listaEstrellas.append(Recompensa)
-			posy = posy + 200
+			posy = posy + 150
 
 	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
 	def cargarObstaculos(self):
-		posx = -2000
-		posEstrellaX = -1900
+		posx = -3500
+		posEstrellaX = -3500
 		# Establece el orden de como aparecen los Obstaculos
 		listaUbicacion = [1,0,1,0,1,0,1,0,1,0]
 		for x in range(1,10):
 			#valor = np.random.randint(2, size=1)
 			if listaUbicacion[x] == 1:
 				# posicion Abajo de los Obstaculos
-				posy = np.random.randint(0,100)
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/MedusaAA.png', 'Imagenes/MedusaAA.png')
+				posy = 0
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
-				posy = posy + 700
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
+				posy = posy + 680
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
-				#Cargar Las monedas
+				#Cargar Las Estrellas
 				self.cargarEstrellas(posEstrellaX)
 			else:
 				# posicion Arriba de los Obstaculos
-				posy = -300
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/MedusaAA.png', 'Imagenes/MedusaAA.png')
+				posy = -400
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
 				listaObstaculos.append(ObstaculoEne)
-				posy = 400
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/AlgaBajo.png', 'Imagenes/AlgaBajo.png')
+				posy = 280
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
 				listaObstaculos.append(ObstaculoEne)
-				#Cargar Las monedas
+				#Cargar Las Estrellas
 				self.cargarEstrellas(posEstrellaX)
 
-			posx = posx + 300
-			posEstrellaX = posEstrellaX + 400
+			posx = posx + 500
+			posEstrellaX = posx + 250
 
 	# Juego de La Galina y los Huevos (Derecha e Izquierda)
 	def JuegoIzquierdaDerecha(self):
@@ -547,7 +551,7 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar el Tiempo Transcurrido
-			if Tempo.temporal == 2000:
+			if Tempo.temporal == 3000:
 				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
@@ -821,8 +825,8 @@ class IdleScreen():
 			#enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
-			# Verifica el Tiempo Transcurrido
-			if Tempo.temporal == 2000:
+			# Verifica que el jugador ha recolectado 20 Estrellas o que el Tiempo Transcurrido sea el límite de 3000
+			if puntos.score == 20 or Tempo.temporal == 3000:
 				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			#enemigo.dibujar(screen)
@@ -855,9 +859,9 @@ class IdleScreen():
 				for Recompensa in listaEstrellas:
 					Recompensa.comportamiento(tiempo)
 					Recompensa.dibujar(screen)
-					# Verificar cuando el jugador choque con las monedas
+					# Verificar cuando el jugador choque con las Estrellas
 					if Recompensa.rect.colliderect(jugador.rect):
-						# Suma el puntaje las monedas que recoge el Jugador
+						# Suma el puntaje las Estrellas que recoge el Jugador
 						puntos.score_up()
 						#Borrar de la Pantalla la moneda recogida
 						listaEstrellas.remove(Recompensa)
