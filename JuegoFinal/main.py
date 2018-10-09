@@ -40,7 +40,7 @@ from Clases import Temporizador
 from Clases import mapa
 from Clases import Ardilla
 from Clases import Arbolito
-# Importar las Clases para el Juego de Mover Juego de Mover Objetos
+# Importar las Clases para el Juego de Adentro Afuera
 from Clases import Oso
 from Clases import Objetivo
 
@@ -71,21 +71,21 @@ class IdleScreen():
 		self.scrHeight = self.screen.get_rect().height
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("Imagenes/FondoIzquierdaDerecha.jpg").convert(), 1, 0)
-		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArriba.jpg").convert(), 1, 0)
-		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoLaberinto.png").convert(), 1, 0)
+		self.bgImageArriba = pygame.transform.flip(pygame.image.load("Imagenes/FondoArribaAbajo.jpg").convert(), 1, 0)
+		self.bgImageLaberinto = pygame.transform.flip(pygame.image.load("Imagenes/FondoLaberinto.jpg").convert(), 1, 0)
 		self.bgImageIntro = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicio.jpg").convert(), 1, 0)
 		self.bgImageMenuJuegos = pygame.transform.flip(pygame.image.load("Imagenes/FondoMenu.jpg").convert(), 1, 0)
 		self.bgImageFinJuego = pygame.transform.flip(pygame.image.load("Imagenes/FondoFinJuego.jpg").convert(), 1, 0)
-		self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInicial.jpg").convert(), 1, 0)
+		self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstEntrenamiento.jpg").convert(), 1, 0)
 		self.bgImageEntrenaIzquierda = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaIzquierda.jpg").convert(), 1, 0)
 		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaDerecha.jpg").convert(), 1, 0)
 		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaArriba.jpg").convert(), 1, 0)
 		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaAbajo.jpg").convert(), 1, 0)
 		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/FondoMover.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
-		self.font = pygame.font.SysFont("gaban", 60)
-		self.fontPuntaje = pygame.font.SysFont("Answer", 40)
-		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 60)
+		self.font = pygame.font.SysFont("gaban", 55)
+		self.fontPuntaje = pygame.font.SysFont("Answer", 35)
+		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 55)
 		self.fontColor = (16, 4, 130)
 		self.menuItems = list()
 		self.menuItemsArriba = list()
@@ -113,11 +113,11 @@ class IdleScreen():
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesLaberinto = ("Arriba", "Abajo", "Derecha", "Izquierda")
-		self.menuFuncsLaberinto = {"Arriba" : self.ClickArriba,
-							"Abajo" : self.ClickAbajo,
-							"Derecha" : self.ClickDerecho,
-							"Izquierda" : self.ClickIzquierdo}
+		self.itemNamesLaberinto = ("A", "V", "->", "<-")
+		self.menuFuncsLaberinto = {"A" : self.ClickArriba,
+							"V" : self.ClickAbajo,
+							"->" : self.ClickDerecho,
+							"<-" : self.ClickIzquierdo}
 		self.itemNamesInstrucciones = ("Anterior", "Siguiente")
 		self.menuFuncsInstrucciones = {"Anterior" : self.ClickAnterior,
 							"Siguiente" : self.ClickSiguiente}
@@ -136,11 +136,11 @@ class IdleScreen():
 
 		for index, item in enumerate(self.itemNames):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
-			width = label.get_rect().width
-			height = label.get_rect().height + 30
-			posx = (self.scrWidth / 2) - (width / 2)
+			width = label.get_rect().width + 30
+			height = label.get_rect().height
+			posx = (self.scrHeight) - (height)
 			totalHeight  = len(self.itemNames) * height
-			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+			posy = (self.scrWidth)  + (index * height)
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItems.append(mi)
@@ -170,7 +170,7 @@ class IdleScreen():
 			height = label.get_rect().height + 30
 			posx = (self.scrWidth / 2) - (width / 2)
 			totalHeight  = len(self.itemNamesInstrucciones) * height
-			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+			posy = (self.scrHeight) - (230) + (index * height)
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsInstrucciones.append(mi)
@@ -181,11 +181,11 @@ class IdleScreen():
 
 		for index, item in enumerate(self.itemNamesArriba):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
-			width = label.get_rect().width
-			height = label.get_rect().height + 30
-			posx = (self.scrWidth / 2) - (width / 2)
+			width = label.get_rect().width + 30
+			height = label.get_rect().height
+			posx = (self.scrHeight) - (height)
 			totalHeight  = len(self.itemNamesArriba) * height
-			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+			posy = (self.scrWidth) + (index * height)
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsArriba.append(mi)
@@ -411,20 +411,20 @@ class IdleScreen():
 			if listaUbicacion[x] == 1:
 				# posicion Abajo de los Obstaculos
 				posy = 0
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/ObstaculoArriba.png', 'Imagenes/ObstaculoArriba.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = posy + 680
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/ObstaculoAbajo.png', 'Imagenes/ObstaculoAbajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las Estrellas
 				self.cargarEstrellas(posEstrellaX)
 			else:
 				# posicion Arriba de los Obstaculos
 				posy = -400
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/top.png', 'Imagenes/top.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/ObstaculoArriba.png', 'Imagenes/ObstaculoArriba.png')
 				listaObstaculos.append(ObstaculoEne)
 				posy = 280
-				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/bottom.png', 'Imagenes/bottom.png')
+				ObstaculoEne = Obstaculo.Obstaculito(posx,posy,40,'Imagenes/ObstaculoAbajo.png', 'Imagenes/ObstaculoAbajo.png')
 				listaObstaculos.append(ObstaculoEne)
 				#Cargar Las Estrellas
 				self.cargarEstrellas(posEstrellaX)
@@ -459,9 +459,9 @@ class IdleScreen():
 		#enemigo = Invasor(100,100)
 		self.cargarEnemigos()
 		# Cargar el Temporizador
-		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 55))
 		# Instancia del Objeto Puntaje
-		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
+		puntos = Puntaje.Score(self.fontPuntaje, (900, 55))
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
@@ -513,15 +513,15 @@ class IdleScreen():
 						opcion = self.menuFuncs[self.itemNames[self.activeFocus]]()
 						# break;
 						# Verificar cual de los botones se ha pulsado
-						if identidad == "izquierda":
-							# Movimiento del Jugador a la Izquierda
-							jugador.movimientoIzquierda()
+					if identidad == "izquierda":
+						# Movimiento del Jugador a la Izquierda
+						jugador.movimientoIzquierda()
 							# Disparos del jugador
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
-						elif identidad == "derecha":
-							# Movimiento del Jugador a la Derecha
-							jugador.movimientoDerecha()
+					elif identidad == "derecha":
+						# Movimiento del Jugador a la Derecha
+						jugador.movimientoDerecha()
 							# Disparos del jugador
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
@@ -550,8 +550,8 @@ class IdleScreen():
 			# enemigo.comportamiento(tiempo)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
-			# Verificar el Tiempo Transcurrido
-			if Tempo.temporal == 3000:
+			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
+			if puntos.score == 20 or Tempo.temporal == 4000:
 				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
@@ -607,7 +607,7 @@ class IdleScreen():
 										#enemigo.listaDisparo.remove(x)
 
 			if enJuego == False:
-				pygame.mixer.music.fadeout(3000)
+				pygame.mixer.music.fadeout(4000)
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
@@ -733,9 +733,9 @@ class IdleScreen():
 		#enemigo = Enemigo(100,100)
 		self.cargarObstaculos()
 		# Cargar el Temporizador
-		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 55))
 		# Instancia del Objeto Puntaje
-		puntos = Puntaje.Score(self.fontPuntaje, (900, 50))
+		puntos = Puntaje.Score(self.fontPuntaje, (900, 55))
 		# Instancia del Objeto Proyectil para el Jugador
 		# DemoProyectil = Proyectil(self.scrWidth/2,self.scrHeight-80,"../Imagenes/bala.png", True)
 		# Instancia del Objeto Proyectil para el enemigo
@@ -1006,7 +1006,7 @@ class IdleScreen():
 		# pygame.mixer.music.play(3)
 		# Instancia del Objeto Raton y Gato
 		imagenArdillita = Ardilla.imagenArdillita(30,30)
-		imagenArbol = Arbolito.imagenArbol(920,670)
+		imagenArbol = Arbolito.imagenArbol(910,670)
 
 		grupoimagenArdillita = pygame.sprite.RenderUpdates(imagenArdillita)
 		grupoimagenArbol = pygame.sprite.RenderUpdates(imagenArbol)
@@ -1024,9 +1024,9 @@ class IdleScreen():
 		# Instancia del Objeto Proyectil para el enemigo
 		# ProyectilInvasor = Proyectil(self.scrWidth/4,self.scrHeight-700,"../Imagenes/disparob.jpg", False)
 		# Cargar el Temporizador
-		Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 50))
+		Tempo = Temporizador.Tiempito(self.fontPuntaje, (120, 65))
 		# Instancia del Objeto Puntaje
-		puntos = Puntaje.Score(self.fontPuntaje, (920, 50))
+		puntos = Puntaje.Score(self.fontPuntaje, (930, 65))
 		# Verificar si un jugador gano o perdio
 		enJuego = True
 		# Construye el Menu Principal si done = False
@@ -1413,14 +1413,19 @@ class IdleScreen():
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
+			#Cargar el sonido Principal
+			pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
+			pygame.mixer.music.play(3)
+			#Cargar la Palabra de Fin del JUEGO
+			Texto = pygame.transform.flip(self.font.render("Lo lograste", 1, (255, 14, 0)), 1, 0)
 			# Instancia del objeto Cuadro
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, 150, 150)
 			# Instancia del Objeto ObjetivoMover
-			Lugar = Objetivo.ObjetivoMover(100,600,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
+			Lugar = Objetivo.ObjetivoMover(300,600,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
 			# Instancia del Objeto Puntaje
-			puntos = Puntaje.Score(self.fontPuntaje, (900,50))
+			puntos = Puntaje.Score(self.fontPuntaje, (900,68))
 			# Cargar el Temporizador
-			Tempo = Temporizador.Tiempito(self.fontPuntaje, (200,50))
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (130,68))
 			# Verificar si el Jugador gano o perdio
 			enJuego = True
 			#if not done:
@@ -1480,9 +1485,23 @@ class IdleScreen():
 				Lugar.dibujar(screen)
 
 				#Verificar Colision del Jugador con el Objetivo
-				if ObjJug.rect.collidepoint(self.scrWidth - 100,600):
-					puntos.score_up()
+				if ObjJug.rect.collidepoint(self.scrWidth - 300,600):
+					screen.blit(Texto, (320,300))
+					puntos.score = 1
+					#puntos.score_up()
 					print "Colisiono el Jugador"
+					listaTiempo[0] = Tempo.temporal
+					listaPuntos[0] = puntos.score
+
+
+				if Tempo.temporal == 500:
+					enJuego = False
+
+				if enJuego == False:
+					pygame.mixer.music.fadeout(3000)
+					# Llamar a la pantalla de Fin de JUEGO
+					done = False
+					self.FinJuego(listaPuntos[0], listaTiempo[0], 4)
 
 				# Se establece en el menu que boton se hizo click
 				#self.menuItemsIntro[self.activeFocus].applyFocus(self.screen)
@@ -2178,10 +2197,10 @@ class IdleScreen():
 			# Cargar el Nombre de Cada VideoJuego y el Fondo de las Instrucciones
 			if NroJuego == 1:
 				TituloJuego = "Entrenamiento"
-				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstEntrenamiento.jpg").convert(), 1, 0)
 			elif NroJuego == 2:
 				TituloJuego = "Izquierda, Derecha"
-				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstIzquierdaDerecha.jpg").convert(), 1, 0)
 			elif NroJuego == 3:
 				TituloJuego = "Arriba, Abajo"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
@@ -2192,7 +2211,7 @@ class IdleScreen():
 				TituloJuego = "Laberinto"
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
 			# Carga el Titulo de las Instrucciones
-			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(TituloJuego), 1, (255, 14, 0)), 1, 0)
+			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(TituloJuego), 1, (0, 0, 255)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
@@ -2232,7 +2251,7 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageInstrucciones, (0, 0))
 				# Aparece El Titulo de las Instrucciones
-				screen.blit(Titulo,(130,50))
+				screen.blit(Titulo,(120,10))
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
 				# Se establece en el menu que boton se hizo click (Aqui Aparece el error: List index out of range)
@@ -2247,7 +2266,7 @@ class IdleScreen():
 					self.screen.blit(item.label, (item.xpos, item.ypos))
 
 				#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
-				if mpos[0] > self.scrWidth / 2:
+				if mpos[1] > self.scrHeight / 2:
 					self.activeFocus = 1
 					self.lastActiveFocus = 0
 				else:

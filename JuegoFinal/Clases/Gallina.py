@@ -61,7 +61,7 @@ class Gallinita(pygame.sprite.Sprite):
 	def __descenso(self):
 		if self.Maxdescenso == self.rect.top:
 			self.contador = 0
-			self.Maxdescenso = self.rect.top + 40
+			self.Maxdescenso = self.rect.top + 20
 		else:
 			self.rect.top += 1
 
@@ -79,7 +79,7 @@ class Gallinita(pygame.sprite.Sprite):
 
 	def __ataque(self):
 		# Numero de Huevos que Pone la gallina
-		if (randint(0,150) < self.rangoDisparo):
+		if (randint(0,180) < self.rangoDisparo):
 			self.__disparo()
 
 	def __disparo(self):
