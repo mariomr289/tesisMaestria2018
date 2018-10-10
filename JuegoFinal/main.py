@@ -448,6 +448,16 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
+		# Cargar imagen de Flecha IZQUIERDA
+		FlechaIzquierda = pygame.image.load("Imagenes/CaritaFeliz.png")
+		spriteIzquierda = pygame.sprite.Sprite()
+		spriteIzquierda.image = FlechaIzquierda
+		spriteIzquierda.rect = FlechaIzquierda.get_rect()
+		# Cargar imagen de Flecha DERECHA
+		FlechaDerecha = pygame.image.load("Imagenes/CaritaTriste.png")
+		spriteDerecha = pygame.sprite.Sprite()
+		spriteDerecha.image = FlechaDerecha
+		spriteDerecha.rect = FlechaDerecha.get_rect()
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -548,6 +558,11 @@ class IdleScreen():
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
 			# enemigo.comportamiento(tiempo)
+			# Mostrar las flechas de IZQUIERDA y DERECHA
+			if identidad == "izquierda":
+				self.screen.blit(spriteIzquierda.image,(670,450))
+			if identidad == "derecha":
+				self.screen.blit(spriteDerecha.image,(120,450))
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
@@ -722,6 +737,16 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
+		# Cargar la Imagen de Flecha ARRIBA
+		FlechaArriba = pygame.image.load("Imagenes/CaritaFeliz.png")
+		spriteArriba = pygame.sprite.Sprite()
+		spriteArriba.image = FlechaArriba
+		spriteArriba.rect = FlechaArriba.get_rect()
+		# Cargar la Imagen de Flecha ABAJO
+		FlechaAbajo = pygame.image.load("Imagenes/CaritaTriste.png")
+		spriteAbajo = pygame.sprite.Sprite()
+		spriteAbajo.image = FlechaAbajo
+		spriteAbajo.rect = FlechaAbajo.get_rect()
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -823,6 +848,11 @@ class IdleScreen():
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
 			#enemigo.comportamiento(tiempo)
+			# Mostrar las Flechas ARRIBA y ABAJO
+			if identidad == "arriba":
+				self.screen.blit(spriteArriba.image,(600,120))
+			if identidad == "abajo":
+				self.screen.blit(spriteAbajo.image,(600,500))
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verifica que el jugador ha recolectado 20 Estrellas o que el Tiempo Transcurrido sea el límite de 3000
@@ -1001,9 +1031,11 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
+		# Cargar Imagen de Flecha Arriba
+		
 		# Cargar sonido principal
-		# pygame.mixer.music.load('Sonidos/Intro.mp3')
-		# pygame.mixer.music.play(3)
+		pygame.mixer.music.load('Sonidos/Intro.mp3')
+		pygame.mixer.music.play(3)
 		# Instancia del Objeto Raton y Gato
 		imagenArdillita = Ardilla.imagenArdillita(30,30)
 		imagenArbol = Arbolito.imagenArbol(910,670)
@@ -1142,7 +1174,9 @@ class IdleScreen():
 			grupoimagenArbol.draw(screen)
 
 			if enJuego == False:
+				pygame.mixer.music.fadeout(3000)
 				done = False
+				# Llamar a la pantalla de Fin de Juego
 				self.FinJuego(puntos.score, Tempo.temporal, 5)
 
 			# Se establece en el menu que boton se hizo click
