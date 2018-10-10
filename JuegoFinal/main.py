@@ -1611,6 +1611,20 @@ class IdleScreen():
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
+			# Cargar Imagen de Carita Feliz
+			CaritaFeliz = pygame.image.load("Imagenes/CaritaFeliz.png")
+			spriteFeliz = pygame.sprite.Sprite()
+			spriteFeliz.image = CaritaFeliz
+			spriteFeliz.rect = CaritaFeliz.get_rect()
+			# Cargar Imagen de Carita Triste
+			CaritaTriste = pygame.image.load("Imagenes/CaritaTriste.png")
+			spriteTriste = pygame.sprite.Sprite()
+			spriteTriste.image = CaritaTriste
+			spriteTriste.rect = CaritaTriste.get_rect()
+			# Cargar la Palabra de Correcto
+			TxtCorrecto = pygame.transform.flip(self.font.render("Correcto", 1, (255, 14, 0)), 1, 0)
+			# Cargar la Palabra de Incorrecto
+			TxtIncorrecto = pygame.transform.flip(self.font.render("Incorrecto", 1, (255, 14, 0)), 1, 0)
 			# Cargar el Temporizador
 			Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 67))
 			# Instancia del Objeto Puntaje
@@ -1664,8 +1678,10 @@ class IdleScreen():
 								# Verificar cual de los botones se ha pulsado
 								if identidad == "izquierda" and actividad == 1:
 									puntos.score_up()
+									#screen.blit(Texto, (320,300))
 								if identidad == "derecha" and actividad == 2:
 									puntos.score_up()
+
 					# Controlamos el cliqueo del mouse
 					if actividad == 3 or actividad == 4:
 						if enJuego == True:
@@ -1691,6 +1707,35 @@ class IdleScreen():
 				Tempo.update(screen)
 				# Actualizar el Puntaje del jugador
 				puntos.update(screen)
+				# Mostrar las Caritas Feliz o Triste y la Palabra Correcta e Incorrecta
+				# Actividad 1
+				if identidad == "izquierda" and actividad == 1:
+					self.screen.blit(TxtCorrecto, (700,300))
+					self.screen.blit(spriteFeliz.image, (700,400))
+				if identidad == "derecha" and actividad == 1:
+					self.screen.blit(TxtIncorrecto, (100,300))
+					self.screen.blit(spriteTriste.image, (100,400))
+				# Actividad 2
+				if identidad == "izquierda" and actividad == 2:
+					self.screen.blit(TxtIncorrecto, (700,300))
+					self.screen.blit(spriteTriste.image, (700,400))
+				if identidad == "derecha" and actividad == 2:
+					self.screen.blit(TxtCorrecto, (100,300))
+					self.screen.blit(spriteFeliz.image, (100,400))
+				# Actividad 3
+				if identidad == "arriba" and actividad == 3:
+					self.screen.blit(TxtCorrecto, (700,300))
+					self.screen.blit(spriteFeliz.image, (700,400))
+				if identidad == "abajo" and actividad == 3:
+					self.screen.blit(TxtIncorrecto, (100,300))
+					self.screen.blit(spriteTriste.image, (100,400))
+				# Actividad 4
+				if identidad == "arriba" and actividad == 4:
+					self.screen.blit(TxtIncorrecto, (700,300))
+					self.screen.blit(spriteTriste.image, (700,400))
+				if identidad == "abajo" and actividad == 4:
+					self.screen.blit(TxtCorrecto, (100,300))
+					self.screen.blit(spriteFeliz.image, (100,400))
 				# Verificar el Tiempo Transcurrido
 				if Tempo.temporal == 500:
 					enJuego = False
@@ -2203,13 +2248,13 @@ class IdleScreen():
 				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstIzquierdaDerecha.jpg").convert(), 1, 0)
 			elif NroJuego == 3:
 				TituloJuego = "Arriba, Abajo"
-				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstArribaAbajo.jpg").convert(), 1, 0)
 			elif NroJuego == 4:
-				TituloJuego = "Mover Objetos"
-				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+				TituloJuego = "Adentro Afuera"
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstAdentroAfuera.jpg").convert(), 1, 0)
 			else:
 				TituloJuego = "Laberinto"
-				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/mainbg.jpg").convert(), 1, 0)
+				self.bgImageInstrucciones = pygame.transform.flip(pygame.image.load("Imagenes/FondoInstLaberinto.jpg").convert(), 1, 0)
 			# Carga el Titulo de las Instrucciones
 			Titulo = pygame.transform.flip(self.fontFinJuego.render("Instrucciones del Juego: " + str(TituloJuego), 1, (0, 0, 255)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
@@ -2251,7 +2296,7 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageInstrucciones, (0, 0))
 				# Aparece El Titulo de las Instrucciones
-				screen.blit(Titulo,(120,10))
+				screen.blit(Titulo,(150,10))
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
 				# Se establece en el menu que boton se hizo click (Aqui Aparece el error: List index out of range)
