@@ -1622,9 +1622,9 @@ class IdleScreen():
 			spriteTriste.image = CaritaTriste
 			spriteTriste.rect = CaritaTriste.get_rect()
 			# Cargar la Palabra de Correcto
-			TxtCorrecto = pygame.transform.flip(self.font.render("Correcto", 1, (255, 14, 0)), 1, 0)
+			TxtCorrecto = pygame.transform.flip(self.font.render("Correcto", 1, (100, 0, 255)), 1, 0)
 			# Cargar la Palabra de Incorrecto
-			TxtIncorrecto = pygame.transform.flip(self.font.render("Incorrecto", 1, (255, 14, 0)), 1, 0)
+			TxtIncorrecto = pygame.transform.flip(self.font.render("Incorrecto", 1, (100, 0, 255)), 1, 0)
 			# Cargar el Temporizador
 			Tempo = Temporizador.Tiempito(self.fontPuntaje, (128, 67))
 			# Instancia del Objeto Puntaje
@@ -1710,32 +1710,32 @@ class IdleScreen():
 				# Mostrar las Caritas Feliz o Triste y la Palabra Correcta e Incorrecta
 				# Actividad 1
 				if identidad == "izquierda" and actividad == 1:
-					self.screen.blit(TxtCorrecto, (700,300))
-					self.screen.blit(spriteFeliz.image, (700,400))
+					self.screen.blit(TxtCorrecto, (670,320))
+					self.screen.blit(spriteFeliz.image, (670,450))
 				if identidad == "derecha" and actividad == 1:
-					self.screen.blit(TxtIncorrecto, (100,300))
-					self.screen.blit(spriteTriste.image, (100,400))
+					self.screen.blit(TxtIncorrecto, (120,320))
+					self.screen.blit(spriteTriste.image, (150,450))
 				# Actividad 2
 				if identidad == "izquierda" and actividad == 2:
-					self.screen.blit(TxtIncorrecto, (700,300))
-					self.screen.blit(spriteTriste.image, (700,400))
+					self.screen.blit(TxtIncorrecto, (620,320))
+					self.screen.blit(spriteTriste.image, (650,450))
 				if identidad == "derecha" and actividad == 2:
-					self.screen.blit(TxtCorrecto, (100,300))
-					self.screen.blit(spriteFeliz.image, (100,400))
+					self.screen.blit(TxtCorrecto, (120,320))
+					self.screen.blit(spriteFeliz.image, (120,450))
 				# Actividad 3
 				if identidad == "arriba" and actividad == 3:
-					self.screen.blit(TxtCorrecto, (700,300))
-					self.screen.blit(spriteFeliz.image, (700,400))
+					self.screen.blit(TxtCorrecto, (700,250))
+					self.screen.blit(spriteFeliz.image, (80,150))
 				if identidad == "abajo" and actividad == 3:
-					self.screen.blit(TxtIncorrecto, (100,300))
-					self.screen.blit(spriteTriste.image, (100,400))
+					self.screen.blit(TxtIncorrecto, (670,500))
+					self.screen.blit(spriteTriste.image, (80,450))
 				# Actividad 4
 				if identidad == "arriba" and actividad == 4:
-					self.screen.blit(TxtIncorrecto, (700,300))
-					self.screen.blit(spriteTriste.image, (700,400))
+					self.screen.blit(TxtIncorrecto, (670,250))
+					self.screen.blit(spriteTriste.image, (80,150))
 				if identidad == "abajo" and actividad == 4:
-					self.screen.blit(TxtCorrecto, (100,300))
-					self.screen.blit(spriteFeliz.image, (100,400))
+					self.screen.blit(TxtCorrecto, (700,500))
+					self.screen.blit(spriteFeliz.image, (80,450))
 				# Verificar el Tiempo Transcurrido
 				if Tempo.temporal == 500:
 					enJuego = False
