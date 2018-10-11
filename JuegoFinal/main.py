@@ -113,11 +113,11 @@ class IdleScreen():
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesLaberinto = ("A", "V", "->", "<-")
-		self.menuFuncsLaberinto = {"A" : self.ClickArriba,
-							"V" : self.ClickAbajo,
-							"->" : self.ClickDerecho,
-							"<-" : self.ClickIzquierdo}
+		self.itemNamesLaberinto = ("Arriba", "Derecha", "Abajo", "Izquierda")
+		self.menuFuncsLaberinto = {"Arriba" : self.ClickArriba,
+							"Derecha" : self.ClickDerecho,
+							"Abajo" : self.ClickAbajo,
+							"Izquierda" : self.ClickIzquierdo}
 		self.itemNamesInstrucciones = ("Anterior", "Siguiente")
 		self.menuFuncsInstrucciones = {"Anterior" : self.ClickAnterior,
 							"Siguiente" : self.ClickSiguiente}
@@ -1031,8 +1031,37 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
-		# Cargar Imagen de Flecha Arriba
-		
+		# Cargar Imagen de Flecha Arriba pequenia
+		FlechaArribaChica = pygame.image.load("Imagenes/FlechaArriba.png")
+		spriteFlArribaChica = pygame.sprite.Sprite()
+		spriteFlArribaChica.image = FlechaArribaChica
+		spriteFlArribaChica.rect = FlechaArribaChica.get_rect()
+		# Cargar Imagen de Flecha Arriba Grande
+		FlechaArribaGrande = pygame.image.load("Imagenes/FlechaArribaGrande.png")
+		spriteFlArribaGrande = pygame.sprite.Sprite()
+		spriteFlArribaGrande.image = FlechaArribaGrande
+		spriteFlArribaGrande.rect = FlechaArribaGrande.get_rect()
+		# Cargar Imagen de Flecha Abajo pequenia
+		FlechaAbajoChica = pygame.image.load("Imagenes/FlechaAbajo.png")
+		spriteFlAbajoChica = pygame.sprite.Sprite()
+		spriteFlAbajoChica.image = FlechaAbajoChica
+		spriteFlAbajoChica.rect = FlechaAbajoChica.get_rect()
+		# Cargar Imagen de Flecha Abajo Grande
+		FlechaAbajoGrande = pygame.image.load("Imagenes/FlechaAbajoGrande.png")
+		spriteFlAbajoGrande = pygame.sprite.Sprite()
+		spriteFlAbajoGrande.image = FlechaAbajoGrande
+		spriteFlAbajoGrande.rect = FlechaAbajoGrande.get_rect()
+		# Cargar Imagen de Flecha Izquierda pequenia
+		FlechaIzquierdaChica = pygame.image.load("Imagenes/FlechaIzquierda.png")
+		spriteFlIzquierdaChica = pygame.sprite.Sprite()
+		spriteFlIzquierdaChica.image = FlechaIzquierdaChica
+		spriteFlIzquierdaChica.rect = FlechaIzquierdaChica.get_rect()
+		# Cargar Imagen de Flecha Izquierda Grande
+		FlechaAbajoGrande = pygame.image.load("Imagenes/FlechaAbajoGrande.png")
+		spriteFlAbajoGrande = pygame.sprite.Sprite()
+		spriteFlAbajoGrande.image = FlechaAbajoGrande
+		spriteFlAbajoGrande.rect = FlechaAbajoGrande.get_rect()
+
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/Intro.mp3')
 		pygame.mixer.music.play(3)
@@ -1169,6 +1198,15 @@ class IdleScreen():
 			# Actualizar el Puntaje del JUEGO
 			puntos.update(screen)
 
+			# Mostrar las Flechas pequenias
+			self.screen.blit(spriteFlArribaChica.image,(700, 200))
+			self.screen.blit(spriteFlAbajoChica.image,(300, 200))
+			# Mostrar las Flechas Grandes
+			if identidad == "arriba":
+				self.screen.blit(spriteFlArribaGrande.image,(690,190))
+			if identidad == "abajo":
+				self.screen.blit(spriteFlAbajoGrande.image,(290,190))
+
 			# Y luego el Sprite del Jugador
 			grupoimagenArdillita.draw(screen)
 			grupoimagenArbol.draw(screen)
@@ -1190,17 +1228,17 @@ class IdleScreen():
 				self.screen.blit(item.label, (item.xpos, item.ypos))
 
 			#  Se ejecuta la acción de click del mouse (Parte principal)
-			if mpos[1] < self.scrHeight / 4:
+			if mpos[0] <= self.scrWidth/2 and mpos[1] <= self.scrHeight/2:
 				self.activeFocus = 0
 				self.lastActiveFocus = 1
 				self.secondActiveFocus = 2
 				self.thirdActiveFocus = 3
-			elif mpos[1] < self.scrHeight / 2:
+			elif mpos[0] <= self.scrWidth/2 and mpos[1] > self.scrHeight/2:
 				self.activeFocus = 1
 				self.lastActiveFocus = 0
 				self.secondActiveFocus = 2
 				self.thirdActiveFocus = 3
-			elif mpos[1] < (self.scrHeight / 4 + self.scrHeight/2):
+			elif mpos[0] > self.scrWidth/2 and mpos[1] <= self.scrHeight/2:
 				self.activeFocus = 2
 				self.lastActiveFocus = 0
 				self.secondActiveFocus = 1
