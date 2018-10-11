@@ -52,6 +52,7 @@ class MenuItem(pygame.font.Font):
 		self.height = height
 		self.font = font
 		self.fontColor = fontColor
+		self.cuadro = pygame.draw.rect(screen, (40, 210, 250), (25, 25, 350, 100), 1)
 		self.label = pygame.transform.flip(self.font.render(self.name, 1, self.fontColor), 1, 0)
 		self.itemImage = pygame.image.load("../graphics/menuico.png").convert()
 		self.itemImage.set_colorkey((255, 255, 255))
@@ -67,6 +68,7 @@ class MenuItem(pygame.font.Font):
 	# Se aplica el foco en el elemento de menu real
 	def applyFocus(self, screen):
 		self.label = pygame.transform.flip(self.font.render(self.name, 1, (255, 0, 0)), 1, 0)
+		#Escala el Tamano de la Letra
 		self.label = pygame.transform.smoothscale(self.label, (self.width + 25, self.height + 25))
 		screen.blit(self.itemImage, (self.xpos - 70, self.ypos + 25))
 
@@ -85,7 +87,7 @@ class IdleScreen():
 		self.bgColor = (0, 0, 0)
 		self.bgImage = pygame.transform.flip(pygame.image.load("../graphics/mainbg.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
-		self.font = pygame.font.SysFont("LDFComicSans", 40)
+		self.font = pygame.font.SysFont("LDFComicSans", 60)
 		self.fontColor = (255, 255, 255)
 		self.menuItems = list()
 		self.itemNames = ("Nuevo Juego", "Salir", "Hola","Chao")
@@ -187,17 +189,18 @@ class IdleScreen():
 				self.screen.blit(item.label, (item.xpos, item.ypos))
 
 			#  2 lazy 2 hacen algo hermoso y universal (Parte principal)
-			if mpos[1] < self.scrHeight / 4:
+
+			if mpos[0] <= self.scrWidth / 2 and mpos[1] <= self.scrHeight/2:
 				self.activeFocus = 0
 				self.lastActiveFocus = 1
 				self.secondActiveFocus = 2
 				self.thirdActiveFocus = 3
-			elif mpos[1] < self.scrHeight / 2:
+			elif mpos[0] <= self.scrWidth / 2 and mpos[1] > self.scrHeight/2:
 				self.activeFocus = 1
 				self.lastActiveFocus = 0
 				self.secondActiveFocus = 2
 				self.thirdActiveFocus = 3
-			elif mpos[1] < (self.scrHeight / 4 + self.scrHeight/2):
+			elif mpos[0] > self.scrWidth / 2 and mpos[1] <= self.scrHeight/2:
 				self.activeFocus = 2
 				self.lastActiveFocus = 0
 				self.secondActiveFocus = 1
