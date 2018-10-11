@@ -15,3 +15,4 @@ from Ardilla import imagenArdillita
 from Arbolito import imagenArbol
 from Oso import Osito
 from Objetivo import ObjetivoMover
+from Flecha import Flechita

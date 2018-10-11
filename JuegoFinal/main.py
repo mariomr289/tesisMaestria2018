@@ -43,6 +43,8 @@ from Clases import Arbolito
 # Importar las Clases para el Juego de Adentro Afuera
 from Clases import Oso
 from Clases import Objetivo
+# Importar las Clase de las Flechas
+from Clases import Flecha
 
 # Da una lista de longitud del tamanio lleno con la variable val la longitud es una lista y val es dinamica
 constList = lambda length, val: [val for _ in range(length)]
@@ -1052,15 +1054,15 @@ class IdleScreen():
 		spriteFlAbajoGrande.image = FlechaAbajoGrande
 		spriteFlAbajoGrande.rect = FlechaAbajoGrande.get_rect()
 		# Cargar Imagen de Flecha Izquierda pequenia
-		FlechaIzquierdaChica = pygame.image.load("Imagenes/FlechaIzquierda.png")
-		spriteFlIzquierdaChica = pygame.sprite.Sprite()
-		spriteFlIzquierdaChica.image = FlechaIzquierdaChica
-		spriteFlIzquierdaChica.rect = FlechaIzquierdaChica.get_rect()
+		FlechaIzquierdaChica = Flecha.Flechita(100,200,'Imagenes/FlechaIzquierda.png')
 		# Cargar Imagen de Flecha Izquierda Grande
-		FlechaAbajoGrande = pygame.image.load("Imagenes/FlechaAbajoGrande.png")
-		spriteFlAbajoGrande = pygame.sprite.Sprite()
-		spriteFlAbajoGrande.image = FlechaAbajoGrande
-		spriteFlAbajoGrande.rect = FlechaAbajoGrande.get_rect()
+		FlechaIzquierdaGrande = Flecha.Flechita(90,190,'Imagenes/FlechaIzquierdaGrande.png')
+		# Cargar Imagen de Flecha Derecha pequenia
+		FlechaDerechaChica = Flecha.Flechita(500,600,'Imagenes/FlechaDerecha.png')
+		# Cargar Imagen de Flecha Derecha Grande
+		FlechaDerechaGrande = Flecha.Flechita(490,590,'Imagenes/FlechaDerechaGrande.png')
+
+
 
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/Intro.mp3')
@@ -1201,11 +1203,17 @@ class IdleScreen():
 			# Mostrar las Flechas pequenias
 			self.screen.blit(spriteFlArribaChica.image,(700, 200))
 			self.screen.blit(spriteFlAbajoChica.image,(300, 200))
+			FlechaDerechaChica.dibujar(screen)
+			FlechaIzquierdaChica.dibujar(screen)
 			# Mostrar las Flechas Grandes
 			if identidad == "arriba":
 				self.screen.blit(spriteFlArribaGrande.image,(690,190))
 			if identidad == "abajo":
 				self.screen.blit(spriteFlAbajoGrande.image,(290,190))
+			if identidad == "derecha":
+				FlechaDerechaGrande.dibujar(screen)
+			if identidad == "izquierda":
+				FlechaIzquierdaGrande.dibujar(screen)
 
 			# Y luego el Sprite del Jugador
 			grupoimagenArdillita.draw(screen)
