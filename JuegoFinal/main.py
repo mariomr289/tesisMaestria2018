@@ -115,11 +115,11 @@ class IdleScreen():
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesLaberinto = ("Arriba", "Derecha", "Abajo", "Izquierda")
+		self.itemNamesLaberinto = ("Arriba", "Izquierda", "Abajo", "Derecha")
 		self.menuFuncsLaberinto = {"Arriba" : self.ClickArriba,
-							"Derecha" : self.ClickDerecho,
+							"Izquierda" : self.ClickIzquierdo,
 							"Abajo" : self.ClickAbajo,
-							"Izquierda" : self.ClickIzquierdo}
+							"Derecha" : self.ClickDerecho}
 		self.itemNamesInstrucciones = ("Anterior", "Siguiente")
 		self.menuFuncsInstrucciones = {"Anterior" : self.ClickAnterior,
 							"Siguiente" : self.ClickSiguiente}
@@ -230,9 +230,9 @@ class IdleScreen():
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
 			width = label.get_rect().width
 			height = label.get_rect().height + 30
-			posx = (self.scrWidth / 2) - (width / 2)
+			posx = (self.scrHeight) - (height)
 			totalHeight  = len(self.itemNamesLaberinto) * height
-			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
+			posy = (self.scrWidth) + (index * height)
 
 			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
 			self.menuItemsLaberinto.append(mi)
@@ -1034,36 +1034,21 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar Imagen de Flecha Arriba pequenia
-		FlechaArribaChica = pygame.image.load("Imagenes/FlechaArriba.png")
-		spriteFlArribaChica = pygame.sprite.Sprite()
-		spriteFlArribaChica.image = FlechaArribaChica
-		spriteFlArribaChica.rect = FlechaArribaChica.get_rect()
+		FlechaArribaChica = Flecha.Flechita(715,125,'Imagenes/FlechaArriba.png')
 		# Cargar Imagen de Flecha Arriba Grande
-		FlechaArribaGrande = pygame.image.load("Imagenes/FlechaArribaGrande.png")
-		spriteFlArribaGrande = pygame.sprite.Sprite()
-		spriteFlArribaGrande.image = FlechaArribaGrande
-		spriteFlArribaGrande.rect = FlechaArribaGrande.get_rect()
+		FlechaArribaGrande = Flecha.Flechita(695,95,'Imagenes/FlechaArribaGrande.png')
 		# Cargar Imagen de Flecha Abajo pequenia
-		FlechaAbajoChica = pygame.image.load("Imagenes/FlechaAbajo.png")
-		spriteFlAbajoChica = pygame.sprite.Sprite()
-		spriteFlAbajoChica.image = FlechaAbajoChica
-		spriteFlAbajoChica.rect = FlechaAbajoChica.get_rect()
+		FlechaAbajoChica = Flecha.Flechita(200,130,'Imagenes/FlechaAbajo.png')
 		# Cargar Imagen de Flecha Abajo Grande
-		FlechaAbajoGrande = pygame.image.load("Imagenes/FlechaAbajoGrande.png")
-		spriteFlAbajoGrande = pygame.sprite.Sprite()
-		spriteFlAbajoGrande.image = FlechaAbajoGrande
-		spriteFlAbajoGrande.rect = FlechaAbajoGrande.get_rect()
+		FlechaAbajoGrande = Flecha.Flechita(175,95,'Imagenes/FlechaAbajoGrande.png')
 		# Cargar Imagen de Flecha Izquierda pequenia
-		FlechaIzquierdaChica = Flecha.Flechita(100,200,'Imagenes/FlechaIzquierda.png')
+		FlechaIzquierdaChica = Flecha.Flechita(205,515,'Imagenes/FlechaIzquierda.png')
 		# Cargar Imagen de Flecha Izquierda Grande
-		FlechaIzquierdaGrande = Flecha.Flechita(90,190,'Imagenes/FlechaIzquierdaGrande.png')
+		FlechaIzquierdaGrande = Flecha.Flechita(175,485,'Imagenes/FlechaIzquierdaGrande.png')
 		# Cargar Imagen de Flecha Derecha pequenia
-		FlechaDerechaChica = Flecha.Flechita(500,600,'Imagenes/FlechaDerecha.png')
+		FlechaDerechaChica = Flecha.Flechita(730,525,'Imagenes/FlechaDerecha.png')
 		# Cargar Imagen de Flecha Derecha Grande
-		FlechaDerechaGrande = Flecha.Flechita(490,590,'Imagenes/FlechaDerechaGrande.png')
-
-
-
+		FlechaDerechaGrande = Flecha.Flechita(695,485,'Imagenes/FlechaDerechaGrande.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/Intro.mp3')
 		pygame.mixer.music.play(3)
@@ -1201,18 +1186,18 @@ class IdleScreen():
 			puntos.update(screen)
 
 			# Mostrar las Flechas pequenias
-			self.screen.blit(spriteFlArribaChica.image,(700, 200))
-			self.screen.blit(spriteFlAbajoChica.image,(300, 200))
+			FlechaArribaChica.dibujar(screen)
+			FlechaAbajoChica.dibujar(screen)
 			FlechaDerechaChica.dibujar(screen)
 			FlechaIzquierdaChica.dibujar(screen)
 			# Mostrar las Flechas Grandes
 			if identidad == "arriba":
-				self.screen.blit(spriteFlArribaGrande.image,(690,190))
+				FlechaArribaGrande.dibujar(screen)
 			if identidad == "abajo":
-				self.screen.blit(spriteFlAbajoGrande.image,(290,190))
-			if identidad == "derecha":
-				FlechaDerechaGrande.dibujar(screen)
+				FlechaAbajoGrande.dibujar(screen)
 			if identidad == "izquierda":
+				FlechaDerechaGrande.dibujar(screen)
+			if identidad == "derecha":
 				FlechaIzquierdaGrande.dibujar(screen)
 
 			# Y luego el Sprite del Jugador
