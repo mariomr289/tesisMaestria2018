@@ -1490,16 +1490,20 @@ class IdleScreen():
 			#Cargar el sonido Principal
 			pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 			pygame.mixer.music.play(3)
+			# Cargar la Palabra de la actividad
+			Actividad = pygame.transform.flip(self.font.render("Adentro", 1, (0,0,255)), 1, 0)
 			#Cargar la Palabra de Fin del JUEGO
-			Texto = pygame.transform.flip(self.font.render("Lo lograste", 1, (255, 14, 0)), 1, 0)
+			Texto = pygame.transform.flip(self.font.render("Lo lograste", 1, (255,14,0)), 1, 0)
 			# Instancia del objeto Cuadro
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, 150, 150)
 			# Instancia del Objeto ObjetivoMover
 			Lugar = Objetivo.ObjetivoMover(300,600,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
 			# Instancia del Objeto Puntaje
-			puntos = Puntaje.Score(self.fontPuntaje, (900,68))
-			# Cargar el Temporizador
-			Tempo = Temporizador.Tiempito(self.fontPuntaje, (130,68))
+			puntos = Puntaje.Score(self.fontPuntaje, (900,60))
+			# Cargar el Temporizador de la Actividad
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (130,60))
+			# Cargar el Temporizador de Ejecucion de la Actividad
+			Tempo2 = Temporizador.Tiempito(self.fontPuntaje,(130,60))
 			# Verificar si el Jugador gano o perdio
 			enJuego = True
 			#if not done:
@@ -1510,7 +1514,9 @@ class IdleScreen():
 				# Obtenemos el tiempo del Juego
 				tiempo = pygame.time.get_ticks()/1000
 				# Llamar a la funcion que inicializa el tiempo
-				Tempo.tiempo_sube()
+				Tempo2.tiempo_sube()
+				if puntos.score < 1:
+					Tempo.tiempo_sube()
 				# Obtenga la profundidad del kinect
 				(depth,_) = get_depth()
 				old_depth = depth
@@ -1546,8 +1552,11 @@ class IdleScreen():
 
 				# Se Carga el fondo de la Imagen de Mover Objetos
 				self.screen.blit(self.bgImageMoverObjeto, (0, 0))
+				# Se Muestra la Actividad a Realizar
+				screen.blit(Actividad, (400,20))
 				# Se muestra el tiempo de la actividad
-				Tempo.update(screen)
+				#Tempo.update(screen)
+				Tempo2.update(screen)
 				# Actualizar el Puntaje del JUEGO
 				puntos.update(screen)
 				# Actualiza el Osito en la Pantalla
@@ -1560,15 +1569,14 @@ class IdleScreen():
 
 				#Verificar Colision del Jugador con el Objetivo
 				if ObjJug.rect.collidepoint(self.scrWidth - 300,600):
-					screen.blit(Texto, (320,300))
+					screen.blit(Texto, (350,400))
 					puntos.score = 1
-					#puntos.score_up()
 					print "Colisiono el Jugador"
 					listaTiempo[0] = Tempo.temporal
 					listaPuntos[0] = puntos.score
 
 
-				if Tempo.temporal == 500:
+				if Tempo2.temporal == 500:
 					enJuego = False
 
 				if enJuego == False:
