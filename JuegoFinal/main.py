@@ -450,16 +450,14 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
-		# Cargar imagen de Flecha IZQUIERDA
-		FlechaIzquierda = pygame.image.load("Imagenes/CaritaFeliz.png")
-		spriteIzquierda = pygame.sprite.Sprite()
-		spriteIzquierda.image = FlechaIzquierda
-		spriteIzquierda.rect = FlechaIzquierda.get_rect()
-		# Cargar imagen de Flecha DERECHA
-		FlechaDerecha = pygame.image.load("Imagenes/CaritaTriste.png")
-		spriteDerecha = pygame.sprite.Sprite()
-		spriteDerecha.image = FlechaDerecha
-		spriteDerecha.rect = FlechaDerecha.get_rect()
+		# Cargar Imagen de Flecha Izquierda pequenia
+		FlechaIzquierdaChica = Flecha.Flechita(205,415,'Imagenes/FlechaIzquierda.png')
+		# Cargar Imagen de Flecha Izquierda Grande
+		FlechaIzquierdaGrande = Flecha.Flechita(175,385,'Imagenes/FlechaIzquierdaGrande.png')
+		# Cargar Imagen de Flecha Derecha pequenia
+		FlechaDerechaChica = Flecha.Flechita(730,415,'Imagenes/FlechaDerecha.png')
+		# Cargar Imagen de Flecha Derecha Grande
+		FlechaDerechaGrande = Flecha.Flechita(695,385,'Imagenes/FlechaDerechaGrande.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -560,11 +558,14 @@ class IdleScreen():
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
 			# enemigo.comportamiento(tiempo)
+			# Mostrar las Flechas pequenias
+			FlechaDerechaChica.dibujar(screen)
+			FlechaIzquierdaChica.dibujar(screen)
 			# Mostrar las flechas de IZQUIERDA y DERECHA
 			if identidad == "izquierda":
-				self.screen.blit(spriteIzquierda.image,(670,450))
+				FlechaDerechaGrande.dibujar(screen)
 			if identidad == "derecha":
-				self.screen.blit(spriteDerecha.image,(120,450))
+				FlechaIzquierdaGrande.dibujar(screen)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
@@ -739,16 +740,14 @@ class IdleScreen():
 		# Iterator boolean -> Indica a programa cuando finalizar
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
-		# Cargar la Imagen de Flecha ARRIBA
-		FlechaArriba = pygame.image.load("Imagenes/CaritaFeliz.png")
-		spriteArriba = pygame.sprite.Sprite()
-		spriteArriba.image = FlechaArriba
-		spriteArriba.rect = FlechaArriba.get_rect()
-		# Cargar la Imagen de Flecha ABAJO
-		FlechaAbajo = pygame.image.load("Imagenes/CaritaTriste.png")
-		spriteAbajo = pygame.sprite.Sprite()
-		spriteAbajo.image = FlechaAbajo
-		spriteAbajo.rect = FlechaAbajo.get_rect()
+		# Cargar Imagen de Flecha Arriba pequenia
+		FlechaArribaChica = Flecha.Flechita(460,150,'Imagenes/FlechaArriba.png')
+		# Cargar Imagen de Flecha Arriba Grande
+		FlechaArribaGrande = Flecha.Flechita(440,120,'Imagenes/FlechaArribaGrande.png')
+		# Cargar Imagen de Flecha Abajo pequenia
+		FlechaAbajoChica = Flecha.Flechita(460,530,'Imagenes/FlechaAbajo.png')
+		# Cargar Imagen de Flecha Abajo Grande
+		FlechaAbajoGrande = Flecha.Flechita(440,500,'Imagenes/FlechaAbajoGrande.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -850,11 +849,14 @@ class IdleScreen():
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
 			#enemigo.comportamiento(tiempo)
-			# Mostrar las Flechas ARRIBA y ABAJO
+			# Mostrar las Flechas pequenias
+			FlechaArribaChica.dibujar(screen)
+			FlechaAbajoChica.dibujar(screen)
+			# Mostrar las Flechas Grandes
 			if identidad == "arriba":
-				self.screen.blit(spriteArriba.image,(600,120))
+				FlechaArribaGrande.dibujar(screen)
 			if identidad == "abajo":
-				self.screen.blit(spriteAbajo.image,(600,500))
+				FlechaAbajoGrande.dibujar(screen)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verifica que el jugador ha recolectado 20 Estrellas o que el Tiempo Transcurrido sea el límite de 3000
