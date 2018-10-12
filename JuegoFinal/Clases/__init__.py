@@ -16,3 +16,4 @@ from Arbolito import imagenArbol
 from Oso import Osito
 from Objetivo import ObjetivoMover
 from Flecha import Flechita
+from Boton import Botoncito

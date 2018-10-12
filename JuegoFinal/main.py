@@ -43,8 +43,10 @@ from Clases import Arbolito
 # Importar las Clases para el Juego de Adentro Afuera
 from Clases import Oso
 from Clases import Objetivo
-# Importar las Clase de las Flechas
+# Importar la Clase de las Flechas
 from Clases import Flecha
+# Importar la Clases de los Botones
+from Clases import Boton
 
 # Da una lista de longitud del tamanio lleno con la variable val la longitud es una lista y val es dinamica
 constList = lambda length, val: [val for _ in range(length)]
@@ -83,7 +85,7 @@ class IdleScreen():
 		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaDerecha.jpg").convert(), 1, 0)
 		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaArriba.jpg").convert(), 1, 0)
 		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaAbajo.jpg").convert(), 1, 0)
-		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/FondoMover.jpg").convert(), 1, 0)
+		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/FondoAdentro.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 55)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 35)
@@ -1336,6 +1338,11 @@ class IdleScreen():
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
+			# Cargar Imagen del Boton Entrar pequenio
+			BotonEntrarChico = Boton.Botoncito(480,350,'Imagenes/MarcianoA.jpg')
+			# Cargar Imagen del Boton Entrar Grande
+			BotonEntrarGrande = Boton.Botoncito(480,350,'Imagenes/MarcianoB.jpg')
+
 			if not done:
 				self.buildMenuIntro() #Construye el Menu Principal
 
