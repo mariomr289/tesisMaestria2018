@@ -85,7 +85,10 @@ class IdleScreen():
 		self.bgImageEntrenaDerecha = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaDerecha.jpg").convert(), 1, 0)
 		self.bgImageEntrenaArriba = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaArriba.jpg").convert(), 1, 0)
 		self.bgImageEntrenaAbajo = pygame.transform.flip(pygame.image.load("Imagenes/EntrenaAbajo.jpg").convert(), 1, 0)
-		self.bgImageMoverObjeto = pygame.transform.flip(pygame.image.load("Imagenes/FondoAdentro.jpg").convert(), 1, 0)
+		self.bgImageAdentro = pygame.transform.flip(pygame.image.load("Imagenes/FondoAdentro.jpg").convert(), 1, 0)
+		self.bgImageAfuera = pygame.transform.flip(pygame.image.load("Imagenes/FondoAfuera.jpg").convert(), 1, 0)
+		self.bgImageEncima = pygame.transform.flip(pygame.image.load("Imagenes/FondoEncima.jpg").convert(), 1, 0)
+		self.bgImageDebajo = pygame.transform.flip(pygame.image.load("Imagenes/fondoDebajo.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 55)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 35)
@@ -272,7 +275,7 @@ class IdleScreen():
 		elif NroJuego == 3:
 			self.JuegoArribaAbajo()
 		elif NroJuego == 4:
-			self.JuegoAdentroAfuera()
+			self.JuegoAdentroAfuera("Adentro")
 		else:
 			self.JuegoLaberinto()
 
@@ -1473,7 +1476,7 @@ class IdleScreen():
 					dummy = False
 
 	# Pantalla Del Juego Adentro_Afuera
-	def JuegoAdentroAfuera(self):
+	def JuegoAdentroAfuera(self, actividad):
 			global done
 			screenloop = True
 			(depth,_) = get_depth()
@@ -1491,19 +1494,27 @@ class IdleScreen():
 			pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 			pygame.mixer.music.play(3)
 			# Cargar la Palabra de la actividad
-			Actividad = pygame.transform.flip(self.font.render("Adentro", 1, (0,0,255)), 1, 0)
+			TxtActividad = pygame.transform.flip(self.font.render(actividad, 1, (0,0,255)), 1, 0)
 			#Cargar la Palabra de Fin del JUEGO
 			Texto = pygame.transform.flip(self.font.render("Lo lograste", 1, (255,14,0)), 1, 0)
+			# Verificar Que actividad se esta ejecutando
+			if actividad == "Adentro":
+				posOsoX = 150
+				posOsoY = 150
+				posObjX = 300
+				posObjY = 600
+
 			# Instancia del objeto Cuadro
-			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, 150, 150)
+			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, posOsoX, posOsoY)
 			# Instancia del Objeto ObjetivoMover
-			Lugar = Objetivo.ObjetivoMover(300,600,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
+			Lugar = Objetivo.ObjetivoMover(posObjX,posObjY,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
+
 			# Instancia del Objeto Puntaje
 			puntos = Puntaje.Score(self.fontPuntaje, (900,60))
 			# Cargar el Temporizador de la Actividad
-			Tempo = Temporizador.Tiempito(self.fontPuntaje, (130,60))
+			Tempo = Temporizador.Tiempito(self.fontPuntaje, (900,120))
 			# Cargar el Temporizador de Ejecucion de la Actividad
-			Tempo2 = Temporizador.Tiempito(self.fontPuntaje,(130,60))
+			Tempo2 = Temporizador.Tiempito(self.fontPuntaje, (130,60))
 			# Verificar si el Jugador gano o perdio
 			enJuego = True
 			#if not done:
@@ -1551,11 +1562,12 @@ class IdleScreen():
 							print "Mouse Up"
 
 				# Se Carga el fondo de la Imagen de Mover Objetos
-				self.screen.blit(self.bgImageMoverObjeto, (0, 0))
+				if actividad == "Adentro":
+					self.screen.blit(self.bgImageAdentro, (0, 0))
 				# Se Muestra la Actividad a Realizar
-				screen.blit(Actividad, (400,20))
+				screen.blit(TxtActividad, (400,20))
 				# Se muestra el tiempo de la actividad
-				#Tempo.update(screen)
+				Tempo.update(screen)
 				Tempo2.update(screen)
 				# Actualizar el Puntaje del JUEGO
 				puntos.update(screen)
@@ -1568,19 +1580,18 @@ class IdleScreen():
 				Lugar.dibujar(screen)
 
 				#Verificar Colision del Jugador con el Objetivo
-				if ObjJug.rect.collidepoint(self.scrWidth - 300,600):
+				if ObjJug.rect.collidepoint(self.scrWidth - posObjX,posObjY):
 					screen.blit(Texto, (350,400))
 					puntos.score = 1
 					print "Colisiono el Jugador"
-					listaTiempo[0] = Tempo.temporal
-					listaPuntos[0] = puntos.score
-
 
 				if Tempo2.temporal == 500:
 					enJuego = False
 
-				if enJuego == False:
+				if enJuego == False and actividad == "Adentro":
 					pygame.mixer.music.fadeout(3000)
+					listaTiempo[0] = Tempo.temporal
+					listaPuntos[0] = puntos.score
 					# Llamar a la pantalla de Fin de JUEGO
 					done = False
 					self.FinJuego(listaPuntos[0], listaTiempo[0], 4)
