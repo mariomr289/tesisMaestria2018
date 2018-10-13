@@ -1503,6 +1503,21 @@ class IdleScreen():
 				posOsoY = 150
 				posObjX = 300
 				posObjY = 600
+			elif actividad == "Afuera":
+				posOsoX = 750
+				posOsoY = 150
+				posObjX = 800
+				posObjY = 600
+			elif actividad == "Encima":
+				posOsoX = 150
+				posOsoY = 150
+				posObjX = 300
+				posObjY = 600
+			elif actividad == "Debajo":
+				posOsoX = 150
+				posOsoY = 150
+				posObjX = 300
+				posObjY = 600
 
 			# Instancia del objeto Cuadro
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, posOsoX, posOsoY)
@@ -1564,6 +1579,12 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Mover Objetos
 				if actividad == "Adentro":
 					self.screen.blit(self.bgImageAdentro, (0, 0))
+				elif actividad == "Afuera":
+					self.screen.blit(self.bgImageAfuera, (0, 0))
+				elif actividad == "Encima":
+					self.screen.blit(self.bgImageEncima, (0, 0))
+				elif actividad == "Debajo":
+					self.screen.blit(self.bgImageDebajo, (0, 0))
 				# Se Muestra la Actividad a Realizar
 				screen.blit(TxtActividad, (400,20))
 				# Se muestra el tiempo de la actividad
@@ -1589,11 +1610,26 @@ class IdleScreen():
 					enJuego = False
 
 				if enJuego == False and actividad == "Adentro":
-					pygame.mixer.music.fadeout(3000)
 					listaTiempo[0] = Tempo.temporal
 					listaPuntos[0] = puntos.score
-					# Llamar a la pantalla de Fin de JUEGO
 					done = False
+					self.JuegoAdentroAfuera("Afuera")
+				elif enJuego == False and actividad == "Afuera":
+					listaTiempo[1] = Tempo.temporal
+					listaPuntos[1] = puntos.score
+					done = False
+					self.JuegoAdentroAfuera("Encima")
+				elif enJuego == False and actividad == "Encima":
+					listaTiempo[2] = Tempo.temporal
+					listaPuntos[2] = puntos.score
+					done = False
+					self.JuegoAdentroAfuera("Debajo")
+				elif enJuego == False and actividad == "Debajo":
+					listaTiempo[3] = Tempo.temporal
+					listaPuntos[3] = puntos.score
+					done = False
+					pygame.mixer.music.fadeout(2000)
+					# Llamar a la pantalla de Fin de JUEGO
 					self.FinJuego(listaPuntos[0], listaTiempo[0], 4)
 
 				# Se establece en el menu que boton se hizo click
@@ -2156,7 +2192,7 @@ class IdleScreen():
 				juego = "Adentro-Afuera"
 			else:
 				juego = "Laberinto"
-			Texto = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (23, 131, 191)), 1, 0)
+			Titulo = pygame.transform.flip(self.fontFinJuego.render("Fin del Juego " + str(juego), 1, (23, 131, 191)), 1, 0)
 			# Carga el Puntaje Obtenido en el JUEGO
 			Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje Obtenido: " + str(puntos), 1, (143,31,130)), 1, 0)
 			# Carga el Tiempo Obtenido en el JUEGO
@@ -2199,17 +2235,17 @@ class IdleScreen():
 				# Se Carga el fondo de la Imagen de Introduccion
 				self.screen.blit(self.bgImageFinJuego, (0, 0))
 				# Aparece El Texto de Fin del Juego
-				screen.blit(Texto,(200,10))
-				if NroJuego > 1:
+				screen.blit(Titulo,(240,10))
+				if NroJuego == 2 or NroJuego == 3 or NroJuego == 5:
 					# Muestra el Puntaje Obtenido por el Jugador
 					screen.blit(Marcador,(350,170))
 					screen.blit(TiempoFinal,(410,230))
-				else:
+				elif NroJuego == 1:
 					y = 130
 					accion = "Izquierda"
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
-						screen.blit(Marcador,(480,y))
+						screen.blit(Marcador,(510,y))
 						screen.blit(TiempoFinal,(200,y))
 						y += 50
 						if y == 180:
@@ -2218,6 +2254,34 @@ class IdleScreen():
 							accion = "Arriba"
 						elif y == 280:
 							accion = "Abajo"
+				elif NroJuego == 4:
+					# Imprimir el Puntaje de Todas las Acciones
+					y = 130
+					accion = "Adentro"
+					for item in listaPuntos:
+						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
+						screen.blit(Marcador,(510,y))
+						y += 50
+						if y == 180:
+							accion = "Afuera"
+						elif y == 230:
+							accion = "Encima"
+						elif y == 280:
+							accion = "Debajo"
+					# Imprimir el Tiempo de Todas las Acciones
+					y = 130
+					accion = "Adentro"
+					for item in listaTiempo:
+						TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
+						screen.blit(TiempoFinal,(200,y))
+						y += 50
+						if y == 180:
+							accion = "Afuera"
+						elif y == 230:
+							accion = "Encima"
+						elif y == 280:
+							accion = "Debajo"
+
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
 				# Se establece en el menu que boton se hizo click
