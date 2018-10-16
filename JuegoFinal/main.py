@@ -458,17 +458,17 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar Imagen de Flecha Izquierda pequenia
-		FlechaIzquierdaChica = Flecha.Flechita(205,415,'Imagenes/FlechaIzquierda.png')
+		FlechaIzquierdaChica = Flecha.Flechita(205,415,'Imagenes/Flecha-Izquierda-Chica.png')
 		# Cargar Imagen de Flecha Izquierda Grande
-		FlechaIzquierdaGrande = Flecha.Flechita(175,385,'Imagenes/FlechaIzquierdaGrande.png')
+		FlechaIzquierdaGrande = Flecha.Flechita(175,385,'Imagenes/Flecha-Izquierda.png')
 		# Cargar Imagen de Flecha Derecha pequenia
-		FlechaDerechaChica = Flecha.Flechita(730,415,'Imagenes/FlechaDerecha.png')
+		FlechaDerechaChica = Flecha.Flechita(730,415,'Imagenes/Flecha-Derecha-Chica.png')
 		# Cargar Imagen de Flecha Derecha Grande
-		FlechaDerechaGrande = Flecha.Flechita(695,385,'Imagenes/FlechaDerechaGrande.png')
+		FlechaDerechaGrande = Flecha.Flechita(695,385,'Imagenes/Flecha-Derecha.png')
 		# Cargar Imagen de Volumen Play
-		VolumenPlay = Boton.Botoncito(800,700,'Imagenes/índice.png')
+		VolumenPlay = Boton.Botoncito(15,655,'Imagenes/VolumenSonido.png')
 		# Cargar Imagen de Volumen Pausa
-		VolumenPausa = Boton.Botoncito(800,700,'Imagenes/MarcianoB.jpg')
+		VolumenPausa = Boton.Botoncito(15,655,'Imagenes/VolumenSilencio.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -530,7 +530,7 @@ class IdleScreen():
 				if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
 					pygame.mixer.music.pause()
 					SonidoMusica = "pausa"
-				if e.type == pygame.KEYDOWN and e.key == pygame.K_z:
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_v:
 					pygame.mixer.music.unpause()
 					SonidoMusica = "play"
 				if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
