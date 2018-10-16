@@ -18,3 +18,8 @@ class Tiempito(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.font.render("Tiempo: " + str(self.temporal), 1, (255, 255, 255)), 1, 0)
         self.rect = self.image.get_rect(center = self.pos)
         screen.blit(self.image, self.rect)
+
+    def update_actividad(self, screen):
+        self.image = pygame.transform.flip(self.font.render("Tiempo Actividad: " + str(self.temporal), 1, (255, 255, 255)), 1, 0)
+        self.rect = self.image.get_rect(center = self.pos)
+        screen.blit(self.image, self.rect)

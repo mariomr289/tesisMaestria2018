@@ -20,4 +20,4 @@ class Osito(pygame.sprite.Sprite):
 			# Obtener la posicion del Oso en la pantalla invertida
 			self.PosOsoX = scrWidth - self.rect.centerx
 		# dibuja el oso cada vez que se mueve el mouse
-		screen.blit(self.ImagenOso, (self.PosOsoX - 100, self.rect.centery - 100))
+		screen.blit(self.ImagenOso, (self.PosOsoX - 52, self.rect.centery - 52))

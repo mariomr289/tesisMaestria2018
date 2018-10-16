@@ -92,6 +92,7 @@ class IdleScreen():
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 55)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 35)
+		self.fontTiempo = pygame.font.SysFont("Answer", 25)
 		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 55)
 		self.fontColor = (16, 4, 130)
 		self.menuItems = list()
@@ -1501,35 +1502,35 @@ class IdleScreen():
 			if actividad == "Adentro":
 				posOsoX = 150
 				posOsoY = 150
-				posObjX = 300
-				posObjY = 600
+				posObjX = 250
+				posObjY = 670
 			elif actividad == "Afuera":
 				posOsoX = 750
-				posOsoY = 150
+				posOsoY = 120
 				posObjX = 800
-				posObjY = 600
+				posObjY = 670
 			elif actividad == "Encima":
 				posOsoX = 150
 				posOsoY = 150
-				posObjX = 300
-				posObjY = 600
+				posObjX = 460
+				posObjY = 530
 			elif actividad == "Debajo":
 				posOsoX = 150
 				posOsoY = 150
-				posObjX = 300
-				posObjY = 600
+				posObjX = 460
+				posObjY = 685
 
 			# Instancia del objeto Cuadro
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, posOsoX, posOsoY)
 			# Instancia del Objeto ObjetivoMover
-			Lugar = Objetivo.ObjetivoMover(posObjX,posObjY,'Imagenes/Moneda1.png','Imagenes/Moneda2.png')
+			Lugar = Objetivo.ObjetivoMover(posObjX,posObjY,'Imagenes/Objetivo1.png','Imagenes/Objetivo2.png')
 
 			# Instancia del Objeto Puntaje
 			puntos = Puntaje.Score(self.fontPuntaje, (900,60))
 			# Cargar el Temporizador de la Actividad
-			Tempo = Temporizador.Tiempito(self.fontPuntaje, (900,120))
+			Tempo = Temporizador.Tiempito(self.fontTiempo, (135,42))
 			# Cargar el Temporizador de Ejecucion de la Actividad
-			Tempo2 = Temporizador.Tiempito(self.fontPuntaje, (130,60))
+			Tempo2 = Temporizador.Tiempito(self.fontTiempo, (130,72))
 			# Verificar si el Jugador gano o perdio
 			enJuego = True
 			#if not done:
@@ -1588,17 +1589,17 @@ class IdleScreen():
 				# Se Muestra la Actividad a Realizar
 				screen.blit(TxtActividad, (400,20))
 				# Se muestra el tiempo de la actividad
-				Tempo.update(screen)
+				Tempo.update_actividad(screen)
 				Tempo2.update(screen)
 				# Actualizar el Puntaje del JUEGO
 				puntos.update(screen)
-				# Actualiza el Osito en la Pantalla
-				ObjJug.update(screen, self.scrWidth)
 
 				# Animacion del ObjetivoMover
 				Lugar.comportamiento(tiempo)
 				# Dibuja el Objetivo a Realizar
 				Lugar.dibujar(screen)
+				# Actualiza el Osito en la Pantalla
+				ObjJug.update(screen, self.scrWidth)
 
 				#Verificar Colision del Jugador con el Objetivo
 				if ObjJug.rect.collidepoint(self.scrWidth - posObjX,posObjY):
@@ -2172,6 +2173,8 @@ class IdleScreen():
 	# Pantalla De Fin del Juego
 	def FinJuego(self, puntos, TiempoJuego, NroJuego):
 			global done
+			global PuntajeTotal
+			global TiempoTotal
 			screenloop = True
 			(depth,_) = get_depth()
 			# Lista de cache en blanco para el area convexa del casco
@@ -2205,6 +2208,8 @@ class IdleScreen():
 
 			while screenloop:
 				self.clock.tick(30)
+				PuntajeTotal = 0
+				TiempoTotal = 0
 				# Obtenga la profundidad del kinect
 				(depth,_) = get_depth()
 				old_depth = depth
@@ -2241,46 +2246,65 @@ class IdleScreen():
 					screen.blit(Marcador,(350,170))
 					screen.blit(TiempoFinal,(410,230))
 				elif NroJuego == 1:
-					y = 130
+					y = 115
 					accion = "Izquierda"
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
-						screen.blit(Marcador,(510,y))
-						screen.blit(TiempoFinal,(200,y))
-						y += 50
-						if y == 180:
+						screen.blit(Marcador,(520,y))
+						TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo "+ accion +" : 500" , 1, (143,31,130)), 1, 0)
+						screen.blit(TiempoFinal,(190,y))
+						# Sumar el Puntaje Total
+						PuntajeTotal = PuntajeTotal + item
+						y += 45
+						if y == 160:
 							accion = "Derecha"
-						elif y == 230:
+						elif y == 205:
 							accion = "Arriba"
-						elif y == 280:
+						elif y == 250:
 							accion = "Abajo"
+					# Imprimir el Puntaje Total
+					PuntosTotales = pygame.transform.flip(self.fontPuntaje.render("Puntaje Total: " + str(PuntajeTotal), 1, (143,31,130)), 1, 0)
+					screen.blit(PuntosTotales,(520,295))
+					# Imprimir el Tiempo Total
+					TiemposTotales = pygame.transform.flip(self.fontPuntaje.render("Tiempo Total: 2000", 1, (143,31,130)), 1, 0)
+					screen.blit(TiemposTotales,(190,295))
 				elif NroJuego == 4:
 					# Imprimir el Puntaje de Todas las Acciones
-					y = 130
+					y = 115
 					accion = "Adentro"
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
-						screen.blit(Marcador,(510,y))
-						y += 50
-						if y == 180:
+						screen.blit(Marcador,(520,y))
+						# Sumar el Puntaje Total
+						PuntajeTotal = PuntajeTotal + item
+						y += 45
+						if y == 160:
 							accion = "Afuera"
-						elif y == 230:
+						elif y == 205:
 							accion = "Encima"
-						elif y == 280:
+						elif y == 250:
 							accion = "Debajo"
+					# Imprimir el Puntaje Total
+					PuntosTotales = pygame.transform.flip(self.fontPuntaje.render("Puntaje Total: " + str(PuntajeTotal), 1, (143,31,130)), 1, 0)
+					screen.blit(PuntosTotales,(520,295))
 					# Imprimir el Tiempo de Todas las Acciones
-					y = 130
+					y = 115
 					accion = "Adentro"
 					for item in listaTiempo:
 						TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
-						screen.blit(TiempoFinal,(200,y))
-						y += 50
-						if y == 180:
+						screen.blit(TiempoFinal,(190,y))
+						# Sumar el Tiempo Total
+						TiempoTotal = TiempoTotal + item
+						y += 45
+						if y == 160:
 							accion = "Afuera"
-						elif y == 230:
+						elif y == 205:
 							accion = "Encima"
-						elif y == 280:
+						elif y == 250:
 							accion = "Debajo"
+					# Imprimir el Tiempo Total
+					TiemposTotales = pygame.transform.flip(self.fontPuntaje.render("Tiempo Total: " + str(TiempoTotal), 1, (143,31,130)), 1, 0)
+					screen.blit(TiemposTotales,(190,295))
 
 				# Se usa para que aparezca las imagenes que dan la vuelta
 				self.floatingPicture()
