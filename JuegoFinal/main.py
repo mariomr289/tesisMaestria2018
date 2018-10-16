@@ -120,7 +120,7 @@ class IdleScreen():
 		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
 							"Menu Juegos" : self.ClickRegresar,
-							"Salir" : self.ClickSalir}
+							"Salir" : self.ClickSalir2}
 		self.itemNamesLaberinto = ("Arriba", "Izquierda", "Abajo", "Derecha")
 		self.menuFuncsLaberinto = {"Arriba" : self.ClickArriba,
 							"Izquierda" : self.ClickIzquierdo,
@@ -257,6 +257,13 @@ class IdleScreen():
 		print "SALIR"
 		#sys.exit(128)
 
+	# Boton de Salir de la Pantalla de Introduccion
+	def ClickSalir2(self, NroJuego):
+		global done
+		done = False
+		print "SALIR"
+		#sys.exit(128)
+
 	# Boton de Anterior de la Pantalla de Instrucciones
 	def ClickAnterior(self, NroJuego):
 		global done
@@ -281,14 +288,23 @@ class IdleScreen():
 			self.JuegoLaberinto()
 
 	# Boton de Reiniciar los VideoJuegos
-	def ClickReiniciar(self):
+	def ClickReiniciar(self, NroJuego):
 		global done
 		done = False
 		print "REINICIAR"
-		self.introduccion()
+		if NroJuego == 1:
+			self.Entrenamiento(1)
+		elif NroJuego == 2:
+			self.JuegoIzquierdaDerecha()
+		elif NroJuego == 3:
+			self.JuegoArribaAbajo()
+		elif NroJuego == 4:
+			self.JuegoAdentroAfuera("Adentro")
+		else:
+			self.JuegoLaberinto()
 
 	# Boton de Regresar al Menu de los Juegos
-	def ClickRegresar(self):
+	def ClickRegresar(self, NroJuego):
 		global done
 		done = False
 		print "REGRESAR"
@@ -2321,7 +2337,7 @@ class IdleScreen():
 						sys.exit()
 					elif e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
-						opcion = self.menuFuncsFinJuego[self.itemNamesFinJuego[self.activeFocus]]()
+						opcion = self.menuFuncsFinJuego[self.itemNamesFinJuego[self.activeFocus]](NroJuego)
 						break;
 
 				# Se Carga el fondo de la Imagen de Introduccion
