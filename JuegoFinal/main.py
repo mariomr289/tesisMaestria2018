@@ -757,6 +757,7 @@ class IdleScreen():
 	def JuegoArribaAbajo(self):
 		global done
 		global identidad
+		SonidoMusica = "play"
 		screenloop = True
 		(depth,_) = get_depth()
 		# Lista de cache en blanco para el area convexa del casco
@@ -770,13 +771,17 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar Imagen de Flecha Arriba pequenia
-		FlechaArribaChica = Flecha.Flechita(460,150,'Imagenes/FlechaArriba.png')
+		FlechaArribaChica = Flecha.Flechita(460,150,'Imagenes/Flecha-Arriba-Chica.png')
 		# Cargar Imagen de Flecha Arriba Grande
-		FlechaArribaGrande = Flecha.Flechita(440,120,'Imagenes/FlechaArribaGrande.png')
+		FlechaArribaGrande = Flecha.Flechita(440,120,'Imagenes/Flecha-Arriba.png')
 		# Cargar Imagen de Flecha Abajo pequenia
-		FlechaAbajoChica = Flecha.Flechita(460,530,'Imagenes/FlechaAbajo.png')
+		FlechaAbajoChica = Flecha.Flechita(460,530,'Imagenes/Flecha-Abajo-Chica.png')
 		# Cargar Imagen de Flecha Abajo Grande
-		FlechaAbajoGrande = Flecha.Flechita(440,500,'Imagenes/FlechaAbajoGrande.png')
+		FlechaAbajoGrande = Flecha.Flechita(440,500,'Imagenes/Flecha-Abajo.png')
+		# Cargar Imagen de Volumen Play
+		VolumenPlay = Boton.Botoncito(15,655,'Imagenes/VolumenSonido.png')
+		# Cargar Imagen de Volumen Pausa
+		VolumenPausa = Boton.Botoncito(15,655,'Imagenes/VolumenSilencio.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 		pygame.mixer.music.play(3)
@@ -835,6 +840,18 @@ class IdleScreen():
 					pygame.mixer.music.fadeout(2000)
 					pygame.quit()
 					sys.exit()
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
+					pygame.mixer.music.pause()
+					SonidoMusica = "pausa"
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_v:
+					pygame.mixer.music.unpause()
+					SonidoMusica = "play"
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
+					pygame.time.wait(5000)
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+					pygame.mixer.music.fadeout(1000)
+					self.detenerTodoArrAba()
+					self.MenuJuegos()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -878,6 +895,11 @@ class IdleScreen():
 			# ProyectilInvasor.dibujar(screen)
 			# Llamada al comportamiento del enemigo
 			#enemigo.comportamiento(tiempo)
+			if SonidoMusica == "play":
+				VolumenPlay.dibujar(screen)
+			else:
+				VolumenPausa.dibujar(screen)
+
 			# Mostrar las Flechas pequenias
 			FlechaArribaChica.dibujar(screen)
 			FlechaAbajoChica.dibujar(screen)
@@ -1052,6 +1074,7 @@ class IdleScreen():
 	def JuegoLaberinto(self):
 		global done
 		global identidad
+		SonidoMusica = "play"
 		screenloop = True
 		(depth,_) = get_depth()
 		# Lista de cache en blanco para el area convexa del casco
@@ -1065,21 +1088,25 @@ class IdleScreen():
 		# Muy importante bool para la manipulacion del raton
 		dummy = False
 		# Cargar Imagen de Flecha Arriba pequenia
-		FlechaArribaChica = Flecha.Flechita(715,125,'Imagenes/FlechaArriba.png')
+		FlechaArribaChica = Flecha.Flechita(715,125,'Imagenes/Flecha-Arriba-Chica.png')
 		# Cargar Imagen de Flecha Arriba Grande
-		FlechaArribaGrande = Flecha.Flechita(695,95,'Imagenes/FlechaArribaGrande.png')
+		FlechaArribaGrande = Flecha.Flechita(695,95,'Imagenes/Flecha-Arriba.png')
 		# Cargar Imagen de Flecha Abajo pequenia
-		FlechaAbajoChica = Flecha.Flechita(200,130,'Imagenes/FlechaAbajo.png')
+		FlechaAbajoChica = Flecha.Flechita(200,130,'Imagenes/Flecha-Abajo-Chica.png')
 		# Cargar Imagen de Flecha Abajo Grande
-		FlechaAbajoGrande = Flecha.Flechita(175,95,'Imagenes/FlechaAbajoGrande.png')
+		FlechaAbajoGrande = Flecha.Flechita(175,95,'Imagenes/Flecha-Abajo.png')
 		# Cargar Imagen de Flecha Izquierda pequenia
-		FlechaIzquierdaChica = Flecha.Flechita(205,515,'Imagenes/FlechaIzquierda.png')
+		FlechaIzquierdaChica = Flecha.Flechita(205,515,'Imagenes/Flecha-Izquierda-Chica.png')
 		# Cargar Imagen de Flecha Izquierda Grande
-		FlechaIzquierdaGrande = Flecha.Flechita(175,485,'Imagenes/FlechaIzquierdaGrande.png')
+		FlechaIzquierdaGrande = Flecha.Flechita(175,485,'Imagenes/Flecha-Izquierda.png')
 		# Cargar Imagen de Flecha Derecha pequenia
-		FlechaDerechaChica = Flecha.Flechita(730,525,'Imagenes/FlechaDerecha.png')
+		FlechaDerechaChica = Flecha.Flechita(730,525,'Imagenes/Flecha-Derecha-Chica.png')
 		# Cargar Imagen de Flecha Derecha Grande
-		FlechaDerechaGrande = Flecha.Flechita(695,485,'Imagenes/FlechaDerechaGrande.png')
+		FlechaDerechaGrande = Flecha.Flechita(695,485,'Imagenes/Flecha-Derecha.png')
+		# Cargar Imagen de Volumen Play
+		VolumenPlay = Boton.Botoncito(15,655,'Imagenes/VolumenSonido.png')
+		# Cargar Imagen de Volumen Pausa
+		VolumenPausa = Boton.Botoncito(15,655,'Imagenes/VolumenSilencio.png')
 		# Cargar sonido principal
 		pygame.mixer.music.load('Sonidos/Intro.mp3')
 		pygame.mixer.music.play(3)
@@ -1145,6 +1172,17 @@ class IdleScreen():
 					screenloop = False
 					pygame.quit()
 					sys.exit()
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
+					pygame.mixer.music.pause()
+					SonidoMusica = "pausa"
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_v:
+					pygame.mixer.music.unpause()
+					SonidoMusica = "play"
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
+					pygame.time.wait(5000)
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+					pygame.mixer.music.fadeout(1000)
+					self.MenuJuegos()
 				# Controlamos que cliqueo con el mouse
 				if enJuego == True:
 					if e.type == pygame.MOUSEBUTTONDOWN:
@@ -1215,6 +1253,11 @@ class IdleScreen():
 			Tempo.update(screen)
 			# Actualizar el Puntaje del JUEGO
 			puntos.update(screen)
+			# Mostrar el Volumen del SonidoMusica
+			if SonidoMusica == "play":
+				VolumenPlay.dibujar(screen)
+			else:
+				VolumenPausa.dibujar(screen)
 
 			# Mostrar las Flechas pequenias
 			FlechaArribaChica.dibujar(screen)
@@ -1503,6 +1546,7 @@ class IdleScreen():
 	def JuegoAdentroAfuera(self, actividad):
 			global done
 			screenloop = True
+			SonidoMusica = "play"
 			(depth,_) = get_depth()
 			# Lista de cache en blanco para el area convexa del casco
 			cHullAreaCache = constList(5,12000)
@@ -1514,6 +1558,10 @@ class IdleScreen():
 			# Iterator boolean -> Indica a programa cuando finalizar
 			# Muy importante bool para la manipulacion del raton
 			dummy = False
+			# Cargar Imagen de Volumen Play
+			VolumenPlay = Boton.Botoncito(15,655,'Imagenes/VolumenSonido.png')
+			# Cargar Imagen de Volumen Pausa
+			VolumenPausa = Boton.Botoncito(15,655,'Imagenes/VolumenSilencio.png')
 			#Cargar el sonido Principal
 			pygame.mixer.music.load('Sonidos/DonkeyKongCountry3-JangleBells.mp3')
 			pygame.mixer.music.play(3)
@@ -1589,6 +1637,17 @@ class IdleScreen():
 						screenloop = False
 						pygame.quit()
 						sys.exit()
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
+						pygame.mixer.music.pause()
+						SonidoMusica = "pausa"
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_v:
+						pygame.mixer.music.unpause()
+						SonidoMusica = "play"
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
+						pygame.time.wait(5000)
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+						pygame.mixer.music.fadeout(1000)
+						self.MenuJuegos()
 					# Controlamos el clic del MOUSE
 					if enJuego == True:
 						if e.type == pygame.MOUSEBUTTONDOWN:
@@ -1616,6 +1675,11 @@ class IdleScreen():
 				Tempo2.update(screen)
 				# Actualizar el Puntaje del JUEGO
 				puntos.update(screen)
+				# Mostrar el Volumen del SonidoMusica
+				if SonidoMusica == "play":
+					VolumenPlay.dibujar(screen)
+				else:
+					VolumenPausa.dibujar(screen)
 
 				# Animacion del ObjetivoMover
 				Lugar.comportamiento(tiempo)
