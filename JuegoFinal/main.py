@@ -2572,6 +2572,10 @@ class IdleScreen():
 						screenloop = False
 						pygame.quit()
 						sys.exit()
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+						pygame.mixer.music.fadeout(1000)
+						self.MenuJuegos()
+
 					elif e.type == pygame.MOUSEBUTTONDOWN:
 						screenloop = True
 						opcion = self.menuFuncsInstrucciones[self.itemNamesInstrucciones[self.activeFocus]](NroJuego)
