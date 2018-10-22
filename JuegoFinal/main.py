@@ -614,7 +614,7 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
-			if puntos.score == 20 or Tempo.temporal == 4000:
+			if puntos.score == 20 or Tempo.temporal == 5000:
 				enJuego = False
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
@@ -674,7 +674,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				self.FinJuego(puntos.score, Tempo.temporal, 2)
+				self.FinJuego(puntos.score, Tempo.segundos, 2)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItems[self.activeFocus].applyFocus(self.screen)
@@ -991,7 +991,7 @@ class IdleScreen():
 				screen.blit(Texto,(320,200))
 				# Llamar a la pantalla de Fin del Juego
 				done = False
-				self.FinJuego(puntos.score, Tempo.temporal, 3)
+				self.FinJuego(puntos.score, Tempo.segundos, 3)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsArriba[self.activeFocus].applyFocus(self.screen)
@@ -1298,7 +1298,7 @@ class IdleScreen():
 				pygame.mixer.music.fadeout(3000)
 				done = False
 				# Llamar a la pantalla de Fin de Juego
-				self.FinJuego(puntos.score, Tempo.temporal, 5)
+				self.FinJuego(puntos.score, Tempo.segundos, 5)
 
 			# Se establece en el menu que boton se hizo click
 			self.menuItemsLaberinto[self.activeFocus].applyFocus(self.screen)
@@ -1710,26 +1710,26 @@ class IdleScreen():
 					puntos.score = 1
 					print "Colisiono el Jugador"
 
-				if Tempo2.temporal == 500:
+				if Tempo2.temporal == 450:
 					enJuego = False
 
 				if enJuego == False and actividad == "Adentro":
-					listaTiempo[0] = Tempo.temporal
+					listaTiempo[0] = Tempo.segundos
 					listaPuntos[0] = puntos.score
 					done = False
 					self.JuegoAdentroAfuera("Afuera")
 				elif enJuego == False and actividad == "Afuera":
-					listaTiempo[1] = Tempo.temporal
+					listaTiempo[1] = Tempo.segundos
 					listaPuntos[1] = puntos.score
 					done = False
 					self.JuegoAdentroAfuera("Encima")
 				elif enJuego == False and actividad == "Encima":
-					listaTiempo[2] = Tempo.temporal
+					listaTiempo[2] = Tempo.segundos
 					listaPuntos[2] = puntos.score
 					done = False
 					self.JuegoAdentroAfuera("Debajo")
 				elif enJuego == False and actividad == "Debajo":
-					listaTiempo[3] = Tempo.temporal
+					listaTiempo[3] = Tempo.segundos
 					listaPuntos[3] = puntos.score
 					done = False
 					pygame.mixer.music.fadeout(2000)
@@ -1970,7 +1970,7 @@ class IdleScreen():
 					self.screen.blit(TxtCorrecto, (700,500))
 					self.screen.blit(spriteFeliz.image, (80,450))
 				# Verificar el Tiempo Transcurrido
-				if Tempo.temporal == 500:
+				if Tempo.temporal == 450:
 					enJuego = False
 
 				# LLama a la Pantalla de Fin de Juego
@@ -2354,7 +2354,7 @@ class IdleScreen():
 					for item in listaPuntos:
 						Marcador = pygame.transform.flip(self.fontPuntaje.render("Puntaje "+ accion +" : " + str(item), 1, (143,31,130)), 1, 0)
 						screen.blit(Marcador,(520,y))
-						TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo "+ accion +" : 500" , 1, (143,31,130)), 1, 0)
+						TiempoFinal = pygame.transform.flip(self.fontPuntaje.render("Tiempo "+ accion +" : 15" , 1, (143,31,130)), 1, 0)
 						screen.blit(TiempoFinal,(190,y))
 						# Sumar el Puntaje Total
 						PuntajeTotal = PuntajeTotal + item
@@ -2369,7 +2369,7 @@ class IdleScreen():
 					PuntosTotales = pygame.transform.flip(self.fontPuntaje.render("Puntaje Total: " + str(PuntajeTotal), 1, (143,31,130)), 1, 0)
 					screen.blit(PuntosTotales,(520,295))
 					# Imprimir el Tiempo Total
-					TiemposTotales = pygame.transform.flip(self.fontPuntaje.render("Tiempo Total: 2000", 1, (143,31,130)), 1, 0)
+					TiemposTotales = pygame.transform.flip(self.fontPuntaje.render("Tiempo Total: 60", 1, (143,31,130)), 1, 0)
 					screen.blit(TiemposTotales,(190,295))
 				elif NroJuego == 4:
 					# Imprimir el Puntaje de Todas las Acciones
