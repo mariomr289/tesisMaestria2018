@@ -385,17 +385,24 @@ class IdleScreen():
 		for enemigo in listaEnemigo:
 			for disparo in enemigo.listaDisparo:
 				enemigo.listaDisparo.remove(disparo)
+			#Elimina Las galinas de la pantalla
+			listaEnemigo.remove(enemigo)
 
-			enemigo.conquista = True
+		enemigo.conquista = True
 
 	# Funcion que detiene todo en el Juego Arriba Abajo
 	def detenerTodoArrAba(self):
-		for ObstaculoEne in listaObstaculos:
+		while len(listaEstrellas) > 0:
 			for Recompensa in listaEstrellas:
+				#Elimina las estrellas de la lista
 				listaEstrellas.remove(Recompensa)
-			listaObstaculos.remove(ObstaculoEne)
 
-			ObstaculoEne.conquista = True
+		while len(listaObstaculos) > 0:
+			for ObstaculoEne in listaObstaculos:
+				#Elimina los obstaculos de la lista
+				listaObstaculos.remove(ObstaculoEne)
+
+		ObstaculoEne.conquista = True
 
 	# Funcion para cargar los enemigos
 	def cargarEnemigos(self):
@@ -614,8 +621,9 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
-			if puntos.score == 20 or Tempo.temporal == 5000:
+			if puntos.score == 20 or Tempo.temporal == 5400:
 				enJuego = False
+				self.detenerTodo()
 			# Llamada a que se dibuje el enemigo
 			# enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
@@ -927,8 +935,9 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verifica que el jugador ha recolectado 20 Estrellas o que el Tiempo Transcurrido sea el límite de 3000
-			if puntos.score == 20 or Tempo.temporal == 3000:
+			if puntos.score == 20 or Tempo.temporal == 4800:
 				enJuego = False
+				self.detenerTodoArrAba()
 			# Llamada a que se dibuje el enemigo
 			#enemigo.dibujar(screen)
 			# Verificar los disparos del jugador
@@ -964,7 +973,7 @@ class IdleScreen():
 					if Recompensa.rect.colliderect(jugador.rect):
 						# Suma el puntaje las Estrellas que recoge el Jugador
 						puntos.score_up()
-						#Borrar de la Pantalla la moneda recogida
+						#Borrar de la Pantalla la Estrella recogida
 						listaEstrellas.remove(Recompensa)
 						enJuego = True
 
@@ -1263,7 +1272,7 @@ class IdleScreen():
 
 			# Carga el Fondo del Juego
 			self.screen.blit(self.bgImageLaberinto, (0, 0))
-			# Actualiza el Nivel del Laberinto
+			# Actualiza el Nivel del Laberinto, dibuja el Mapa
 			nivel.actualizar(screen)
 			# Se muestra el Tiempo del VideoJuego
 			Tempo.update(screen)
@@ -1293,6 +1302,9 @@ class IdleScreen():
 			# Y luego el Sprite del Jugador
 			grupoimagenArdillita.draw(screen)
 			grupoimagenArbol.draw(screen)
+
+			if Tempo.temporal == 6600:
+				enJuego = False
 
 			if enJuego == False:
 				pygame.mixer.music.fadeout(3000)
