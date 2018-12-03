@@ -203,7 +203,7 @@ class IdleScreen():
 		self.items = []
 		while len(self.menuItemsMenuJuegos) > 0:
 			for miMenuJuegos in self.menuItemsMenuJuegos:
-				#Elimina las estrellas de la lista
+				#Elimina los items del Menu
 				self.menuItemsMenuJuegos.remove(miMenuJuegos)
 
 		for index, item in enumerate(self.itemNamesMenuJuegos):
@@ -220,6 +220,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de la Interfaz de Fin del Juego
 	def buildFinJuego(self):
 		self.items = []
+		while len(self.menuItemsFinJuego) > 0:
+			for miFinJuegos in self.menuItemsFinJuego:
+				#Elimina los items del Menu
+				self.menuItemsFinJuego.remove(miFinJuegos)
 
 		for index, item in enumerate(self.itemNamesFinJuego):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -229,8 +233,8 @@ class IdleScreen():
 			totalHeight  = len(self.itemNamesFinJuego) * height
 			posy = (self.scrHeight) - (400) + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItemsFinJuego.append(mi)
+			miFinJuegos = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsFinJuego.append(miFinJuegos)
 
 	# Crea el menu de los Botones de JuegoLaberintoArdilla
 	def buildMenuLaberinto(self):
