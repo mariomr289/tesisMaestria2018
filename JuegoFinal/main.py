@@ -201,6 +201,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de la Interfaz del Memu de los Juegos
 	def buildMenuJuegos(self):
 		self.items = []
+		while len(self.menuItemsMenuJuegos) > 0:
+			for miMenuJuegos in self.menuItemsMenuJuegos:
+				#Elimina las estrellas de la lista
+				self.menuItemsMenuJuegos.remove(miMenuJuegos)
 
 		for index, item in enumerate(self.itemNamesMenuJuegos):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -210,8 +214,8 @@ class IdleScreen():
 			totalHeight  = len(self.itemNamesMenuJuegos) * height
 			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItemsMenuJuegos.append(mi)
+			miMenuJuegos = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsMenuJuegos.append(miMenuJuegos)
 
 	# Crea el menu de los Botones de la Interfaz de Fin del Juego
 	def buildFinJuego(self):
