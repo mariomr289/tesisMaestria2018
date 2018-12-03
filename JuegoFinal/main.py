@@ -111,11 +111,11 @@ class IdleScreen():
 		self.itemNamesIntro = ("Entrar", "Salir")
 		self.menuFuncsIntro = {"Entrar" : self.ClickEntrar,
 							"Salir" : self.ClickSalir}
-		self.itemNamesMenuJuegos = ("Entrenamiento", "Izquierda-Derecha", "Arriba-Abajo", "Adentro-Afuera", "Laberinto")
+		self.itemNamesMenuJuegos = ("Entrenamiento", "Izquierda Derecha", "Arriba Abajo", "Adentro Afuera", "Laberinto")
 		self.menuFuncsMenuJuegos = {"Entrenamiento" : self.ClickEntrenamiento,
-							"Izquierda-Derecha" : self.ClickPrimerJuego,
-							"Arriba-Abajo" : self.ClickSegundoJuego,
-							"Adentro-Afuera" : self.ClickTercerJuego,
+							"Izquierda Derecha" : self.ClickPrimerJuego,
+							"Arriba Abajo" : self.ClickSegundoJuego,
+							"Adentro Afuera" : self.ClickTercerJuego,
 							"Laberinto" : self.ClickCuartoJuego}
 		self.itemNamesFinJuego = ("Reiniciar Juego", "Menu Juegos", "Salir")
 		self.menuFuncsFinJuego = {"Reiniciar Juego" : self.ClickReiniciar,
