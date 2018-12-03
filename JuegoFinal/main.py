@@ -141,6 +141,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de la Interfaz del Juego Izquierda y Derecha
 	def buildMenu(self):
 		self.items = []
+		while len(self.menuItems) > 0:
+			for miIzqDer in self.menuItems:
+				#Elimina los items del Menu
+				self.menuItems.remove(miIzqDer)
 
 		for index, item in enumerate(self.itemNames):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -150,12 +154,16 @@ class IdleScreen():
 			totalHeight  = len(self.itemNames) * height
 			posy = (self.scrWidth)  + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItems.append(mi)
+			miIzqDer = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItems.append(miIzqDer)
 
 	# Crea el menu de los Botones de la Interfaz de Introduccion
 	def buildMenuIntro(self):
 		self.items = []
+		while len(self.menuItemsIntro) > 0:
+			for miMnIntro in self.menuItemsIntro:
+				#Elimina los items del Menu
+				self.menuItemsIntro.remove(miMnIntro)
 
 		for index, item in enumerate(self.itemNamesIntro):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -165,8 +173,8 @@ class IdleScreen():
 			totalHeight  = len(self.itemNamesIntro) * height
 			posy = (self.scrHeight / 2) - (totalHeight / 2) + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItemsIntro.append(mi)
+			miMnIntro = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsIntro.append(miMnIntro)
 
 	# Crea el menu de los Botones de la Interfaz de Instrucciones
 	def buildMenuInstrucciones(self):
@@ -186,6 +194,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de la Interfaz del Juego Arriba y Abajo
 	def buildMenuArriba(self):
 		self.items = []
+		while len(self.menuItemsArriba) > 0:
+			for miMnArriba in self.menuItemsArriba:
+				#Elimina los items del Menu
+				self.menuItemsArriba.remove(miMnArriba)
 
 		for index, item in enumerate(self.itemNamesArriba):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -195,8 +207,8 @@ class IdleScreen():
 			totalHeight  = len(self.itemNamesArriba) * height
 			posy = (self.scrWidth) + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItemsArriba.append(mi)
+			miMnArriba = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsArriba.append(miMnArriba)
 
 	# Crea el menu de los Botones de la Interfaz del Memu de los Juegos
 	def buildMenuJuegos(self):
@@ -239,6 +251,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de JuegoLaberintoArdilla
 	def buildMenuLaberinto(self):
 		self.items = []
+		while len(self.menuItemsLaberinto) > 0:
+			for miMnLabe in self.menuItemsLaberinto:
+				#Elimina los items del Menu
+				self.menuItemsLaberinto.remove(miMnLabe)
 
 		for index, item in enumerate(self.itemNamesLaberinto):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -248,8 +264,8 @@ class IdleScreen():
 			totalHeight  = len(self.itemNamesLaberinto) * height
 			posy = (self.scrWidth) + (index * height)
 
-			mi = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
-			self.menuItemsLaberinto.append(mi)
+			miMnLabe = MenuItem(item, posx, posy, width, height, self.font, self.fontColor)
+			self.menuItemsLaberinto.append(miMnLabe)
 
 	# Boton de entrar de la Pantalla de Introduccion
 	def ClickEntrar(self):
