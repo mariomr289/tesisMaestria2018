@@ -179,6 +179,10 @@ class IdleScreen():
 	# Crea el menu de los Botones de la Interfaz de Instrucciones
 	def buildMenuInstrucciones(self):
 		self.items = []
+		while len(self.menuItemsInstrucciones) > 0:
+			for mi in self.menuItemsInstrucciones:
+				#Elimina los items del Menu
+				self.menuItemsInstrucciones.remove(mi)
 
 		for index, item in enumerate(self.itemNamesInstrucciones):
 			label = pygame.transform.flip(self.font.render(item, 1, self.fontColor), 1, 0)
@@ -299,7 +303,7 @@ class IdleScreen():
 	def ClickSiguiente(self, NroJuego):
 		global done
 		done = False
-		print "SIGUIENTE"
+		print "SIGUIENTE " + str(NroJuego)
 		if NroJuego == 1:
 			self.Entrenamiento(1)
 		elif NroJuego == 2:
@@ -348,7 +352,7 @@ class IdleScreen():
 		done = False
 		print "Segundo Juego"
 		self.Instrucciones(3)
-		#self.JuegoArriAba()
+		#self.JuegoArribaAbajo()
 
 	# Boton de Ingreso al Tercer Juego
 	def ClickTercerJuego(self):
@@ -2628,7 +2632,7 @@ class IdleScreen():
 					self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
 					self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
 				except IndexError:
-					break;
+					print "Error de Asignacion de Juego " + str(NroJuego)
 
 				# Se muestra el menú de la Interfaz de Introduccion
 				for item in self.menuItemsInstrucciones:
