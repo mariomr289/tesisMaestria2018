@@ -453,11 +453,11 @@ class IdleScreen():
 
 	# Funcion para Cargar las Estrellas del Juegos Arriba Abajo
 	def cargarEstrellas(self, posx):
-		posy = 60
+		posy = 90
 		for y in range(1,6):
 			Recompensa = Estrella.Estrellita(posx,posy, 40, 'Imagenes/estrellita1.png', 'Imagenes/estrellita2.png')
 			listaEstrellas.append(Recompensa)
-			posy = posy + 150
+			posy = posy + 135
 
 	# Funcion para cargar los Obstaculos del Juego Arriba Abajo
 	def cargarObstaculos(self):
@@ -649,7 +649,7 @@ class IdleScreen():
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
 			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
-			if puntos.score == 20 or Tempo.temporal == 5400:
+			if puntos.score == 10 or Tempo.temporal == 4500:
 				enJuego = False
 				self.detenerTodo()
 			# Llamada a que se dibuje el enemigo
@@ -910,16 +910,16 @@ class IdleScreen():
 						screenloop = True
 						opcion = self.menuFuncsArriba[self.itemNamesArriba[self.activeFocus]]()
 						# break;
-						# Verificar cual de los botones se ha pulsado
-						if identidad == "arriba":
-							# Movimiento del Jugador a la Izquierda
-							jugador.movimientoArriba()
+					# Verificar cual de los botones se ha pulsado
+					if identidad == "arriba":
+						# Movimiento del Jugador arriba
+						jugador.movimientoArriba()
 							# Disparos del jugador
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
-						elif identidad == "abajo":
-							# Movimiento del Jugador a la Derecha
-							jugador.movimientoAbajo()
+					elif identidad == "abajo":
+						# Movimiento del Jugador abajo
+						jugador.movimientoAbajo()
 							# Disparos del jugador
 							#x,y = jugador.rect.center
 							#jugador.disparar(x,y)
@@ -1331,7 +1331,7 @@ class IdleScreen():
 			grupoimagenArdillita.draw(screen)
 			grupoimagenArbol.draw(screen)
 
-			if Tempo.temporal == 6600:
+			if Tempo.temporal == 7500:
 				enJuego = False
 
 			if enJuego == False:
@@ -1750,7 +1750,7 @@ class IdleScreen():
 					puntos.score = 1
 					print "Colisiono el Jugador"
 
-				if Tempo2.temporal == 450:
+				if Tempo2.temporal == 900:
 					enJuego = False
 
 				if enJuego == False and actividad == "Adentro":

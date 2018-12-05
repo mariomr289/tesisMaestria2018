@@ -6,7 +6,7 @@ class Pececito(pygame.sprite.Sprite):
 	def __init__(self, scrWidth, scrHeight):
 		pygame.sprite.Sprite.__init__(self)
 		self.ImagenPez = pygame.image.load('Imagenes/PECESITA2.png')
-		self.ImagenPerder = pygame.image.load('Imagenes/explosion.jpg')
+		self.ImagenPerder = pygame.image.load('Imagenes/PECESITA2.png')
 		self.rect = self.ImagenPez.get_rect()
 		self.rect.centerx = scrWidth - 100
 		self.rect.centery = scrHeight/2
@@ -29,10 +29,10 @@ class Pececito(pygame.sprite.Sprite):
 	# Identificar que la nave no se salga de la pantalla
 	def __movimiento(self):
 		if self.Vida == True:
-			if self.rect.top <= 10:
-				self.rect.top = 10
-			elif self.rect.bottom > 758:
-				self.rect.bottom = 758
+			if self.rect.top <= 110:
+				self.rect.top = 110
+			elif self.rect.bottom > 668:
+				self.rect.bottom = 668
 
 	# Funcion para cuando pierda el juego
 	def destruccion(self):

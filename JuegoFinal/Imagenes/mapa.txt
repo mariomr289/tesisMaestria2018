@@ -1,5 +1,5 @@
 T-----S--------S---------------7
-|     |k k k  k| k k  k k k  k | 
+|     | k k k k| k k k k k k k | 
 |     |        |               |
 Z--7 kL--7 k  kL-----7k  --7 k |
 |  |     |  |        |     |   |
@@ -15,10 +15,10 @@ Z--7 kL--7 k  kL-----7k  --7 k |
 |     |  |        |  |     |   |
 | kT--J kL----- k | k|k  k | k |
 |  |              |  |  T--D   |
-| k| k  k k k k k | k k |k | k |
+| k| k k k k k  k | k k |k | k |
 |  |              |     |  |   |
 | kL------- k | k L-----Jk | k |
 |             |            |   |
-| k  k  k k k | k k k k  k |   |
+| k k k k k k | k k k k  k |   |
 |             |            |   |
 L-------------A------------A---J
