@@ -1942,6 +1942,10 @@ class IdleScreen():
 						screenloop = False
 						pygame.quit()
 						sys.exit()
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
+						pygame.time.wait(5000)
+					if e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+						self.MenuJuegos()
 					# Controlamos el cliqueo del mouse
 					if actividad == 1 or actividad == 2:
 						if enJuego == True:
