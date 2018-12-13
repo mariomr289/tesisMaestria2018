@@ -91,6 +91,7 @@ class IdleScreen():
 		self.bgImageDebajo = pygame.transform.flip(pygame.image.load("Imagenes/fondoDebajo.jpg").convert(), 1, 0)
 		self.clock = pygame.time.Clock()
 		self.font = pygame.font.SysFont("gaban", 55)
+		self.fontLogro = pygame.font.SysFont("gaban", 80)
 		self.fontPuntaje = pygame.font.SysFont("Answer", 35)
 		self.fontTiempo = pygame.font.SysFont("Answer", 25)
 		self.fontFinJuego = pygame.font.SysFont("RicksAmericanNF", 55)
@@ -648,7 +649,7 @@ class IdleScreen():
 				FlechaIzquierdaGrande.dibujar(screen)
 			# llamada a que se dibuje la nave espacial
 			jugador.dibujar(screen)
-			# Verificar que el Puntaje sea igual a 20 Huevos o el Tiempo Transcurrido sea igual al limite
+			# Verificar que el Puntaje sea igual a 10 Huevos o el Tiempo Transcurrido sea igual al limite
 			if puntos.score == 10 or Tempo.temporal == 4500:
 				enJuego = False
 				self.detenerTodo()
@@ -1624,28 +1625,28 @@ class IdleScreen():
 			# Cargar la Palabra de la actividad
 			TxtActividad = pygame.transform.flip(self.font.render(actividad, 1, (0,0,255)), 1, 0)
 			#Cargar la Palabra de Fin del JUEGO
-			Texto = pygame.transform.flip(self.font.render("Lo lograste", 1, (255,14,0)), 1, 0)
+			Texto = pygame.transform.flip(self.fontLogro.render("Lo lograste", 1, (56,130,194)), 1, 0)
 			# Verificar Que actividad se esta ejecutando
 			if actividad == "Adentro":
 				posOsoX = 150
-				posOsoY = 150
-				posObjX = 250
-				posObjY = 670
+				posOsoY = 510
+				posObjX = 240
+				posObjY = 310
 			elif actividad == "Afuera":
 				posOsoX = 750
-				posOsoY = 120
+				posOsoY = 510
 				posObjX = 800
-				posObjY = 670
+				posObjY = 310
 			elif actividad == "Encima":
 				posOsoX = 150
-				posOsoY = 150
+				posOsoY = 510
 				posObjX = 460
-				posObjY = 530
+				posObjY = 170
 			elif actividad == "Debajo":
 				posOsoX = 150
-				posOsoY = 150
+				posOsoY = 510
 				posObjX = 460
-				posObjY = 685
+				posObjY = 320
 
 			# Instancia del objeto Cuadro
 			ObjJug = Oso.Osito(self.scrWidth, self.scrHeight, posOsoX, posOsoY)
@@ -1725,7 +1726,7 @@ class IdleScreen():
 				elif actividad == "Debajo":
 					self.screen.blit(self.bgImageDebajo, (0, 0))
 				# Se Muestra la Actividad a Realizar
-				screen.blit(TxtActividad, (400,20))
+				screen.blit(TxtActividad, (400,10))
 				# Se muestra el tiempo de la actividad
 				Tempo.update_actividad(screen)
 				Tempo2.update(screen)
@@ -1746,7 +1747,7 @@ class IdleScreen():
 
 				#Verificar Colision del Jugador con el Objetivo
 				if ObjJug.rect.collidepoint(self.scrWidth - posObjX,posObjY):
-					screen.blit(Texto, (350,400))
+					screen.blit(Texto, (530,350))
 					puntos.score = 1
 					print "Colisiono el Jugador"
 
@@ -2636,7 +2637,7 @@ class IdleScreen():
 					self.menuItemsInstrucciones[self.activeFocus].applyFocus(self.screen)
 					self.menuItemsInstrucciones[self.lastActiveFocus].removeFocus()
 				except IndexError:
-					print "Error de Asignacion de Juego " + str(NroJuego)
+					print "Asignacion de Juego " + str(NroJuego)
 
 				# Se muestra el menú de la Interfaz de Introduccion
 				for item in self.menuItemsInstrucciones:
