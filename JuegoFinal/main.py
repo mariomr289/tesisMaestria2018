@@ -64,9 +64,9 @@ listaEstrellas = []
 imagenNuez = 'Imagenes/q.png'
 # Lista de Puntuacion Juego Entrenamiento
 listaPuntos = [0,0,0,0]
-# Lista de Tiempo Juego Mover Objetos
+# Lista de Tiempo Juego Adentro Afuera
 listaTiempo = [0,0,0,0]
-# Clase para el menu inactivo / juego
+# Clase Principal del Juego
 class IdleScreen():
 	def __init__(self, screen):
 		pygame.init()
@@ -388,7 +388,6 @@ class IdleScreen():
 
 	def ClickIzquierdo(self):
 		global done
-		#global movimiento
 		global identidad
 		print "IZQUIERDA"
 		done = True
@@ -414,7 +413,7 @@ class IdleScreen():
 		for enemigo in listaEnemigo:
 			for disparo in enemigo.listaDisparo:
 				enemigo.listaDisparo.remove(disparo)
-			#Elimina Las galinas de la pantalla
+			#Elimina La galina de la pantalla
 			listaEnemigo.remove(enemigo)
 
 		enemigo.conquista = True
@@ -1332,7 +1331,7 @@ class IdleScreen():
 			grupoimagenArdillita.draw(screen)
 			grupoimagenArbol.draw(screen)
 
-			if Tempo.temporal == 7500:
+			if Tempo.temporal == 9000:
 				enJuego = False
 
 			if enJuego == False:
